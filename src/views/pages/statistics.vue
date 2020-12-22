@@ -30,5 +30,6 @@ export default {
 <style scoped>
 .statistics_container {
   width: 100%;
+  overflow-x: hidden;
 }
 </style>

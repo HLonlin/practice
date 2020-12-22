@@ -12,7 +12,8 @@ import indexLayout from '@/views/home/indexLayout';
 // 静态路由
 export const constantRouter = [{
         path: '',
-        component: indexLayout,
+        component: () =>
+            import ('@/views/home/indexLayout'),
         redirect: '/home',
         children: [{
             path: 'home',
