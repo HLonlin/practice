@@ -1,6 +1,5 @@
 import Vue from 'vue';
 
-import 'normalize.css/normalize.css'; // A modern alternative to CSS resets
 import '@/assets/styles/default.css';
 
 import tool from '@/assets/tools';
