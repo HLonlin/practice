@@ -15,6 +15,23 @@ Js-cookie | cookie 管理工具 | [https://github.com/js-cookie/js-cookie](https
 nprogress | 进度条控件 | [https://github.com/rstacruz/nprogress](https://github.com/rstacruz/nprogress)</br>
 less | CSS 预处理语言 | [http://lesscss.cn/]</br>
 
+### 项目布局
+
+```luaout
+src -- 源码目录
+├── assets -- 资源文件
+    ├── images -- 图片资源
+    ├── styles -- 样式资源
+    ├── tools -- 常用函数
+├── router -- vue-router路由配置
+├── service -- axios网络请求定义
+├── store -- vuex的状态管理
+└── views -- 前端页面
+    ├── home -- 首页
+    ├── pages -- 子页面
+    ├── components -- 通用组件
+```
+
 ## 运行步骤
 
 - 下载 node 并安装：[https://nodejs.org/dist/v12.14.0/node-v12.14.0-x64.msi](https://nodejs.org/dist/v12.14.0/node-v12.14.0-x64.msi);
