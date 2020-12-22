@@ -5,7 +5,6 @@ import 'normalize.css/normalize.css'; // A modern alternative to CSS resets
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/zh-CN'; // lang i18n
-import VCharts from 'v-charts';
 
 import '@/styles/default.css';
 
@@ -17,8 +16,8 @@ import indexDB from "@/indexdb";
 Vue.prototype.$tool = tool;
 Vue.prototype.$axios = axios;
 Vue.prototype.$api = api;
-Vue.prototype.$cookies=cookies;
-Vue.prototype.$indexDB=indexDB;
+Vue.prototype.$cookies = cookies;
+Vue.prototype.$indexDB = indexDB;
 
 import App from './App';
 import router from './router';
@@ -28,7 +27,7 @@ import store from './store'
 import '@/icons'; // icon
 
 Vue.use(ElementUI, {
-  locale
+    locale
 });
 Vue.use(VCharts);
 
@@ -37,11 +36,11 @@ Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  store,
-  router,
-  components: {
-    App
-  },
-  template: '<App/>'
+    el: '#app',
+    store,
+    router,
+    components: {
+        App
+    },
+    template: '<App/>'
 })
