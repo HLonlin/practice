@@ -1,7 +1,7 @@
 {
-    "name": "practice",
+    "name": "practice_student_mobile",
     "version": "1.0.0",
-    "description": "实习小匠",
+    "description": "实习小匠学生移动端",
     "author": "HLonlin <1021944439@qq.com>",
     "private": true,
     "scripts": {
@@ -11,13 +11,13 @@
     },
     "dependencies": {
         "axios": "^0.18.0",
-        "echarts": "^4.2.0-rc.2",
-        "element-ui": "^2.3.7",
         "js-cookie": "^2.2.0",
+        "less": "^3.9.0",
+        "less-loader": "^5.0.0",
         "normalize.css": "^8.0.0",
         "nprogress": "^0.2.0",
-        "v-charts": "^1.19.0",
         "v-distpicker": "^1.0.20",
+        "vant": "^2.11.3",
         "vue": "^2.5.2",
         "vue-router": "^3.0.1",
         "vuex": "^3.0.1"

@@ -1,6 +1,6 @@
-# practice
+# practice_student_mobile
 
-> 实习小匠
+> 实习小匠学生移动端
 
 ### 技术选型
 
@@ -9,14 +9,13 @@
 Vue | 前端框架 | [https://vuejs.org/](https://vuejs.org/)</br>
 Vue-router | 路由框架 | [https://router.vuejs.org/](https://router.vuejs.org/)</br>
 Vuex | 全局状态管理框架 | [https://vuex.vuejs.org/](https://vuex.vuejs.org/)</br>
-Element | 前端 UI 框架 | [https://element.eleme.io/](https://element.eleme.io/)</br>
+vant | 前端 UI 框架 | [https://vant-contrib.gitee.io/vant/#/zh-CN/]</br>
 Axios | 前端 HTTP 框架 | [https://github.com/axios/axios](https://github.com/axios/axios)</br>
-v-charts | 基于 Echarts 的图表框架 | [https://v-charts.js.org/](https://v-charts.js.org/)</br>
 Js-cookie | cookie 管理工具 | [https://github.com/js-cookie/js-cookie](https://github.com/js-cookie/js-cookie)</br>
 nprogress | 进度条控件 | [https://github.com/rstacruz/nprogress](https://github.com/rstacruz/nprogress)</br>
-vue-element-admin | 项目脚手架参考 | [https://github.com/PanJiaChen/vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)</br>
+less | CSS 预处理语言 | [http://lesscss.cn/]</br>
 
-## 搭建步骤
+## 运行步骤
 
 - 下载 node 并安装：[https://nodejs.org/dist/v12.14.0/node-v12.14.0-x64.msi](https://nodejs.org/dist/v12.14.0/node-v12.14.0-x64.msi);
 - 克隆源代码到本地，使用 IDEA 打开，并完成编译;
