@@ -7,8 +7,6 @@ vueRouter.prototype.push = function push(location) {
     return originalPush.call(this, location).catch(err => err)
 }
 
-/* Layout */
-import indexLayout from '@/views/home/indexLayout';
 // 静态路由
 export const constantRouter = [{
         path: '',
