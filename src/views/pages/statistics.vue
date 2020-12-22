@@ -1,8 +1,16 @@
-<template> </template>
+<template>
+  <div class="statistics_container">
+    <topBar></topBar>
+  </div>
+</template>
 
 <script>
+import topBar from "../compoents/topBar";
 export default {
-  name: "index",
+  name: "statistics",
+  components: {
+    topBar
+  },
   data() {
     return {};
   },
@@ -19,4 +27,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped>
+.statistics_container {
+  width: 100%;
+}
+</style>

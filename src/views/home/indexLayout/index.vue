@@ -1,8 +1,10 @@
-<template> </template>
+<template>
+  <div class="app-wrapper">首页</div>
+</template>
 
 <script>
 export default {
-  name: "index",
+  name: "layout",
   data() {
     return {};
   },
@@ -14,9 +16,10 @@ export default {
   updated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {}
+  methods: {},
+  computed: {}
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped></style>
