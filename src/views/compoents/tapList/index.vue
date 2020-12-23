@@ -9,7 +9,20 @@
     >
       <router-link :to="{ path: item.pagePath }">
         <div class="item_inner">
+          <van-badge
+            v-if="item.cornerMarker & (item.cornerNum > 0)"
+            :content="item.cornerNum"
+            max="99"
+          >
+            <div
+              class="iconItem"
+              :class="
+                ontapText == item.text ? 'ontap ' + item.icon_on : item.icon
+              "
+            ></div>
+          </van-badge>
           <div
+            v-else
             class="iconItem"
             :class="
               ontapText == item.text ? 'ontap ' + item.icon_on : item.icon

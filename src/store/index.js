@@ -10,43 +10,53 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import getters from './getters.js';
-import indexDB from '@/store/modules/indexDB.js';
+import news from '@/store/modules/news.js';
+import mine from '@/store/modules/mine.js';
+import notice from '@/store/modules/notice.js';
+import signin from '@/store/modules/signin.js';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  modules: {
-    indexDB
-  },
-  mutations: {
-    addState(state, item) { // 增加
-      state[item.key] = item.val;
+    modules: {
+        news,
+        signin,
+        mine,
+        notice
     },
-    delState(state, id) { //删除
-      for (let key in state) {
-        if (key === id) {
-          delete state[key];
-        }
-      }
+    mutations: {
+        // this.$store.commit("addState", {
+        //   key: "numberOfNews",
+        //   val: this.numberOfNews
+        // });
+        addState(state, item) { // 增加
+            state[item.key] = item.val;
+        },
+        delState(state, id) { //删除
+            for (let key in state) {
+                if (key === id) {
+                    delete state[key];
+                }
+            }
+        },
+        delStateAll(state) { // 清空
+            for (let key in state) {
+                delete state[key];
+            }
+        },
     },
-    delStateAll(state) { // 清空
-      for (let key in state) {
-        delete state[key];
-      }
+    actions: {
+        addState(state, item) { // 增加
+            state.commit('addState', item);
+        },
+        delState(state, id) { //删除
+            state.commit('delState', id);
+        },
+        delStateAll(state) { // 清空
+            state.commit('delStateAll');
+        },
     },
-  },
-  actions: {
-    addState(state, item) { // 增加
-      state.commit('addState', item);
-    },
-    delState(state, id) { //删除
-      state.commit('delState', id);
-    },
-    delStateAll(state) { // 清空
-      state.commit('delStateAll');
-    },
-  },
-  getters
+    getters
 })
 
 export default store;
