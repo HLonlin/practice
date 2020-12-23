@@ -5,9 +5,14 @@ import '@/assets/styles/default.css'; // 默认样式
 
 // 按需引入vant组件
 import 'vant/lib/index.css'
-import { Col, Row } from "vant";
-Vue.use(Col);
-Vue.use(Row);
+import { Col, Row, Badge } from "vant";
+const vantComponentsObj = { Col, Row, Badge }
+const vantComponents = {
+    install(Vue) {
+        Object.keys(vantComponentsObj).forEach(key => Vue.use(vantComponentsObj[key]))
+    }
+}
+Vue.use(vantComponents);
 
 import tool from '@/assets/tools'; //常用工具集
 import axios from '@/service'; // http管理 

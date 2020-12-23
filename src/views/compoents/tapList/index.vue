@@ -9,12 +9,12 @@
     >
       <router-link :to="{ path: item.pagePath }">
         <div class="item_inner">
-          <span
+          <div
             class="iconItem"
             :class="
               ontapText == item.text ? 'ontap ' + item.icon_on : item.icon
             "
-          ></span>
+          ></div>
           <div class="item_text" :class="ontapText == item.text ? 'ontap' : ''">
             {{ item.text }}
           </div>
