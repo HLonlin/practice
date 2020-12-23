@@ -1,16 +1,12 @@
 <template>
-  <div class="statistics_container">
-    <topBar></topBar>
+  <div class="container">
+    消息
   </div>
 </template>
 
 <script>
-import topBar from "../compoents/topBar";
 export default {
-  name: "statistics",
-  components: {
-    topBar
-  },
+  name: "news",
   data() {
     return {};
   },
@@ -27,9 +23,4 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.statistics_container {
-  width: 100%;
-  overflow-x: hidden;
-}
-</style>
+<style scoped></style>

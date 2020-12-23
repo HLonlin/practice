@@ -1,10 +1,12 @@
 <template>
-  <div class="tapList_container"></div>
+  <div class="container">
+    我的
+  </div>
 </template>
 
 <script>
 export default {
-  name: "tapList",
+  name: "mine",
   data() {
     return {};
   },
@@ -16,7 +18,7 @@ export default {
   updated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {},
+  methods: {}
 };
 </script>
 

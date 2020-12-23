@@ -15,6 +15,12 @@ import App from './App';
 import router from './router';
 import store from './store'
 
+// 按需引入vant组件
+import 'vant/lib/index.css'
+import { Col, Row } from "vant";
+Vue.use(Col);
+Vue.use(Row);
+
 // 生产环境下不启动提示消息
 Vue.config.productionTip = false;
 
