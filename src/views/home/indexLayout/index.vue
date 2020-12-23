@@ -21,27 +21,31 @@ export default {
       tapList: [
         {
           pagePath: "/signin",
-          iconPath: require("@/assets/images/icon_message.png"),
-          selectedIconPath: require("@/assets/images/icon_message_on.png"),
-          text: "签到"
+          icon: "icon_qiandao",
+          icon_on: "icon_qiandao",
+          text: "签到",
+          cornerMarker: true
         },
         {
           pagePath: "/news",
-          iconPath: require("@/assets/images/icon_message.png"),
-          selectedIconPath: require("@/assets/images/icon_message_on.png"),
-          text: "消息"
+          icon: "icon_xiaoxi",
+          icon_on: "icon_xiaoxi",
+          text: "消息",
+          cornerMarker: true
         },
         {
           pagePath: "/notice",
-          iconPath: require("@/assets/images/icon_message.png"),
-          selectedIconPath: require("@/assets/images/icon_message_on.png"),
-          text: "公告"
+          icon: "icon_gonggao",
+          icon_on: "icon_gonggao",
+          text: "公告",
+          cornerMarker: true
         },
         {
           pagePath: "/mine",
-          iconPath: require("@/assets/images/icon_message.png"),
-          selectedIconPath: require("@/assets/images/icon_message_on.png"),
-          text: "我"
+          icon: "icon_mine",
+          icon_on: "icon_mine",
+          text: "我",
+          cornerMarker: true
         }
       ]
     };

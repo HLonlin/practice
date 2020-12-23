@@ -9,17 +9,13 @@
     >
       <router-link :to="{ path: item.pagePath }">
         <div class="item_inner">
-          <img
-            v-if="ontapText == item.text"
-            class="item_icon item_icon_on"
-            :src="item.selectedIconPath"
-          />
-          <img v-else class="item_icon" :src="item.iconPath" />
-          <div
+          <span
+            class="iconItem"
             :class="
-              ontapText == item.text ? 'item_text item_text_on' : 'item_text'
+              ontapText == item.text ? 'ontap ' + item.icon_on : item.icon
             "
-          >
+          ></span>
+          <div class="item_text" :class="ontapText == item.text ? 'ontap' : ''">
             {{ item.text }}
           </div>
         </div>
@@ -83,15 +79,18 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.item_icon {
-  width: 15px;
+.iconItem {
+  display: inline-block;
   margin-bottom: 4px;
+  font-size: 16px;
+  color: #9d9d99;
 }
 .item_text {
-  color: #999999;
+  color: #9d9d99;
   text-align: center;
 }
-.item_text_on {
+.ontap {
   color: #0090d7;
+  // font-weight: bold;
 }
 </style>
