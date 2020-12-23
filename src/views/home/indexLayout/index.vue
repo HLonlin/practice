@@ -1,8 +1,8 @@
 <template>
   <div class="app-wrapper">
-    <!-- <topBar></topBar> -->
+    <topBar :titleText="ontapText"></topBar>
     <router-view class="router_container"></router-view>
-    <tapList :tapList="tapList"></tapList>
+    <tapList :tapList="tapList" v-on:tap="tap"></tapList>
   </div>
 </template>
 
@@ -17,6 +17,7 @@ export default {
   },
   data() {
     return {
+      ontapText: "",
       tapList: [
         {
           pagePath: "/signin",
@@ -46,14 +47,21 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.$router.push(this.tapList[0].pagePath);
+    this.ontapText = this.tapList[0].text;
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {},
+  methods: {
+    tap: function(value) {
+      this.ontapText = value;
+    }
+  },
   computed: {}
 };
 </script>

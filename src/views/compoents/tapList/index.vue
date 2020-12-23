@@ -5,18 +5,20 @@
       :span="Math.floor(20 / tapList.length)"
       :key="i"
       class="item_container"
-      @click="ontapIndex = i"
+      @click="ontap(item.text)"
     >
       <router-link :to="{ path: item.pagePath }">
         <div class="item_inner">
           <img
-            v-if="ontapIndex == i"
+            v-if="ontapText == item.text"
             class="item_icon item_icon_on"
             :src="item.selectedIconPath"
           />
           <img v-else class="item_icon" :src="item.iconPath" />
           <div
-            :class="ontapIndex == i ? 'item_text item_text_on' : 'item_text'"
+            :class="
+              ontapText == item.text ? 'item_text item_text_on' : 'item_text'
+            "
           >
             {{ item.text }}
           </div>
@@ -36,18 +38,27 @@ export default {
   },
   data() {
     return {
-      ontapIndex: 0
+      ontapText: ""
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.ontapText = this.tapList[0].text;
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    ontap(text) {
+      // tap是在父组件on监听的方法
+      // this.ontapText是需要传的值
+      this.ontapText = text;
+      this.$emit("tap", this.ontapText);
+    }
+  }
 };
 </script>
 
