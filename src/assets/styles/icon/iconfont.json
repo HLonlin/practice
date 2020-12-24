@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "17777935",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
       "icon_id": "7140472",
       "name": "消息",
       "font_class": "xiaoxi",

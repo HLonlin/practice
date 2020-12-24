@@ -76,7 +76,6 @@ export default {
         let num = 0;
         setInterval(function() {
           num = num + 1;
-          console.log(num);
           let stateStr =
             that.tapList[i].pagePath.replace(/\//g, "") + "/addState";
           that.$store.commit(stateStr, {
@@ -104,6 +103,6 @@ export default {
 .router_container {
   width: 100%;
   box-sizing: border-box;
-  padding: 0px 16px 51px 16px;
+  padding: 0px 0px 51px 0px;
 }
 </style>
