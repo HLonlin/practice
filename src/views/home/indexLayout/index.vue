@@ -21,32 +21,32 @@ export default {
       tapList: [
         {
           pagePath: "/signin",
-          icon: "icon_qiandao",
-          icon_on: "icon_qiandao",
+          icon: "icon_qiandaotubiao",
+          icon_on: "icon_qiandaotubiao",
           text: "签到",
           cornerMarker: false,
           cornerNum: 0
         },
         {
           pagePath: "/news",
-          icon: "icon_xiaoxi",
-          icon_on: "icon_xiaoxi",
+          icon: "icon_xiaoxitubiao",
+          icon_on: "icon_xiaoxitubiao",
           text: "消息",
           cornerMarker: true,
           cornerNum: 0
         },
         {
           pagePath: "/notice",
-          icon: "icon_gonggao",
-          icon_on: "icon_gonggao",
+          icon: "icon_gonggaotubiao",
+          icon_on: "icon_gonggaotubiao",
           text: "公告",
           cornerMarker: false,
           cornerNum: 0
         },
         {
           pagePath: "/mine",
-          icon: "icon_mine",
-          icon_on: "icon_mine",
+          icon: "icon_wotubiao",
+          icon_on: "icon_wotubiao",
           text: "我",
           cornerMarker: false,
           cornerNum: 0

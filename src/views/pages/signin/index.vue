@@ -5,7 +5,7 @@
         <div class="signin_round">{{ is_Signin ? "已签到" : "签到" }}</div>
       </div>
       <div class="signin_position">
-        <i class="iconItem icon_dingwei signin_icon"></i>
+        <i class="iconItem icon_dizhitubiao signin_icon"></i>
         {{ currentPosition }}
       </div>
     </div>
