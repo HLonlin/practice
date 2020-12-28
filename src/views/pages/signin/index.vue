@@ -10,6 +10,18 @@
       </div>
     </div>
     <div class="signin_calendarContainer">
+      <van-datetime-picker
+        class="datePicker"
+        v-model="currentYear"
+        type="year-month"
+        title="选择年月"
+        :formatter="yearFormatter"
+        :item-height="45"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @cancel="cancelDatePicker"
+        @confirm="confirmDatePicker"
+      />
       <van-calendar
         title="签到日历"
         :show-title="false"
@@ -19,6 +31,8 @@
         :formatter="formatter"
         @select="selectFn"
         :min-date="minDate"
+        :max-date="maxDate"
+        :show-mark="true"
       />
     </div>
   </div>
@@ -31,7 +45,8 @@ export default {
     return {
       is_Signin: false,
       currentPosition: "广东省广州市越秀区小北路22号",
-      pageIndex: 6
+      pageIndex: 6,
+      currentYear: new Date()
     };
   },
   beforeCreate() {},
@@ -41,16 +56,28 @@ export default {
     this.resetCalendarContainerH();
     this.calendarScroll();
     this.addPageTurnButton();
+    this.pageTurnBytitle();
   },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    // 单日点击事件
     selectFn: function(date) {
       // 点击日期绑定事件
       console.log(date);
     },
+    // 年月选项格式化函数
+    yearFormatter(type, val) {
+      if (type === "year") {
+        return `${val}年`;
+      } else if (type === "month") {
+        return `${val}月`;
+      }
+      return val;
+    },
+    // 日历格式化函数
     formatter: function(day) {
       day.type = "selected";
       // 今天
@@ -69,8 +96,8 @@ export default {
       }
       return day;
     },
+    // 动态日历面板高度
     resetCalendarContainerH: function() {
-      // 动态日历面板高度
       let calendarContainer = document.getElementsByClassName(
         "signin_calendarContainer"
       )[0];
@@ -85,17 +112,18 @@ export default {
       calendarDays[calendarDays.length - 1].style.paddingBottom = "44px";
     },
     addPageTurnButton: function() {
-      let headerSubtitle = document.getElementsByClassName(
+      let header_subtitle = document.getElementsByClassName(
         "van-calendar__header-subtitle"
       )[0];
       let left = document.createElement("div");
       let right = document.createElement("div");
       left.className = "van-lastPage";
       right.className = "van-nextPage";
-      headerSubtitle.appendChild(left);
-      headerSubtitle.appendChild(right);
+      header_subtitle.appendChild(left);
+      header_subtitle.appendChild(right);
       this.pageTurnByBtn();
     },
+    // 日历翻页监听
     calendarScroll: function() {
       let that = this;
       let calendarBody = document.getElementsByClassName(
@@ -106,24 +134,32 @@ export default {
       );
       calendarBody.onscroll = function() {
         let offsetHeightTotal = 0;
+        // 实时更新当前码、作用关联于左右翻页
         if (calendarBody.scrollTop <= calendarMonth[0].offsetHeight) {
           that.pageIndex = 0;
         } else {
           for (var i = 0, imax = calendarMonth.length; i < imax; i++) {
             offsetHeightTotal =
               offsetHeightTotal + calendarMonth[i].offsetHeight;
-            // if (i < 12) {
-            //   offsetHeightTotal =
-            //     offsetHeightTotal + calendarMonth[i + 1].offsetHeight;
-            // }
             if (calendarBody.scrollTop >= offsetHeightTotal) {
               that.pageIndex = i + 1;
             }
           }
         }
+        // 实时更新年月选项当前时间
+        if (that.pageIndex != 0) {
+          that.currentYear = new Date(
+            calendarMonth[that.pageIndex].children[0].innerHTML
+              .replace(/年/, "/")
+              .replace(/月/, "/")
+          );
+        } else {
+          that.currentYear = this.minDate;
+        }
       };
     },
-    pageTurnByBtn: function() {
+    // 翻页
+    scrollToPage: function(e) {
       let that = this;
       let calendarBody = document.getElementsByClassName(
         "van-calendar__body"
@@ -131,34 +167,95 @@ export default {
       let calendarMonth = document.getElementsByClassName(
         "van-calendar__month"
       );
-      let lastPageBtn = document.getElementsByClassName("van-lastPage")[0];
-      let nextPageBtn = document.getElementsByClassName("van-nextPage")[0];
-      function scrollToPage() {
+      let header_subtitle = document.getElementsByClassName(
+        "van-calendar__header-subtitle"
+      )[0];
+      // 阻止左右按钮事件冒泡
+      try {
+        e.stopPropagation(); //非IE浏览器
+      } catch (e) {
+        window.event.cancelBubble = true; //IE浏览器
+      }
+      if (that.pageIndex === 0) {
+        calendarBody.scrollTop = 0;
+      } else {
         let offsetHeightTotal = 0;
         for (var i = 0, imax = that.pageIndex; i < imax; i++) {
           offsetHeightTotal = offsetHeightTotal + calendarMonth[i].offsetHeight;
         }
         calendarBody.scrollTop = offsetHeightTotal + 64;
       }
-      lastPageBtn.addEventListener("click", function() {
+    },
+    // 左右按钮翻页
+    pageTurnByBtn: function() {
+      let that = this;
+      let lastPageBtn = document.getElementsByClassName("van-lastPage")[0];
+      let nextPageBtn = document.getElementsByClassName("van-nextPage")[0];
+      let calendarMonth = document.getElementsByClassName(
+        "van-calendar__month"
+      );
+      lastPageBtn.addEventListener("click", function(e) {
         that.pageIndex = that.pageIndex - 1 > 0 ? that.pageIndex - 1 : 0;
-        if (that.pageIndex === 0) {
-          calendarBody.scrollTop = 0;
-        } else {
-          scrollToPage();
+        that.scrollToPage(e);
+      });
+      nextPageBtn.addEventListener("click", function(e) {
+        that.pageIndex =
+          that.pageIndex + 1 < calendarMonth.length
+            ? that.pageIndex + 1
+            : calendarMonth.length;
+        that.scrollToPage(e);
+      });
+    },
+    // 标题选项翻页
+    pageTurnBytitle: function() {
+      let header_subtitle = document.getElementsByClassName(
+        "van-calendar__header-subtitle"
+      )[0];
+      let datePicker = document.getElementsByClassName("datePicker")[0];
+      header_subtitle.addEventListener("click", function() {
+        datePicker.style.display = "block";
+      });
+    },
+    cancelDatePicker: function() {
+      document.getElementsByClassName("datePicker")[0].style.display = "none";
+    },
+    confirmDatePicker: function(val) {
+      let that = this;
+      let calendarMonth = document.getElementsByClassName(
+        "van-calendar__month"
+      );
+      let datePicker = document.getElementsByClassName("datePicker")[0];
+      let innerHTMLS = val.getFullYear() + "年" + (val.getMonth() + 1) + "月";
+      for (var i = 0, imax = calendarMonth.length; i < imax; i++) {
+        if (
+          i == 0 &&
+          that.minDate.getFullYear() +
+            "年" +
+            (that.minDate.getMonth() + 1) +
+            "月" ==
+            val.getFullYear() + "年" + (val.getMonth() + 1) + "月"
+        ) {
+          that.pageIndex = 0;
+        } else if (innerHTMLS == calendarMonth[i].children[0].innerHTML) {
+          that.pageIndex = i;
         }
-      });
-      nextPageBtn.addEventListener("click", function() {
-        that.pageIndex = that.pageIndex + 1 < 12 ? that.pageIndex + 1 : 12;
-        scrollToPage();
-      });
+      }
+      this.scrollToPage();
+      datePicker.style.display = "none";
     }
   },
   computed: {
     minDate: function() {
-      // 多显示6个月以前的记录
+      // 限定最小年月
       let Dater = new Date();
-      Dater.setMonth(Dater.getMonth() - 6);
+      Dater.setFullYear(Dater.getFullYear() - 1);
+      Dater.setMonth(0);
+      return Dater;
+    },
+    maxDate: function() {
+      // 限定最大年月
+      let Dater = new Date();
+      Dater.setFullYear(Dater.getFullYear() + 1);
       return Dater;
     }
   }
@@ -248,6 +345,9 @@ export default {
 }
 </style>
 <style>
+.signin_calendarContainer {
+  position: relative;
+}
 .signin_calendarContainer .van-calendar__header-subtitle {
   position: relative;
   color: #000000;
@@ -304,5 +404,12 @@ export default {
 }
 .signin_calendarContainer .noSignIn .van-calendar__selected-day {
   background-color: #eeeeee !important;
+}
+.signin_calendarContainer .datePicker {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
 }
 </style>
