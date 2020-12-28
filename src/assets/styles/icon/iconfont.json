@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "19072917",
+      "name": "我",
+      "font_class": "wo",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "19072918",
+      "name": "公告",
+      "font_class": "gonggao1",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "19072919",
+      "name": "签到",
+      "font_class": "qiandao1",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "19072920",
+      "name": "地址",
+      "font_class": "dizhi",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "19072921",
+      "name": "消息",
+      "font_class": "xiaoxi1",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
       "icon_id": "17777935",
       "name": "定位",
       "font_class": "dingwei",

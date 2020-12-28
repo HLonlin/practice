@@ -96,14 +96,13 @@ export default {
   display: inline-block;
   margin-bottom: 4px;
   font-size: 16px;
-  color: #9d9d99;
+  color: #999999;
 }
 .item_text {
-  color: #9d9d99;
+  color: #999999;
   text-align: center;
 }
 .ontap {
-  color: #0090d7;
-  // font-weight: bold;
+  color: #0090d8;
 }
 </style>

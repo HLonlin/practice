@@ -1,6 +1,14 @@
 <template>
   <div class="topBar_container">
-    <div class="topBar_titleText">{{ titleText }}</div>
+    <van-nav-bar
+      :title="titleText"
+      :fixed="true"
+      :placeholder="true"
+      :safe-area-inset-top="true"
+      :border="false"
+      left-arrow
+      @click-left="onClickLeft"
+    />
   </div>
 </template>
 
@@ -23,35 +31,28 @@ export default {
   updated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    onClickLeft: function() {
+      console.log("ClickLeft");
+    }
+  }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.topBar_container {
-  position: relative;
-  width: 100%;
-  height: 46px;
-  background-color: #0090d7;
+<style>
+.topBar_container .van-nav-bar {
+  background-color: #0090d8;
 }
-.topBar_container:before {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: rotate(45deg) translateY(-50%);
-  width: 10px;
-  height: 10px;
-  content: "";
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
+.van-nav-bar__placeholder,
+.van-nav-bar__content {
+  height: 44px !important;
 }
-.topBar_titleText {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 16px;
-  color: #fff;
+.topBar_container .van-nav-bar .van-icon {
+  color: #ffffff;
+}
+.topBar_container .van-nav-bar__title {
+  font-size: 1.125rem;
+  color: #ffffff;
 }
 </style>

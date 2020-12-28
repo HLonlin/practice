@@ -32,7 +32,7 @@
         @select="selectFn"
         :min-date="minDate"
         :max-date="maxDate"
-        :show-mark="true"
+        :show-mark="false"
       />
     </div>
   </div>
@@ -106,7 +106,7 @@ export default {
       )[0];
       var windowHight = window.screen.height;
       calendarContainer.style.height =
-        windowHight - signin_topPanel.offsetHeight - 97 + "px";
+        windowHight - signin_topPanel.offsetHeight - 95 + "px";
 
       let calendarDays = document.getElementsByClassName("van-calendar__days");
       calendarDays[calendarDays.length - 1].style.paddingBottom = "44px";
@@ -268,15 +268,15 @@ export default {
   position: relative;
   width: 100%;
   height: 200px;
-  background-color: #0090d7;
+  background-color: #0090d8;
 }
 .signin_roundWhite {
   position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 90px;
-  height: 90px;
+  width: 5.625rem;
+  height: 5.625rem;
   border-radius: 50%;
   background-color: #ffffff;
 }
@@ -321,27 +321,27 @@ export default {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 80px;
-  height: 80px;
+  width: 5rem;
+  height: 5rem;
   border-radius: 50%;
-  border: 1px solid #0090d7;
+  border: 1px solid #0090d8;
   background-color: transparent;
-  color: #0090d7;
+  color: #0090d8;
   text-align: center;
-  line-height: 80px;
-  font-size: 20px;
+  line-height: 5rem;
+  font-size: 1.31rem;
   font-weight: bold;
 }
 .signin_icon {
   vertical-align: middle;
 }
 .signin_position {
-  font-size: 14px;
+  font-size: 0.75rem;
   vertical-align: middle;
   text-align: center;
   color: #ffffff;
   box-sizing: border-box;
-  padding: 140px 16px 16px 16px;
+  padding: 140px 1rem 16px 1rem;
 }
 </style>
 <style>
@@ -350,55 +350,59 @@ export default {
 }
 .signin_calendarContainer .van-calendar__header-subtitle {
   position: relative;
-  color: #000000;
+  font-size: 1rem;
+  color: #323233;
   font-weight: bold;
   border-bottom: 1px solid #eeeeee;
 }
 .signin_calendarContainer .van-lastPage {
   position: absolute;
-  left: 80px;
+  left: 5rem;
   top: 50%;
   transform: rotate(45deg) translateY(-50%);
-  width: 10px;
-  height: 10px;
-  border-left: 1px solid #656565;
-  border-bottom: 1px solid #656565;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-left: 1px solid #666666;
+  border-bottom: 1px solid #666666;
 }
 .signin_calendarContainer .van-nextPage {
   position: absolute;
-  right: 80px;
+  right: 5rem;
   top: 50%;
   transform: rotate(45deg) translateY(-50%);
-  width: 10px;
-  height: 10px;
-  border-right: 1px solid #656565;
-  border-top: 1px solid #656565;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-right: 1px solid #666666;
+  border-top: 1px solid #666666;
 }
-
+.signin_calendarContainer .van-calendar__weekday {
+  font-size: 0.875rem;
+  color: #666666;
+}
 .signin_calendarContainer .van-calendar__month {
   box-shadow: 0 2px 10px rgba(125, 126, 128, 0.1);
 }
 .signin_calendarContainer .van-calendar__month-title {
-  height: 64px;
+  height: 4rem;
   box-sizing: border-box;
-  padding-top: 20px;
+  padding-top: 1.25rem;
 }
 .signin_calendarContainer .van-calendar__day {
-  height: 50px;
+  height: 3.125rem;
 }
 .signin_calendarContainer .van-calendar__selected-day {
-  width: 26px;
-  height: 26px;
+  width: 1.625rem;
+  height: 1.625rem;
   border-radius: 50%;
-  color: #676767;
+  color: #666666;
   background-color: rgba(0, 0, 0, 0) !important;
 }
 .signin_calendarContainer .isToday .van-calendar__selected-day {
   background-color: #ffffff !important;
-  border: 1px solid #0090d7;
+  border: 1px solid #0090d8;
 }
 .signin_calendarContainer .signedIn .van-calendar__selected-day {
-  background-color: #0090d7 !important;
+  background-color: #0090d8 !important;
   color: #ffffff;
   border: none;
 }
