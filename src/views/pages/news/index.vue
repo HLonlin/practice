@@ -1,12 +1,18 @@
 <template>
   <div class="container">
-    消息
+    <div class="search_panel">
+      <search sourceOf="news"></search>
+    </div>
   </div>
 </template>
 
 <script>
+import search from "../../compoents/search";
 export default {
   name: "news",
+  components: {
+    search
+  },
   data() {
     return {};
   },
