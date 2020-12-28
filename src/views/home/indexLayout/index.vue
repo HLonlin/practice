@@ -2,7 +2,11 @@
   <div class="app-wrapper">
     <topBar :titleText="ontapText"></topBar>
     <router-view class="router_container"></router-view>
-    <tapList :tapList="tapList" v-on:tap="tap"></tapList>
+    <tapList
+      :tapList="tapList"
+      :ontapIndex="ontapIndex"
+      v-on:tap="tap"
+    ></tapList>
   </div>
 </template>
 
@@ -17,7 +21,7 @@ export default {
   },
   data() {
     return {
-      ontapText: "",
+      ontapIndex: 2,
       tapList: [
         {
           pagePath: "/signin",
@@ -57,8 +61,7 @@ export default {
   beforeCreate() {},
   created() {
     this.updateCornerNum();
-    this.$router.push(this.tapList[0].pagePath);
-    this.ontapText = this.tapList[0].text;
+    this.$router.push(this.tapList[this.ontapIndex].pagePath);
   },
   beforeMount() {},
   mounted() {},
@@ -68,7 +71,7 @@ export default {
   destroyed() {},
   methods: {
     tap: function(value) {
-      this.ontapText = value;
+      this.ontapIndex = value;
     },
     updateCornerNum: function() {
       var that = this;
@@ -93,6 +96,12 @@ export default {
           commitCornerNum(i);
         }
       }
+    }
+  },
+  computed: {
+    ontapText: function() {
+      // 顶部标题文字内容
+      return this.tapList[this.ontapIndex].text;
     }
   }
 };

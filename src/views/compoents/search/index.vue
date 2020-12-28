@@ -46,4 +46,7 @@ export default {
   background-color: #ffffff;
   border: 1px solid #dddddd;
 }
+.search_container .van-search {
+  padding: 10px 1rem;
+}
 </style>

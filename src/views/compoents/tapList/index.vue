@@ -5,7 +5,7 @@
       :span="Math.floor(20 / tapList.length)"
       :key="i"
       class="item_container"
-      @click="ontap(item.text)"
+      @click="ontap(i)"
     >
       <router-link :to="{ path: item.pagePath }">
         <div class="item_inner">
@@ -16,19 +16,15 @@
           >
             <div
               class="iconItem"
-              :class="
-                ontapText == item.text ? 'ontap ' + item.icon_on : item.icon
-              "
+              :class="ontapIndex == i ? 'ontap ' + item.icon_on : item.icon"
             ></div>
           </van-badge>
           <div
             v-else
             class="iconItem"
-            :class="
-              ontapText == item.text ? 'ontap ' + item.icon_on : item.icon
-            "
+            :class="ontapIndex == i ? 'ontap ' + item.icon_on : item.icon"
           ></div>
-          <div class="item_text" :class="ontapText == item.text ? 'ontap' : ''">
+          <div class="item_text" :class="ontapIndex == i ? 'ontap' : ''">
             {{ item.text }}
           </div>
         </div>
@@ -43,17 +39,14 @@ export default {
   // 接受父组件的值
   props: {
     tapList: Array, //在这里对传过来的进行接收
+    ontapIndex: Number,
     required: true
   },
   data() {
-    return {
-      ontapText: ""
-    };
+    return {};
   },
   beforeCreate() {},
-  created() {
-    this.ontapText = this.tapList[0].text;
-  },
+  created() {},
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -61,18 +54,17 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    ontap(text) {
+    ontap(i) {
       // tap是在父组件on监听的方法
-      // this.ontapText是需要传的值
-      this.ontapText = text;
-      this.$emit("tap", this.ontapText);
+      // i是需要传的值
+      this.$emit("tap", i);
     }
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
+<style scoped>
 .tapList_container {
   position: fixed;
   bottom: 0px;

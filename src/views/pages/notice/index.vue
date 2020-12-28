@@ -3,6 +3,7 @@
     <div class="search_panel">
       <search sourceOf="notice"></search>
     </div>
+    <div class="noticeList_panel"></div>
   </div>
 </template>
 
@@ -29,4 +30,9 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+.noticeList_panel {
+  box-sizing: border-box;
+  padding: 0px 1rem;
+}
+</style>
