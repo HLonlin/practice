@@ -1,15 +1,11 @@
 <template>
   <div class="app-wrapper">
-    <topBar :titleText="ontapText"></topBar>
+    <topBar :titleText="toptitle"></topBar>
     <router-view
       class="router_container"
       v-on:checkAllRead="checkAllRead"
     ></router-view>
-    <tapList
-      :tapList="tapList"
-      :ontapIndex="ontapIndex"
-      v-on:tap="tap"
-    ></tapList>
+    <tapList :tapList="tapList" :ontapIndex="tapIndex" v-on:tap="tap"></tapList>
   </div>
 </template>
 
@@ -24,12 +20,13 @@ export default {
   },
   data() {
     return {
-      ontapIndex: 2,
+      tapIndex: 3,
+      toptitle: "实习小匠",
       tapList: [
         {
           pagePath: "/signin",
-          icon: "icon_qiandaotubiao",
-          icon_on: "icon_qiandaotubiao",
+          icon: "icon_biaoqianlanqiandaotubiao",
+          icon_on: "icon_biaoqianlanqiandaotubiao",
           text: "签到",
           cornerMarker: false,
           cornerNum: 0
@@ -64,7 +61,8 @@ export default {
   beforeCreate() {},
   created() {
     // this.updateCorner();
-    this.$router.push(this.tapList[this.ontapIndex].pagePath);
+    this.$router.push(this.tapList[this.tapIndex].pagePath);
+    this.toptitle = this.$route.meta.title;
   },
   beforeMount() {},
   mounted() {},
@@ -74,7 +72,8 @@ export default {
   destroyed() {},
   methods: {
     tap: function(value) {
-      this.ontapIndex = value;
+      this.toptitle = this.$route.meta.title;
+      this.tapIndex = value;
     },
     checkAllRead: function(value) {
       this.tapList[2].cornerMarker = value;
@@ -96,12 +95,6 @@ export default {
           commitCornerNum(i);
         }
       }
-    }
-  },
-  computed: {
-    ontapText: function() {
-      // 顶部标题文字内容
-      return this.tapList[this.ontapIndex].text;
     }
   }
 };

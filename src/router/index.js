@@ -19,33 +19,48 @@ export const constantRouter = [{
                 component: () =>
                     import ('@/views/home/index'),
                 meta: {
-                    title: '首页',
-                    icon: 'home'
+                    title: '实习小匠',
                 }
             },
             {
                 path: 'mine',
                 component: () =>
                     import ( /*webpackChunkName: '包名',*/ '@/views/pages/mine'),
-                hidden: true
+                hidden: true,
+                meta: {
+                    title: '我',
+                    login_require: true
+                }
             },
             {
                 path: 'news',
                 component: () =>
                     import ( /*webpackChunkName: '包名',*/ '@/views/pages/news'),
-                hidden: true
+                hidden: true,
+                meta: {
+                    title: '消息',
+                    login_require: true
+                },
             },
             {
                 path: 'notice',
                 component: () =>
                     import ( /*webpackChunkName: '包名',*/ '@/views/pages/notice'),
-                hidden: true
+                hidden: true,
+                meta: {
+                    title: '公告',
+                    login_require: true
+                },
             },
             {
                 path: 'signin',
                 component: () =>
                     import ( /*webpackChunkName: '包名',*/ '@/views/pages/signin'),
-                hidden: true
+                hidden: true,
+                meta: {
+                    title: '签到',
+                    login_require: true
+                },
             },
         ]
     },
@@ -54,6 +69,12 @@ export const constantRouter = [{
         path: '/404',
         component: () =>
             import ( /*webpackChunkName: '包名',*/ '@/views/pages/lose'),
+        hidden: true
+    },
+    {
+        path: '/login',
+        component: () =>
+            import ( /*webpackChunkName: '包名',*/ '@/views/pages/login'),
         hidden: true
     }
 ]

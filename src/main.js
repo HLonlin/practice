@@ -32,11 +32,49 @@ Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
-    el: '#app',
-    store,
-    router,
-    components: {
-        App
-    },
-    template: '<App/>'
-})
+        el: '#app',
+        store,
+        router,
+        components: {
+            App
+        },
+        template: '<App/>'
+    })
+    // router.beforeEach((to, from, next) => {
+    //     if (to.meta.login_require) {
+    //         if (store.state.tokenid) {
+    //             next()
+    //             return;
+    //             axios.get(api.roleList, {
+    //                 headers: { 'Biz-Access-Token': tokenid }
+    //             }).then(res => {
+    //                 if (res.status !== 200) {
+    //                     next({
+    //                         path: '/login',
+    //                         replace: true,
+    //                         query: {
+    //                             redirect: to.path
+    //                         }
+    //                     })
+    //                 }
+    //                 next()
+    //             })
+    //         } else {
+    //             next({
+    //                 path: '/login',
+    //                 replace: true,
+    //                 query: {
+    //                     redirect: to.path
+    //                 }
+    //             })
+    //         }
+    //     } else {
+    //         next()
+    //     }
+    // })
+    // router.beforeResolve((to, from, next) => {
+    //     if (to.meta.title) {
+    //         document.title = to.meta.title
+    //     }
+    //     next()
+    // })
