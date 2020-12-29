@@ -11,26 +11,17 @@ vueRouter.prototype.push = function push(location) {
 export const constantRouter = [{
         path: '',
         component: () =>
-            import ('@/views/home/indexLayout'),
-        redirect: '/home',
+            import ('@/views/home'),
+        redirect: '/signin',
         children: [{
-                path: 'home',
-                name: 'home',
+                path: 'signin',
                 component: () =>
-                    import ('@/views/home/index'),
-                meta: {
-                    title: '实习小匠',
-                }
-            },
-            {
-                path: 'mine',
-                component: () =>
-                    import ( /*webpackChunkName: '包名',*/ '@/views/pages/mine'),
+                    import ( /*webpackChunkName: '包名',*/ '@/views/pages/signin'),
                 hidden: true,
                 meta: {
-                    title: '我',
+                    title: '签到',
                     login_require: true
-                }
+                },
             },
             {
                 path: 'news',
@@ -53,15 +44,15 @@ export const constantRouter = [{
                 },
             },
             {
-                path: 'signin',
+                path: 'mine',
                 component: () =>
-                    import ( /*webpackChunkName: '包名',*/ '@/views/pages/signin'),
+                    import ( /*webpackChunkName: '包名',*/ '@/views/pages/mine'),
                 hidden: true,
                 meta: {
-                    title: '签到',
+                    title: '我',
                     login_require: true
-                },
-            },
+                }
+            }
         ]
     },
     // 通过es提案的import()实现懒加载，指定相同webpackChunkName的组件会被打包到同一js文件中
