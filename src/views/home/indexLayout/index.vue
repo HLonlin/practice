@@ -1,7 +1,10 @@
 <template>
   <div class="app-wrapper">
     <topBar :titleText="ontapText"></topBar>
-    <router-view class="router_container"></router-view>
+    <router-view
+      class="router_container"
+      v-on:checkAllRead="checkAllRead"
+    ></router-view>
     <tapList
       :tapList="tapList"
       :ontapIndex="ontapIndex"
@@ -45,7 +48,7 @@ export default {
           icon_on: "icon_gonggaotubiao",
           text: "公告",
           cornerMarker: false,
-          cornerNum: 0
+          cornerNum: "dot"
         },
         {
           pagePath: "/mine",
@@ -60,7 +63,7 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.updateCornerNum();
+    // this.updateCorner();
     this.$router.push(this.tapList[this.ontapIndex].pagePath);
   },
   beforeMount() {},
@@ -73,26 +76,23 @@ export default {
     tap: function(value) {
       this.ontapIndex = value;
     },
-    updateCornerNum: function() {
+    checkAllRead: function(value) {
+      this.tapList[2].cornerMarker = value;
+    },
+    updateCorner: function() {
       var that = this;
       function commitCornerNum(i) {
         let num = 0;
         setInterval(function() {
           num = num + 1;
-          let stateStr =
-            that.tapList[i].pagePath.replace(/\//g, "") + "/addState";
-          that.$store.commit(stateStr, {
-            key: "cornerNum",
-            val: num
-          });
-          that.tapList[i].cornerNum =
-            that.$store.state[
-              that.tapList[i].pagePath.replace(/\//g, "")
-            ].cornerNum;
+          that.tapList[i].cornerNum = num;
         }, 200);
       }
       for (var i = 0, imax = that.tapList.length; i < imax; i++) {
-        if (that.tapList[i].cornerMarker) {
+        if (
+          that.tapList[i].cornerMarker &&
+          that.tapList[i].cornerNum != "dot"
+        ) {
           commitCornerNum(i);
         }
       }

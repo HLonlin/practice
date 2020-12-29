@@ -10,9 +10,18 @@
       <router-link :to="{ path: item.pagePath }">
         <div class="item_inner">
           <van-badge
-            v-if="item.cornerMarker & (item.cornerNum > 0)"
+            v-if="item.cornerMarker && item.cornerNum > 0"
             :content="item.cornerNum"
             max="99"
+          >
+            <div
+              class="iconItem"
+              :class="ontapIndex == i ? 'ontap ' + item.icon_on : item.icon"
+            ></div>
+          </van-badge>
+          <van-badge
+            dot
+            v-else-if="item.cornerMarker && item.cornerNum == 'dot'"
           >
             <div
               class="iconItem"
@@ -96,5 +105,10 @@ export default {
 }
 .ontap {
   color: #0090d8;
+}
+</style>
+<style>
+.item_inner .van-badge--dot {
+  top: 4px;
 }
 </style>

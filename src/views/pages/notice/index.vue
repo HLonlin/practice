@@ -35,7 +35,7 @@
         >
           <div
             class="notice_Item"
-            v-for="(item, i) in list"
+            v-for="(item, i) in noticeList"
             :key="i"
             :title="item.title"
           >
@@ -71,10 +71,11 @@ export default {
   data() {
     return {
       topList: [],
-      list: [],
+      noticeList: [],
       loading: false,
       finished: false,
-      refreshing: false
+      refreshing: false,
+      allRead: "true"
     };
   },
   beforeCreate() {},
@@ -87,9 +88,10 @@ export default {
   destroyed() {},
   methods: {
     onLoad() {
+      // 加载列表
       setTimeout(() => {
         if (this.refreshing) {
-          this.list = [];
+          this.noticeList = [];
           this.refreshing = false;
         }
         for (let i = 0; i < 10; i++) {
@@ -100,26 +102,30 @@ export default {
               label: "王永润",
               date: "12月1日 19:18",
               intop: i < 3 ? true : false,
-              important: i % 2 == 0 ? false : true
+              important: i % 2 == 0 ? false : true,
+              read: false
             });
           } else {
-            this.list.push({
+            this.noticeList.push({
               title:
                 "防诈骗：花1万培训，动动嘴就轻松月入过万？！防诈骗：花1万培训，动动嘴就轻松月入过万？！",
               label: "王永润",
               date: "12月1日 19:18",
               intop: i < 3 ? true : false,
-              important: i % 2 == 0 ? false : true
+              important: i % 2 == 0 ? false : true,
+              read: true
             });
           }
         }
         this.loading = false;
-        if (this.list.length >= 40) {
+        if (this.noticeList.length >= 40) {
           this.finished = true;
         }
+        this.checkAllRead();
       }, 1000);
     },
     onRefresh() {
+      // 下拉刷新
       // 清空列表数据
       this.finished = false;
 
@@ -127,6 +133,22 @@ export default {
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       this.onLoad();
+    },
+    checkAllRead: function() {
+      // 检查是否全部已读
+      for (let i = 0, imax = this.topList; i < imax; i++) {
+        if (!this.topList[i].read) {
+          this.allRead = "false";
+        }
+      }
+      for (let i = 0, imax = this.noticeList; i < imax; i++) {
+        if (!this.noticeList[i].read) {
+          this.allRead = "false";
+        }
+      }
+      // checkAllRead是在父组件on监听的方法
+      // this.allRead是需要传的值
+      this.$emit("checkAllRead", this.allRead);
     }
   }
 };
