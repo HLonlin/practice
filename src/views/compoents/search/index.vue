@@ -47,6 +47,6 @@ export default {
   border: 1px solid #dddddd;
 }
 .search_container .van-search {
-  padding: 10px 1rem;
+  padding: 10px 1rem 0px 1rem;
 }
 </style>
