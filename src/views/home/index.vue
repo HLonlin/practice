@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      tapIndex: 3,
+      tapIndex: 0,
       toptitle: "实习小匠",
       tapList: [
         {
@@ -61,6 +61,7 @@ export default {
   beforeCreate() {},
   created() {
     // this.updateCorner();
+    this.tapIndex = this.$route.meta.tapIndex;
     this.toptitle = this.$route.meta.title;
   },
   beforeMount() {},

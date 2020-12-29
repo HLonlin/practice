@@ -17,11 +17,9 @@ Vue.use(vantComponents);
 import tool from '@/assets/tools'; //常用工具集
 import axios from '@/service'; // http管理 
 import api from '@/service/api'; // api管理
-import cookies from "js-cookie";
 Vue.prototype.$tool = tool;
 Vue.prototype.$axios = axios;
 Vue.prototype.$api = api;
-Vue.prototype.$cookies = cookies;
 
 import App from './App';
 import router from './router';

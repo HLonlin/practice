@@ -10,6 +10,7 @@
           v-for="(item, i) in topList"
           :key="i"
           :title="item.title"
+          @click="notice_Details(item)"
         >
           <div
             class="notice_title"
@@ -38,6 +39,7 @@
             v-for="(item, i) in noticeList"
             :key="i"
             :title="item.title"
+            @click="notice_Details(item)"
           >
             <div
               class="notice_title"
@@ -97,23 +99,27 @@ export default {
         for (let i = 0; i < 10; i++) {
           if (i < 3) {
             this.topList.push({
+              i: i,
               title:
                 "防诈骗：花1万培训，动动嘴就轻松月入过万？！防诈骗：花1万培训，动动嘴就轻松月入过万？！",
               label: "王永润",
               date: "12月1日 19:18",
               intop: i < 3 ? true : false,
               important: i % 2 == 0 ? false : true,
-              read: false
+              read: false,
+              type: i == 0 ? "normal" : "enclosure"
             });
           } else {
             this.noticeList.push({
+              i: i,
               title:
                 "防诈骗：花1万培训，动动嘴就轻松月入过万？！防诈骗：花1万培训，动动嘴就轻松月入过万？！",
               label: "王永润",
               date: "12月1日 19:18",
               intop: i < 3 ? true : false,
               important: i % 2 == 0 ? false : true,
-              read: true
+              read: true,
+              type: "outLink"
             });
           }
         }
@@ -149,6 +155,13 @@ export default {
       // checkAllRead是在父组件on监听的方法
       // this.allRead是需要传的值
       this.$emit("checkAllRead", this.allRead);
+    },
+    notice_Details: function(item) {
+      let Item = encodeURIComponent(JSON.stringify(item));
+      this.$router.push({
+        path: "/detailPage",
+        query: { detailId: Item }
+      });
     }
   }
 };

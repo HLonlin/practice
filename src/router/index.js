@@ -10,62 +10,73 @@ vueRouter.prototype.push = function push(location) {
 // 静态路由
 export const constantRouter = [{
         path: '',
+        // 通过es提案的import()实现懒加载，指定相同webpackChunkName的组件会被打包到同一js文件中
         component: () =>
-            import ('@/views/home'),
+            import ( /*webpackChunkName: '包名',*/ '@/views/home'),
         redirect: '/signin',
         children: [{
                 path: 'signin',
                 component: () =>
-                    import ( /*webpackChunkName: '包名',*/ '@/views/pages/signin'),
+                    import ('@/views/pages/signin'),
                 hidden: true,
                 meta: {
                     title: '签到',
-                    login_require: true
+                    login_require: true,
+                    tapIndex: 0
                 },
             },
             {
                 path: 'news',
                 component: () =>
-                    import ( /*webpackChunkName: '包名',*/ '@/views/pages/news'),
+                    import ('@/views/pages/news'),
                 hidden: true,
                 meta: {
                     title: '消息',
-                    login_require: true
+                    login_require: true,
+                    tapIndex: 1
                 },
             },
             {
                 path: 'notice',
                 component: () =>
-                    import ( /*webpackChunkName: '包名',*/ '@/views/pages/notice'),
+                    import ('@/views/pages/notice'),
                 hidden: true,
                 meta: {
                     title: '公告',
-                    login_require: true
+                    login_require: true,
+                    tapIndex: 2
                 },
             },
             {
                 path: 'mine',
                 component: () =>
-                    import ( /*webpackChunkName: '包名',*/ '@/views/pages/mine'),
+                    import ('@/views/pages/mine'),
                 hidden: true,
                 meta: {
                     title: '我',
-                    login_require: true
+                    login_require: true,
+                    tapIndex: 3
                 }
             }
         ]
     },
-    // 通过es提案的import()实现懒加载，指定相同webpackChunkName的组件会被打包到同一js文件中
     {
         path: '/404',
         component: () =>
-            import ( /*webpackChunkName: '包名',*/ '@/views/pages/lose'),
+            import ('@/views/pages/lose'),
         hidden: true
     },
     {
         path: '/login',
         component: () =>
-            import ( /*webpackChunkName: '包名',*/ '@/views/pages/login'),
+            import ('@/views/pages/login'),
+        hidden: true
+    },
+    {
+        name: 'detailPage',
+        path: '/detailPage',
+        component: () =>
+            import ('@/views/pages/notice/subpage/detailPages'),
         hidden: true
     }
 ]
@@ -75,6 +86,7 @@ export const asyncRouter = []
 
 export default new vueRouter({
     // mode: 'history', //后端支持可开
+    mode: "hash",
     routes: constantRouter,
     //定义路由切换时页面如何滚动，只在支持 history.pushState 的浏览器中可用
     scrollBehavior: () => ({ y: 0 }),

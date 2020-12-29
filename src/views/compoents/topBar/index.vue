@@ -44,8 +44,8 @@ export default {
 .topBar_container .van-nav-bar {
   background-color: #0090d8;
 }
-.van-nav-bar__placeholder,
-.van-nav-bar__content {
+.topBar_container .van-nav-bar__placeholder,
+.topBar_container .van-nav-bar__content {
   height: 44px !important;
 }
 .topBar_container .van-nav-bar .van-icon {
