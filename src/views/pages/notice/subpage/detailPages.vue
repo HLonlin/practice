@@ -10,8 +10,19 @@
         left-arrow
         @click-left="onClickLeft"
       />
+      <van-notify
+        v-model="showDetail_notify"
+        color="#333333"
+        background="#B9E8FF"
+        className="detail_notify"
+      >
+        <span>您已于2020-12-14 18:36读过此公告</span>
+      </van-notify>
     </div>
     <div class="detail_panel">
+      <div class="detail_isreadBox">
+        <img class="detail_isreadIcon" src="@/assets/images/isread.png" />
+      </div>
       <div class="detail_title">
         安全提醒：全球昨日日增确诊超55万例，累计逾7258万例，美国新增超19万例
       </div>
@@ -48,7 +59,8 @@ export default {
   name: "detailPage",
   data() {
     return {
-      detail: Object
+      detail: Object,
+      showDetail_notify: false
     };
   },
   beforeCreate() {},
@@ -58,6 +70,7 @@ export default {
   beforeMount() {},
   mounted() {
     this.resetContainerH();
+    this.showNotify();
   },
   beforeUpdate() {},
   updated() {},
@@ -78,6 +91,12 @@ export default {
         path: "/notice"
       });
       //   this.$router.go(-1);
+    },
+    showNotify() {
+      this.showDetail_notify = true;
+      setTimeout(() => {
+        this.showDetail_notify = false;
+      }, 2000);
     }
   }
 };
@@ -86,11 +105,36 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .detail_panel {
+  position: relative;
   box-sizing: border-box;
   padding: 20px 1rem;
   width: 100%;
 }
+.detail_notify {
+  position: fixed;
+  top: 44px;
+  height: 20px;
+  font-size: 0.625rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+  line-height: 10px;
+}
+.detail_isreadBox {
+  position: absolute;
+  top: 20px;
+  right: 1rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.detail_isreadIcon {
+  width: 100%;
+  height: 100%;
+}
 .detail_title {
+  position: relative;
   font-size: 1.25rem;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
@@ -120,9 +164,13 @@ export default {
   text-indent: 2em;
   box-sizing: border-box;
   padding-bottom: 10px;
+  letter-spacing: -0.3px;
+  text-align: justify;
 }
 .detail_content p {
   text-indent: 2em;
+  box-sizing: border-box;
+  padding-bottom: 10px;
 }
 .detail_enclosure {
   font-size: 0.9375rem;
