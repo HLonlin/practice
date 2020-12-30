@@ -78,7 +78,15 @@ export const constantRouter = [{
         component: () =>
             import ('@/views/pages/notice/subpage/detailPages'),
         hidden: true
+    },
+    {
+        name: 'selfinfo',
+        path: '/selfinfo',
+        component: () =>
+            import ('@/views/pages/mine/subpage/selfinfo'),
+        hidden: true
     }
+
 ]
 
 // 动态路由

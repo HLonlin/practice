@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "19140608",
+      "name": "radio",
+      "font_class": "radio",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "19140416",
+      "name": "radio",
+      "font_class": "radioActive",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
       "icon_id": "19103313",
       "name": "教学文档库图标",
       "font_class": "jiaoxuewendangkutubiao",

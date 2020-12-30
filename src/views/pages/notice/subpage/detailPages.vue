@@ -69,7 +69,6 @@ export default {
   },
   beforeMount() {},
   mounted() {
-    this.resetContainerH();
     this.showNotify();
   },
   beforeUpdate() {},
@@ -77,15 +76,6 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    resetContainerH: function() {
-      let windowHight = window.screen.height;
-      let detailPage_container = document.getElementsByClassName(
-        "detailPage_container"
-      )[0];
-      let nav_bar = document.getElementsByClassName("detail_topPanel")[0];
-      detailPage_container.style.height =
-        windowHight - nav_bar.offsetHeight + "px";
-    },
     onClickLeft: function() {
       this.$router.push({
         path: "/notice"
@@ -104,6 +94,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.detailPage_container {
+  height: 100vh;
+}
 .detail_panel {
   position: relative;
   box-sizing: border-box;

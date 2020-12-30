@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="info_panel">
-      <div class="info_panelContainer">
+      <div class="info_panelContainer" @click="routerTo('/selfinfo')">
         <div class="info_head">
           <img class="info_headImg" src="@/assets/images/default.png" alt="" />
         </div>
@@ -53,7 +53,11 @@ export default {
   updated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    routerTo: function(path) {
+      this.$router.push({ path: path });
+    }
+  }
 };
 </script>
 
