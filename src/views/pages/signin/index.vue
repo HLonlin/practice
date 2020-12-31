@@ -107,7 +107,7 @@ export default {
       let signin_topPanel = document.getElementsByClassName(
         "signin_topPanel"
       )[0];
-      var windowHight = window.screen.height;
+      let windowHight = window.screen.height;
       calendarContainer.style.height =
         windowHight - signin_topPanel.offsetHeight - 95 + "px";
 

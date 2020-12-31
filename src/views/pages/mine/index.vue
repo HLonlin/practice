@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="info_panel">
-      <div class="info_panelContainer" @click="routerTo('/selfinfo')">
+      <router-link class="info_panelContainer" :to="{ path: 'selfinfo' }">
         <div class="info_head">
           <img
             class="info_headImg"
@@ -10,7 +10,7 @@
           />
         </div>
         <div class="info_name">卢保希</div>
-      </div>
+      </router-link>
     </div>
     <div class="middle_panel">
       <router-link :to="{ path: 'signin' }" class="cell_panel">
@@ -57,14 +57,18 @@ export default {
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    this.resetContainerH();
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    routerTo: function(path) {
-      this.$router.push({ path: path });
+    resetContainerH: function() {
+      let windowHight = window.screen.height;
+      let container = document.getElementsByClassName("container")[0];
+      container.style.height = windowHight - 44 + "px";
     }
   }
 };
@@ -82,6 +86,8 @@ export default {
   margin-bottom: 10px;
 }
 .info_panelContainer {
+  display: flex;
+  align-items: center;
   position: relative;
   width: 100%;
   height: 100%;
