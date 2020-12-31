@@ -3,7 +3,11 @@
     <div class="info_panel">
       <div class="info_panelContainer" @click="routerTo('/selfinfo')">
         <div class="info_head">
-          <img class="info_headImg" src="@/assets/images/default.png" alt="" />
+          <img
+            class="info_headImg"
+            :src="headImg ? headImg : require('@/assets/images/default.png')"
+            style="object-fit: cover;"
+          />
         </div>
         <div class="info_name">卢保希</div>
       </div>
@@ -43,7 +47,9 @@
 export default {
   name: "mine",
   data() {
-    return {};
+    return {
+      headImg: "https://img.yzcdn.cn/vant/leaf.jpg"
+    };
   },
   beforeCreate() {},
   created() {},

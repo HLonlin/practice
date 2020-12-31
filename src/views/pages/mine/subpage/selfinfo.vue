@@ -10,26 +10,41 @@
       @click-left="onClickLeft"
     />
     <div class="selfinfo_topPanel">
-      <!-- <div class="selfinfo_panel selfinfo_headPanel">
-          <div class="selfinfo_label">头像</div>
-          <div class="selfinfo_headIconBox">
-            <img class="selfinfo_headIcon" :src="headImg" />
-          </div>
-        </div> -->
+      <div class="selfinfo_panel">
+        <div class="selfinfo_label">头像</div>
+        <van-uploader
+          class="selfinfo_headIcon"
+          v-model="info.headImg"
+          :max-count="1"
+          :before-read="beforeRead"
+          :after-read="afterRead"
+          preview-size="3.75rem"
+          :deletable="false"
+          :preview-options="{ showIndex: false }"
+          v-if="!editing"
+        >
+        </van-uploader>
+        <van-uploader
+          class="selfinfo_headIcon"
+          v-model="info.headImg"
+          :max-count="1"
+          :before-read="beforeRead"
+          :after-read="afterRead"
+          preview-size="3.75rem"
+          :preview-options="{ showIndex: false }"
+          v-else
+        >
+        </van-uploader>
+      </div>
       <div class="selfinfo_panel ">
-        <van-field
-          v-model="name"
-          label="姓名"
-          placeholder="请输入姓名"
-          :readonly="!editing"
-        />
+        <van-field v-model="info.name" label="姓名" :readonly="true" />
       </div>
     </div>
     <div class="selfinfo_middlePanel">
       <div class="selfinfo_panel">
         <div class="selfinfo_label">就业方式</div>
-        <div class="selfinfo_text" v-if="!editing">{{ mode }}</div>
-        <van-radio-group v-model="mode" v-else>
+        <div class="selfinfo_text" v-if="!editing">{{ info.mode }}</div>
+        <van-radio-group v-model="info.mode" v-else>
           <van-radio name="自谋" checked-color="#0090d8"
             >自谋
             <template #icon="props">
@@ -61,8 +76,8 @@
       </div>
       <div class="selfinfo_panel">
         <div class="selfinfo_label">就业状态</div>
-        <div class="selfinfo_text" v-if="!editing">{{ state }}</div>
-        <van-radio-group v-model="state" v-else>
+        <div class="selfinfo_text" v-if="!editing">{{ info.state }}</div>
+        <van-radio-group v-model="info.state" v-else>
           <van-radio
             v-for="(item, i) in stateRadioList"
             :key="i"
@@ -84,10 +99,10 @@
       </div>
       <div
         class="selfinfo_panel"
-        :class="{ selfinfo_area: company.length > 16 }"
+        :class="{ selfinfo_area: info.company.length > 16 }"
       >
         <van-field
-          v-model="company"
+          v-model="info.company"
           rows="1"
           autosize
           label="实习单位"
@@ -98,10 +113,10 @@
       </div>
       <div
         class="selfinfo_panel"
-        :class="{ selfinfo_area: address.length > 16 }"
+        :class="{ selfinfo_area: info.address.length > 16 }"
       >
         <van-field
-          v-model="address"
+          v-model="info.address"
           rows="1"
           autosize
           label="单位地址"
@@ -114,7 +129,7 @@
     <div class="selfinfo_bottomPanel">
       <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
         <van-field
-          v-model="tel"
+          v-model="info.tel"
           label="联系电话"
           placeholder="请输入联系电话"
           :readonly="!editing"
@@ -122,7 +137,7 @@
       </div>
       <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
         <van-field
-          v-model="emergencyCall"
+          v-model="info.emergencyCall"
           label="紧急联系电话"
           placeholder="请输入紧急联系电话"
           :readonly="!editing"
@@ -130,7 +145,7 @@
       </div>
       <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
         <van-field
-          v-model="workTelephone"
+          v-model="info.workTelephone"
           label="单位电话"
           placeholder="请输入单位电话"
           :readonly="!editing"
@@ -138,7 +153,7 @@
       </div>
       <div class="selfinfo_panel">
         <van-field
-          v-model="businessContacts"
+          v-model="info.businessContacts"
           label="企业联系人"
           placeholder="请输入企业联系人"
           :readonly="!editing"
@@ -146,7 +161,7 @@
       </div>
       <div class="selfinfo_panel">
         <van-field
-          v-model="post"
+          v-model="info.post"
           label="岗位"
           placeholder="请输入岗位"
           :readonly="!editing"
@@ -154,13 +169,13 @@
       </div>
     </div>
     <div class="selfinfo_bottomBtnBox" v-if="!editing">
-      <div class="selfinfo_bottomBtn" @click="editing = true">
+      <div class="selfinfo_bottomBtn" @click="onEditing">
         编辑
       </div>
     </div>
     <div class="selfinfo_bottomBtnBox" v-else>
       <div class="selfinfo_submitBtn">提交</div>
-      <div class="selfinfo_cancelBtn" @click="editing = false">取消</div>
+      <div class="selfinfo_cancelBtn" @click="onCancel">取消</div>
     </div>
   </div>
 </template>
@@ -171,17 +186,20 @@ export default {
   data() {
     return {
       editing: false,
-      headImg: require("@/assets/images/default.png"),
-      name: "卢保希",
-      mode: "自谋",
-      state: "已上岗",
-      company: "艺影广告发展有限公司",
-      address: "广州市海珠区南洲路143号 艺影小洲影视基地",
-      tel: "13332838357",
-      emergencyCall: "13924221482",
-      workTelephone: "02084122541",
-      businessContacts: "刘丽",
-      post: "组长",
+      info: {
+        headImg: [{ url: "https://img.yzcdn.cn/vant/leaf.jpg" }],
+        name: "卢保希",
+        mode: "自谋",
+        state: "已上岗",
+        company: "艺影广告发展有限公司",
+        address: "广州市海珠区南洲路143号 艺影小洲影视基地",
+        tel: "13332838357",
+        emergencyCall: "13924221482",
+        workTelephone: "02084122541",
+        businessContacts: "刘丽",
+        post: "组长"
+      },
+      infoOfbeforeEdit: {},
       stateRadioList: [
         "待业",
         "待上岗",
@@ -207,6 +225,42 @@ export default {
         path: "/mine"
       });
       //   this.$router.go(-1);
+    },
+    // 上传前校验格式、大小
+    beforeRead(file) {
+      return true;
+    },
+    afterRead(file) {
+      const tempFile = file.file;
+      const type = tempFile.type;
+      const size = tempFile.size;
+      const newName =
+        new Date().getTime() +
+        tempFile.name.substring(tempFile.name.indexOf("."));
+      let uploadFile = new File([tempFile], newName, { type, size });
+      let formData = new FormData();
+      formData.append("file", uploadFile);
+      file.status = "uploading";
+      file.message = "上传中...";
+
+      setTimeout(() => {
+        file.status = "done";
+        file.message = "上传成功";
+      }, 1000);
+    },
+    onEditing: function() {
+      let that = this;
+      that.editing = true;
+      for (let key in that.info) {
+        that.$set(that.infoOfbeforeEdit, key, that.info[key]);
+      }
+    },
+    onCancel: function() {
+      let that = this;
+      that.editing = false;
+      for (let key in that.info) {
+        that.$set(that.info, key, that.infoOfbeforeEdit[key]);
+      }
     }
   }
 };
@@ -234,7 +288,6 @@ export default {
   border-bottom: 1px solid #eeeeee;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 .selfinfo_topPanel .selfinfo_panel:last-child,
 .selfinfo_middlePanel .selfinfo_panel:last-child,
@@ -242,10 +295,12 @@ export default {
   border: none;
 }
 .selfinfo_label {
+  display: flex;
   font-size: 0.875rem;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #323233;
+  align-items: center;
 }
 .selfinfo_text {
   font-size: 0.875rem;
@@ -253,12 +308,16 @@ export default {
   font-weight: 400;
   color: #666666;
 }
+.selfinfo_headIcon {
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+}
 .selfinfo_bottomPanel {
   margin-bottom: 0px;
 }
 .selfinfo_radio {
   vertical-align: middle;
-  font-size: 0.9375rem;
   color: #bbbbbb;
   display: flex;
   align-self: center;
@@ -315,52 +374,6 @@ export default {
   text-align: center;
   border: 1px solid #bbbbbb;
 }
-/* .selfinfo_label {
-  font-size: 0.875rem;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #323233;
-}
-.selfinfo_info {
-  max-width: 14rem;
-  letter-spacing: -0.4px;
-}
-.selfinfo_panel {
-  width: 100%;
-  border-bottom: 1px solid #eeeeee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.875rem;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #323233;
-}
-.selfinfo_disable {
-  color: #666666;
-}
-.selfinfo_able {
-  color: #0090d8;
-}
-.selfinfo_headPanel {
-  height: 90px;
-}
-.selfinfo_headIconBox {
-  width: 3.75rem;
-  height: 3.75rem;
-  border-radius: 50%;
-}
-.selfinfo_headIcon {
-  width: 100%;
-  height: 100%;
-}
-.selfinfo_infoPanel {
-  box-sizing: border-box;
-  padding: 12px 0px;
-}
-.selfinfo_alignTop {
-  align-self: flex-start;
-} */
 </style>
 <style>
 .selfinfo_container .van-nav-bar {
@@ -408,11 +421,12 @@ export default {
 
 .selfinfo_panel .van-radio-group {
   display: flex;
-  height: 19px;
+  flex-wrap: wrap;
+  max-width: 14rem;
 }
 .selfinfo_panel .van-radio {
   display: inline-block;
-  margin-left: 0.75rem;
+  margin: 0.125rem 0px 0.125rem 0.75rem;
 }
 .selfinfo_panel .van-radio__icon {
   display: inline-block;
@@ -428,5 +442,19 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #666666;
+}
+.selfinfo_panel .van-uploader__upload {
+  margin: 0px;
+  border-radius: 50%;
+}
+.selfinfo_panel .van-uploader__preview-image {
+  border-radius: 50%;
+}
+.selfinfo_panel .van-uploader__preview-delete {
+  border-radius: 50%;
+}
+.selfinfo_panel .van-uploader__preview-delete-icon {
+  top: -1px;
+  right: -1px;
 }
 </style>
