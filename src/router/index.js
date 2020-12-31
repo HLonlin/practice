@@ -99,7 +99,15 @@ export const constantRouter = [{
         component: () =>
             import ('@/views/pages/mine/subpage/monthlydetail'),
         hidden: true
+    },
+    {
+        name: 'library',
+        path: '/library',
+        component: () =>
+            import ('@/views/pages/mine/subpage/library'),
+        hidden: true
     }
+
 
 ]
 
