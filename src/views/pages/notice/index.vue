@@ -64,6 +64,9 @@
 </template>
 
 <script>
+/**
+ * 公告列表页
+ */
 import search from "../../compoents/search";
 export default {
   name: "notice",

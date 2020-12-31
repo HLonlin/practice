@@ -3,6 +3,9 @@
 </template>
 
 <script>
+/**
+ * 登录页
+ */
 export default {
   name: "login",
   data() {

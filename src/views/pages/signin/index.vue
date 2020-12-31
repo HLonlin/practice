@@ -39,6 +39,9 @@
 </template>
 
 <script>
+/**
+ * 签到页
+ */
 export default {
   name: "signin",
   data() {

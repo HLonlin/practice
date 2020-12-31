@@ -39,6 +39,9 @@
 </template>
 
 <script>
+/**
+ * 404页
+ */
 export default {
   name: "index",
   data() {

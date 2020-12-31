@@ -181,6 +181,9 @@
 </template>
 
 <script>
+/**
+ * 个人信息页
+ */
 export default {
   name: "selfinfo",
   data() {

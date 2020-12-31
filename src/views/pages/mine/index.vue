@@ -44,6 +44,9 @@
 </template>
 
 <script>
+/**
+ * 我的
+ */
 export default {
   name: "mine",
   data() {

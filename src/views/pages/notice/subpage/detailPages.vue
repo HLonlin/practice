@@ -55,6 +55,9 @@
 </template>
 
 <script>
+/**
+ * 公告详情页
+ */
 export default {
   name: "detailPage",
   data() {

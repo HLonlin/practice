@@ -1,21 +1,13 @@
 <template>
-  <div class="container">
-    <div class="search_panel">
-      <search sourceOf="news"></search>
-    </div>
-  </div>
+  <div class="monthlylist_container"></div>
 </template>
 
 <script>
 /**
- * 聊天列表页
+ * 月记列表页
  */
-import search from "../../compoents/search";
 export default {
-  name: "news",
-  components: {
-    search
-  },
+  name: "monthlylist",
   data() {
     return {};
   },
