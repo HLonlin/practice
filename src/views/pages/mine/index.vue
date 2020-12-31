@@ -13,7 +13,7 @@
       </router-link>
     </div>
     <div class="middle_panel">
-      <router-link :to="{ path: 'signin' }" class="cell_panel">
+      <router-link :to="{ path: 'monthlylist' }" class="cell_panel">
         <i class="iconItem icon_yuejitubiao icon_left"></i>
         <div class="middle_title">月记</div>
       </router-link>
