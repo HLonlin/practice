@@ -4,53 +4,54 @@
  * @author HLonlin <1021944439@qq.com>
  */
 import axios from 'axios';
+import api from "./api.js";
 
-// 创建axios实例
-const service = axios.create({
-    baseURL: process.env.BASE_API, // api的base_url
-    timeout: 15000, // 请求超时时间
-    // headers: {
-    //   'Content-Type': ''
-    // }
-});
+const commonFn = {
+    stringify: function(obj, sep, eq) { // qs.stringify
+        sep = sep || '&';
+        eq = eq || '=';
+        let str = "";
+        for (var k in obj) {
+            str += k + eq + unescape(obj[k]) + sep
+        }
+        return str.slice(0, -1)
+    }
+}
 
-// request拦截器
-service.interceptors.request.use(
+// axios 配置
+axios.defaults.timeout = 15000;
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.baseURL = api.host;
+
+// http request 拦截器
+axios.interceptors.request.use(
     config => {
-        // config.headers.Token = "testCode"; // 自定义请求头
+        if (config.method === 'post') {
+            // config.data = JSON.stringify(config.data);
+            config.data = commonFn.stringify(config.data);
+        }
         return config;
     },
-    error => {
-        // Do something with request error
-        console.log(error) // for debug
-        return Promise.reject(error);
-    }
-);
+    err => {
+        return Promise.reject(err);
+    })
 
-// respone拦截器
-service.interceptors.response.use(
+// http response 拦截器
+axios.interceptors.response.use(
     response => {
-        const res = response.data;
-        if (res.status !== 200) { // status非200抛出错误
-            Message({
-                message: res.message,
-                type: 'error',
-                duration: 3 * 1000
-            });
-            return Promise.reject('error');
+        // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
+        // 否则的话抛出错误
+        if (response.status === 200) {
+            return Promise.resolve(response.data);
         } else {
-            return res;
+            return Promise.reject(response.data);
         }
     },
+    // 服务器状态码不是2开头的的情况
+    // 根据返回的状态码进行一些操作，例如登录过期提示，错误提示等等
     error => {
-        console.log('err' + error); //for debug
-        Message({
-            message: error.message,
-            type: 'error',
-            duration: 3 * 1000
-        });
-        return Promise.reject(error);
+        console.log(error);
     }
-);
+)
 
-export default service;
+export default axios;
