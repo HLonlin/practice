@@ -80,7 +80,7 @@ export default {
       loading: false,
       finished: false,
       refreshing: false,
-      allRead: "true"
+      noReadAll: false
     };
   },
   beforeCreate() {},
@@ -145,19 +145,19 @@ export default {
     },
     checkAllRead: function() {
       // 检查是否全部已读
-      for (let i = 0, imax = this.topList; i < imax; i++) {
+      for (let i = 0, imax = this.topList.length; i < imax; i++) {
         if (!this.topList[i].read) {
-          this.allRead = "false";
+          this.noReadAll = true;
         }
       }
-      for (let i = 0, imax = this.noticeList; i < imax; i++) {
+      for (let i = 0, imax = this.noticeList.length; i < imax; i++) {
         if (!this.noticeList[i].read) {
-          this.allRead = "false";
+          this.noReadAll = true;
         }
       }
       // checkAllRead是在父组件on监听的方法
-      // this.allRead是需要传的值
-      this.$emit("checkAllRead", this.allRead);
+      // this.noReadAll是需要传的值
+      this.$emit("checkAllRead", this.noReadAll);
     },
     notice_Details: function(item) {
       let Item = encodeURIComponent(JSON.stringify(item));
