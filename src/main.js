@@ -13,6 +13,10 @@ const vantComponents = {
     }
 }
 Vue.use(vantComponents);
+import { ImagePreview } from 'vant';
+
+// 全局注册
+Vue.use(ImagePreview);
 
 import tool from '@/assets/tools'; //常用工具集
 import axios from '@/service'; // http管理 

@@ -21,12 +21,14 @@
         <p>进一步学到了修图，剪辑思路音乐卡节奏。</p>
       </div>
       <div class="monthlydetail_articlePhoto">
-        <div class="articlePhoto_item"></div>
-        <div class="articlePhoto_item"></div>
-        <div class="articlePhoto_item"></div>
-        <div class="articlePhoto_item"></div>
-        <div class="articlePhoto_item"></div>
-        <div class="articlePhoto_item"></div>
+        <div
+          v-for="(item, i) in imageList"
+          :key="i"
+          class="articlePhoto_item"
+          @click="previewImg(i)"
+        >
+          <img class="articlePhoto" :src="item" style="object-fit: cover;" />
+        </div>
       </div>
     </div>
     <div class="monthlydetail_commentPanel">
@@ -55,6 +57,12 @@
         </div>
       </div>
     </div>
+    <van-image-preview
+      v-model="show"
+      :images="imageList"
+      :startPosition="index"
+    >
+    </van-image-preview>
   </div>
 </template>
 
@@ -62,7 +70,18 @@
 export default {
   name: "monthlydetail",
   data() {
-    return {};
+    return {
+      show: false,
+      index: 0,
+      imageList: [
+        "https://img.yzcdn.cn/vant/apple-1.jpg",
+        "https://img.yzcdn.cn/vant/apple-2.jpg",
+        "https://img.yzcdn.cn/vant/apple-3.jpg",
+        "https://img.yzcdn.cn/vant/apple-4.jpg",
+        "https://img.yzcdn.cn/vant/apple-5.jpg",
+        "https://img.yzcdn.cn/vant/apple-6.jpg"
+      ]
+    };
   },
   beforeCreate() {},
   created() {},
@@ -78,6 +97,15 @@ export default {
         path: "/monthlylist"
       });
       //   this.$router.go(-1);
+    },
+    previewImg: function(i) {
+      let that = this;
+      this.show = true;
+      this.index = i;
+      // ImagePreview({
+      //   images: that.imageList,
+      //   startPosition: i
+      // });
     }
   }
 };
@@ -127,6 +155,10 @@ export default {
   height: 3.75rem;
   background-color: azure;
   margin: 0px 0.625rem 0.625rem 0px;
+}
+.articlePhoto {
+  width: 100%;
+  height: 100%;
 }
 .monthlydetail_commentPanel {
   width: 100%;
