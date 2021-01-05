@@ -63,22 +63,14 @@ export default {
   data() {
     return {
       usertype: "1", // 账号类型，必填 1=教师，2=学生
-      userid: "", // 登录号，必填，教师：oa账号，学生：手机号
-      passwd: "" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      userid: "admin", // 登录号，必填，教师：oa账号，学生：手机号
+      passwd: "gz020slitsXX" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      // userid: "13076207391", // 登录号，必填，教师：oa账号，学生：手机号
+      // passwd: "10241x" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
     };
   },
   beforeCreate() {},
-  created() {
-    let that = this;
-    // setTimeout(() => {
-    //   let url = that.$route.query.redirect || "/";
-    //   this.$store.commit("addState", {
-    //     key: "tokenid",
-    //     val: url
-    //   });
-    //   that.$router.replace(url);
-    // }, 1000);
-  },
+  created() {},
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -89,11 +81,15 @@ export default {
     onClickLeft: function() {},
     login: function() {
       let that = this;
-      that.$axios({
-        methods: "post",
-        url: that.$api.login,
-        data: { userid: that.userid, passwd: that.passwd }
-      });
+      that.$axios
+        .post(that.$api.login, {
+          usertype: that.usertype,
+          userid: that.userid,
+          passwd: that.passwd
+        })
+        .then(res => {
+          console.log(res);
+        });
     }
   }
 };
