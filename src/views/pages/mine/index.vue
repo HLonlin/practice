@@ -9,7 +9,7 @@
             style="object-fit: cover;"
           />
         </div>
-        <div class="info_name">卢保希</div>
+        <div class="info_name">{{ userName }}</div>
       </router-link>
     </div>
     <div class="middle_panel">
@@ -51,11 +51,14 @@ export default {
   name: "mine",
   data() {
     return {
-      headImg: "https://img.yzcdn.cn/vant/leaf.jpg"
+      headImg: require("../../../assets/images/default.png"),
+      userName: ""
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.getUserData();
+  },
   beforeMount() {},
   mounted() {
     this.resetContainerH();
@@ -69,6 +72,13 @@ export default {
       let windowHight = window.screen.height;
       let container = document.getElementsByClassName("container")[0];
       container.style.height = windowHight - 44 + "px";
+    },
+    getUserData: function() {
+      let userData = this.$tool.getLocal("userData");
+      if (userData) {
+        this.userName = userData.UserName;
+        this.headImg = userData.logo;
+      }
     }
   }
 };

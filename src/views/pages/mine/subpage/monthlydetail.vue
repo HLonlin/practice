@@ -102,10 +102,6 @@ export default {
       let that = this;
       this.show = true;
       this.index = i;
-      // ImagePreview({
-      //   images: that.imageList,
-      //   startPosition: i
-      // });
     }
   }
 };

@@ -9,46 +9,72 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <div class="logo_panel">
-      <img class="logo" src="../../../assets/images/logo.png" />
+    <div v-if="!entSelectShow">
+      <div class="logo_panel">
+        <img class="logo" src="../../../assets/images/logo.png" />
+      </div>
+      <div class="login_panel">
+        <div class="login_bgPanel"></div>
+        <div class="login_itemBox">
+          <div class="login_tabbar">
+            <div
+              class="login_tabbarItem"
+              :class="{ login_tabbarActive: usertype == '1' }"
+              @click="usertype = '1'"
+            >
+              教师
+            </div>
+            <div
+              class="login_tabbarItem"
+              :class="{ login_tabbarActive: usertype == '2' }"
+              @click="usertype = '2'"
+            >
+              学生
+            </div>
+          </div>
+          <div class="login_account">
+            <i class="iconItem icon_denglu-zhanghaotubiao loginIcon"></i>
+            <van-field
+              v-model="userid"
+              :placeholder="usertype == '1' ? '请输入账号' : '请输入手机号码'"
+              class="login_input"
+            />
+          </div>
+          <div class="login_password">
+            <i class="iconItem icon_denglu-mimatubiao loginIcon"></i>
+            <van-field
+              v-model="passwd"
+              type="password"
+              :placeholder="
+                usertype == '1' ? '请输入密码' : '请输入身份证后6位'
+              "
+              class="login_input"
+            />
+          </div>
+          <div class="login_button" @click="login">登录</div>
+        </div>
+      </div>
     </div>
-    <div class="login_panel">
-      <div class="login_bgPanel"></div>
-      <div class="login_itemBox">
-        <div class="login_tabbar">
-          <div
-            class="login_tabbarItem"
-            :class="{ login_tabbarActive: usertype == '1' }"
-            @click="usertype = '1'"
-          >
-            教师
-          </div>
-          <div
-            class="login_tabbarItem"
-            :class="{ login_tabbarActive: usertype == '2' }"
-            @click="usertype = '2'"
-          >
-            学生
-          </div>
+    <div v-else>
+      <div class="login_headImgPanel">
+        <img class="login_headImg" :src="userHead" />
+        <p class="login_userName">{{ userName }}</p>
+      </div>
+      <div class="entSelect_panel">
+        <div
+          class="entSelect_banzhurenBtn"
+          @click="routerTo('')"
+          v-if="entSelect_banzhurenBtn"
+        >
+          班主任入口
         </div>
-        <div class="login_account">
-          <i class="iconItem icon_denglu-zhanghaotubiao loginIcon"></i>
-          <van-field
-            v-model="userid"
-            :placeholder="usertype == '1' ? '请输入账号' : '请输入手机号码'"
-            class="login_input"
-          />
+        <div
+          class="entSelect_xibuBtn"
+          @click="routerTo('')"
+          v-if="entSelect_xibuBtn"
+        >
+          系部入口
         </div>
-        <div class="login_password">
-          <i class="iconItem icon_denglu-mimatubiao loginIcon"></i>
-          <van-field
-            v-model="passwd"
-            type="password"
-            :placeholder="usertype == '1' ? '请输入密码' : '请输入身份证后6位'"
-            class="login_input"
-          />
-        </div>
-        <div class="login_button" @click="login">登录</div>
       </div>
     </div>
   </div>
@@ -62,11 +88,16 @@ export default {
   name: "login",
   data() {
     return {
+      entSelectShow: false,
+      entSelect_banzhurenBtn: false,
+      entSelect_xibuBtn: false,
       usertype: "1", // 账号类型，必填 1=教师，2=学生
-      userid: "admin", // 登录号，必填，教师：oa账号，学生：手机号
-      passwd: "gz020slitsXX" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
-      // userid: "13076207391", // 登录号，必填，教师：oa账号，学生：手机号
-      // passwd: "10241x" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      // userid: "admin", // 登录号，必填，教师：oa账号，学生：手机号
+      // passwd: "gz020slitsXX", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      userid: "13076207391", // 登录号，必填，教师：oa账号，学生：手机号
+      passwd: "10241x", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      userName: "",
+      userHead: require("../../../assets/images/default.png")
     };
   },
   beforeCreate() {},
@@ -81,6 +112,9 @@ export default {
     onClickLeft: function() {},
     login: function() {
       let that = this;
+      this.$toast.loading({
+        message: "登录中..."
+      });
       that.$axios
         .post(that.$api.login, {
           usertype: that.usertype,
@@ -88,8 +122,25 @@ export default {
           passwd: that.passwd
         })
         .then(res => {
-          console.log(res);
+          this.$toast.clear();
+          this.$tool.setLocal("userData", res.data);
+          if (res.status !== 200) {
+            return;
+          }
+          if (that.usertype == "1") {
+            that.entSelectShow = true;
+            that.entSelect_banzhurenBtn = res.data.banzurenPermission;
+            that.entSelect_xibuBtn = res.data.xibuPermission;
+            that.userHead = res.data.logo;
+            that.userName = res.data.nickname;
+          } else {
+            let url = this.$route.query.redirect || "/";
+            that.$router.replace(url);
+          }
         });
+    },
+    routerTo: function(path, params) {
+      this.$router.push({ path: path });
     }
   }
 };
@@ -200,6 +251,50 @@ export default {
   color: #ffffff;
   background-color: #0090d8;
   line-height: 47px;
+}
+.login_headImgPanel {
+  box-sizing: border-box;
+  padding: 90px 0px 60px 0px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.login_headImg {
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-self: center;
+}
+.login_userName {
+  font-size: 1rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #333333;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 8px 0px 0px 0px;
+}
+.entSelect_panel {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.entSelect_banzhurenBtn,
+.entSelect_xibuBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18.75rem;
+  height: 47px;
+  background-color: #0090d8;
+  border-radius: 1.5rem;
+  box-sizing: border-box;
+  margin: 0px 0px 20px 0px;
+  font-size: 1.125rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #ffffff;
 }
 </style>
 <style>

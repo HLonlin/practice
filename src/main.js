@@ -5,18 +5,14 @@ import '@/assets/styles/default.css'; // 默认样式
 
 // 按需引入vant组件
 import 'vant/lib/index.css'
-import { Col, Row, Badge, Calendar, DatetimePicker, NavBar, Search, List, PullRefresh, Notify, Field, RadioGroup, Radio, Uploader, Tabbar, TabbarItem, Toast } from "vant";
-const vantComponentsObj = { Col, Row, Badge, Calendar, DatetimePicker, NavBar, Search, List, PullRefresh, Notify, Field, RadioGroup, Radio, Uploader, Tabbar, TabbarItem, Toast }
+import { Col, Row, Badge, Calendar, DatetimePicker, NavBar, Search, List, PullRefresh, Notify, Field, RadioGroup, Radio, Uploader, Tabbar, TabbarItem, Toast, ImagePreview } from "vant";
+const vantComponentsObj = { Col, Row, Badge, Calendar, DatetimePicker, NavBar, Search, List, PullRefresh, Notify, Field, RadioGroup, Radio, Uploader, Tabbar, TabbarItem, Toast, ImagePreview }
 const vantComponents = {
     install(Vue) {
         Object.keys(vantComponentsObj).forEach(key => Vue.use(vantComponentsObj[key]))
     }
 }
 Vue.use(vantComponents);
-import { ImagePreview } from 'vant';
-
-// 全局注册
-Vue.use(ImagePreview);
 
 import tool from '@/assets/tools'; //常用工具集
 import axios from '@/service'; // http管理 

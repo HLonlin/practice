@@ -37,14 +37,14 @@
         </van-uploader>
       </div>
       <div class="selfinfo_panel ">
-        <van-field v-model="info.name" label="姓名" :readonly="true" />
+        <van-field v-model="info.UserName" label="姓名" :readonly="true" />
       </div>
     </div>
     <div class="selfinfo_middlePanel">
       <div class="selfinfo_panel">
         <div class="selfinfo_label">就业方式</div>
-        <div class="selfinfo_text" v-if="!editing">{{ info.mode }}</div>
-        <van-radio-group v-model="info.mode" v-else>
+        <div class="selfinfo_text" v-if="!editing">{{ info.jiuyefangshi }}</div>
+        <van-radio-group v-model="info.jiuyefangshi" v-else>
           <van-radio name="自谋" checked-color="#0090d8"
             >自谋
             <template #icon="props">
@@ -76,8 +76,10 @@
       </div>
       <div class="selfinfo_panel">
         <div class="selfinfo_label">就业状态</div>
-        <div class="selfinfo_text" v-if="!editing">{{ info.state }}</div>
-        <van-radio-group v-model="info.state" v-else>
+        <div class="selfinfo_text" v-if="!editing">
+          {{ info.jiuyezhuangtai }}
+        </div>
+        <van-radio-group v-model="info.jiuyezhuangtai" v-else>
           <van-radio
             v-for="(item, i) in stateRadioList"
             :key="i"
@@ -99,10 +101,10 @@
       </div>
       <div
         class="selfinfo_panel"
-        :class="{ selfinfo_area: info.company.length > 16 }"
+        :class="{ selfinfo_area: info.shixidanwei.length > 16 }"
       >
         <van-field
-          v-model="info.company"
+          v-model="info.shixidanwei"
           rows="1"
           autosize
           label="实习单位"
@@ -113,10 +115,10 @@
       </div>
       <div
         class="selfinfo_panel"
-        :class="{ selfinfo_area: info.address.length > 16 }"
+        :class="{ selfinfo_area: info.danweidizhi.length > 16 }"
       >
         <van-field
-          v-model="info.address"
+          v-model="info.danweidizhi"
           rows="1"
           autosize
           label="单位地址"
@@ -129,7 +131,7 @@
     <div class="selfinfo_bottomPanel">
       <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
         <van-field
-          v-model="info.tel"
+          v-model="info.phone"
           label="联系电话"
           placeholder="请输入联系电话"
           :readonly="!editing"
@@ -137,7 +139,7 @@
       </div>
       <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
         <van-field
-          v-model="info.emergencyCall"
+          v-model="info.jjlxr"
           label="紧急联系电话"
           placeholder="请输入紧急联系电话"
           :readonly="!editing"
@@ -153,7 +155,7 @@
       </div>
       <div class="selfinfo_panel">
         <van-field
-          v-model="info.businessContacts"
+          v-model="info.qylxr"
           label="企业联系人"
           placeholder="请输入企业联系人"
           :readonly="!editing"
@@ -161,7 +163,7 @@
       </div>
       <div class="selfinfo_panel">
         <van-field
-          v-model="info.post"
+          v-model="info.job"
           label="岗位"
           placeholder="请输入岗位"
           :readonly="!editing"
@@ -190,17 +192,17 @@ export default {
     return {
       editing: false,
       info: {
-        headImg: [{ url: "https://img.yzcdn.cn/vant/leaf.jpg" }],
-        name: "卢保希",
-        mode: "自谋",
-        state: "已上岗",
-        company: "艺影广告发展有限公司",
-        address: "广州市海珠区南洲路143号 艺影小洲影视基地",
-        tel: "13332838357",
-        emergencyCall: "13924221482",
+        headImg: [{ url: "../../../assets/images/default.png" }],
+        UserName: "卢保希",
+        jiuyefangshi: "自谋",
+        jiuyezhuangtai: "已上岗",
+        shixidanwei: "艺影广告发展有限公司",
+        danweidizhi: "广州市海珠区南洲路143号 艺影小洲影视基地",
+        phone: "13332838357",
+        jjlxr: "13924221482",
         workTelephone: "02084122541",
-        businessContacts: "刘丽",
-        post: "组长"
+        qylxr: "刘丽",
+        job: "组长"
       },
       infoOfbeforeEdit: {},
       stateRadioList: [
@@ -215,7 +217,9 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.getUserData();
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -223,6 +227,18 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getUserData: function() {
+      let userData = this.$tool.getLocal("userData");
+      if (userData) {
+        for (let keys in this.info) {
+          if (userData[keys]) {
+            this.info[keys] = userData[keys];
+          }
+        }
+        this.userName = userData.UserName;
+        this.headImg = userData.logo || "../../../assets/images/default.png";
+      }
+    },
     onClickLeft: function() {
       this.$router.push({
         path: "/mine"
