@@ -23,7 +23,8 @@ module.exports = {
             //     changeOrigin: true, // 接口跨域需要配置的参数
             // }
         },
-        host: '192.168.199.197', // 运行测试页面的域名ip
+        host: '192.168.137.1',
+        // host: '192.168.199.197', // 运行测试页面的域名ip
         port: 8888, // 运行测试页面的端口
         autoOpenBrowser: false, // 项目运行时是否自动打开浏览器
         errorOverlay: true, // 浏览器错误提示
