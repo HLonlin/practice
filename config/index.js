@@ -1,5 +1,26 @@
 'use strict'
 const path = require('path')
+const os = require('os');
+
+function getNetworkIp() {
+    let needHost = ''; // 打开的host
+    try {
+        // 获得网络接口列表
+        let network = os.networkInterfaces();
+        for (let dev in network) {
+            let iface = network[dev];
+            for (let i = 0; i < iface.length; i++) {
+                let alias = iface[i];
+                if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+                    needHost = alias.address;
+                }
+            }
+        }
+    } catch (e) {
+        needHost = 'localhost';
+    }
+    return needHost;
+}
 
 module.exports = {
     // 开发环境
@@ -8,23 +29,15 @@ module.exports = {
         assetsPublicPath: '/', // 编译发布的根目录，可配置为资源服务器域名或CDN域名
         proxyTable: { // 配置后台代理
             // '/openapi': {
-            //     target: 'https://openapi.gzslits.com.cn/',
-            //     changeOrigin: true,
-            //     pathRewrite: {
+            //     target: 'https://openapi.gzslits.com.cn/', // 目标网址，如：http://news.baidu.com
+            //     secure: true, // https需要配置的参数
+            //     changeOrigin: true, // 接口跨域需要配置的参数
+            //     pathRewrite: { // 代替targe里面的地址，比如我们需要调用"http://news.baidu.com/user/add"接口，我们可以直接写成"/api/user/add"
             //         '^/openapi': '/openapi'
             //     }
             // },
-            // '/api': {
-            //     target: '', // 目标网址，如：http://news.baidu.com
-            //     secure: true, // https需要配置的参数
-            //     pathRewrite: { // 代替targe里面的地址，比如我们需要调用"http://news.baidu.com/user/add"接口，我们可以直接写成"/api/user/add"
-            //         '^/api': '/api'
-            //     },
-            //     changeOrigin: true, // 接口跨域需要配置的参数
-            // }
         },
-        host: '192.168.137.1',
-        // host: '192.168.199.197', // 运行测试页面的域名ip
+        host: getNetworkIp(), // 运行自动获取的域名ip
         port: 8888, // 运行测试页面的端口
         autoOpenBrowser: false, // 项目运行时是否自动打开浏览器
         errorOverlay: true, // 浏览器错误提示
