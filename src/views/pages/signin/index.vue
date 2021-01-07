@@ -1,12 +1,17 @@
 <template>
   <div class="container">
     <div class="signin_topPanel">
-      <div class="signin_roundWhite">
-        <div class="signin_round">{{ is_Signin ? "已签到" : "签到" }}</div>
+      <div
+        class="signin_roundWhite"
+        @click="is_SigninTotal ? '' : openPopup('healthStatus', true)"
+      >
+        <div class="signin_round">
+          {{ is_SigninTotal ? "已签到" : "签到" }}
+        </div>
       </div>
       <div class="signin_position">
         <i class="iconItem icon_dizhitubiao signin_icon"></i>
-        {{ currentPosition }}
+        {{ currentAddress }}
       </div>
     </div>
     <div class="signin_calendarContainer">
@@ -34,6 +39,187 @@
         :max-date="maxDate"
         :show-mark="false"
       />
+      <van-popup
+        v-model="popups.learnEveryDay"
+        :close-on-click-overlay="countDown == 0"
+        :get-container="getContainer"
+      >
+        <div class="everyDay_popup">
+          <div class="popup_titile">每日一学</div>
+          <div class="popup_content">
+            只有在那崎岖的小路上仍不畏艰难奋勇攀登的人，才有希望到达光辉的顶点。
+          </div>
+          <div class="popup_author">——马克思</div>
+          <div
+            class="popup_bottomBtn"
+            :class="{ popup_bottomBtnAble: countDown == 0 }"
+            @click="
+              countDown == 0
+                ? openPopup('learnEveryDay', false)
+                : openPopup('learnEveryDay', true)
+            "
+          >
+            确定{{ countDown == 0 ? "" : "（" + countDown + "s）" }}
+          </div>
+        </div>
+      </van-popup>
+      <van-popup v-model="popups.signinDetails" :get-container="getContainer">
+        <div class="signin_popup">
+          <div class="signin_popupTitle">{{ signinItem.date }}</div>
+          <div class="signin_popupContent">
+            <div class="popup_ContentItem">
+              <div class="popup_itemTitle">签到情况</div>
+              <div class="popup_itemText">
+                {{ signinItem.is_signin ? "已签到" : "未签到" }}
+              </div>
+            </div>
+            <div class="popup_ContentItem" v-if="signinItem.is_signin">
+              <div class="popup_itemTitle">每日健康上报</div>
+              <div class="popup_itemText">{{ signinItem.healthStatus }}</div>
+            </div>
+            <div class="popup_ContentItem" v-if="signinItem.is_signin">
+              <div class="popup_itemTitle">签到地址</div>
+              <div class="popup_itemText">{{ signinItem.signinAddress }}</div>
+            </div>
+          </div>
+          <div
+            class="signin_popupBottomBtn"
+            @click="openPopup('signinDetails', false)"
+          >
+            确定
+          </div>
+        </div>
+      </van-popup>
+      <van-popup v-model="popups.healthStatus" :get-container="getContainer">
+        <div class="signin_popup">
+          <div class="signin_popupTitle">每日健康上报</div>
+          <div class="signin_popupContent">
+            <van-radio-group v-model="healthStatus">
+              <van-radio
+                class="health_radio"
+                name="自觉正常"
+                checked-color="#0090d8"
+                >自觉正常
+                <template #icon="props">
+                  <i
+                    class="iconItem "
+                    :class="{
+                      icon_radioActive: props.checked,
+                      icon_radio: true
+                    }"
+                  ></i>
+                </template>
+              </van-radio>
+              <van-radio
+                class="health_radio"
+                name="发热37.3℃以下"
+                checked-color="#0090d8"
+                >发热37.3℃以下
+                <template #icon="props">
+                  <i
+                    class="iconItem "
+                    :class="{
+                      icon_radioActive: props.checked,
+                      icon_radio: true
+                    }"
+                  ></i>
+                </template>
+              </van-radio>
+              <van-radio
+                class="health_radio"
+                name="发热37.3℃（含）以上"
+                checked-color="#0090d8"
+                >发热37.3℃（含）以上
+                <template #icon="props">
+                  <i
+                    class="iconItem "
+                    :class="{
+                      icon_radioActive: props.checked,
+                      icon_radio: true
+                    }"
+                  ></i>
+                </template>
+              </van-radio>
+              <van-radio
+                class="health_radio"
+                name="干咳"
+                checked-color="#0090d8"
+                >干咳
+                <template #icon="props">
+                  <i
+                    class="iconItem "
+                    :class="{
+                      icon_radioActive: props.checked,
+                      icon_radio: true
+                    }"
+                  ></i>
+                </template>
+              </van-radio>
+              <van-radio
+                class="health_radio"
+                name="乏力"
+                checked-color="#0090d8"
+                >乏力
+                <template #icon="props">
+                  <i
+                    class="iconItem "
+                    :class="{
+                      icon_radioActive: props.checked,
+                      icon_radio: true
+                    }"
+                  ></i>
+                </template>
+              </van-radio>
+              <van-radio
+                class="health_radio"
+                :name="otherHealthStatus"
+                checked-color="#0090d8"
+                >其他症状
+                <template #icon="props">
+                  <i
+                    class="iconItem "
+                    :class="{
+                      icon_radioActive: props.checked,
+                      icon_radio: true
+                    }"
+                  ></i>
+                </template>
+              </van-radio>
+            </van-radio-group>
+            <van-field
+              class="otherHealthStatus"
+              v-model="otherHealthStatus"
+              placeholder="请简要描述症状情况"
+            />
+          </div>
+          <div
+            class="signin_popupBottomBtn"
+            @click="is_SigninTotal ? '' : openPopup('confirmSignin', true)"
+          >
+            签到
+          </div>
+        </div>
+      </van-popup>
+      <van-popup v-model="popups.confirmSignin" :get-container="getContainer">
+        <div class="signin_popup">
+          <div class="signin_popupContent">
+            <div class="popup_ContentItem popup_paddinTop">
+              <div class="popup_itemTitle">每日健康上报</div>
+              <div class="popup_itemText">{{ healthStatus }}</div>
+            </div>
+            <div class="popup_ContentItem">
+              <div class="popup_itemTitle">
+                签到地址
+                <div class="popup_itemLabel">重新定位</div>
+              </div>
+              <div class="popup_itemText">广东省广州市越秀区小北路22号</div>
+            </div>
+          </div>
+          <div class="signin_popupBottomBtn" @click="signinTotal">
+            确定
+          </div>
+        </div>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -46,10 +232,35 @@ export default {
   name: "signin",
   data() {
     return {
-      is_Signin: false,
-      currentPosition: "广东省广州市越秀区小北路22号",
-      pageIndex: 6,
-      currentYear: new Date()
+      popups: {
+        learnEveryDay: false, // 每日一学
+        signinDetails: false, // 签到详情
+        healthStatus: false, // 健康上报
+        confirmSignin: false // 确认签到
+      },
+      pageIndex: Number,
+      currentYear: new Date(),
+      countDown: 10, // 每日一学倒计时长
+      signinItem: {
+        // 签到详情内容
+        date: String,
+        is_signin: Boolean,
+        healthStatus: String,
+        signinAddress: String
+      },
+      is_SigninTotal: false, // 今日是否已签到
+      healthStatus: "自觉正常", // 健康状态
+      currentAddress: "广东省广州市越秀区小北路22号", // 当前签到地址
+      otherHealthStatus: "", // 其他症状输入框文本
+      // 健康上报选项
+      healthRadio: [
+        "自觉正常",
+        "发热37.3℃以下",
+        "发热37.3℃（含）以上",
+        "干咳",
+        "乏力",
+        "其他症状"
+      ]
     };
   },
   beforeCreate() {},
@@ -60,17 +271,21 @@ export default {
     this.calendarScroll();
     this.addPageTurnButton();
     this.pageTurnBytitle();
+    this.countDownFn();
   },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
   destroyed() {},
+  watch: {
+    otherHealthStatus: {
+      handler(newVal, oldVal) {
+        this.healthRadio[5] = newVal;
+        this.healthStatus = newVal;
+      }
+    }
+  },
   methods: {
-    // 单日点击事件
-    selectFn: function(date) {
-      // 点击日期绑定事件
-      console.log(date);
-    },
     // 年月选项格式化函数
     yearFormatter(type, val) {
       if (type === "year") {
@@ -114,6 +329,7 @@ export default {
       let calendarDays = document.getElementsByClassName("van-calendar__days");
       calendarDays[calendarDays.length - 1].style.paddingBottom = "44px";
     },
+    // 添加翻页按钮
     addPageTurnButton: function() {
       let header_subtitle = document.getElementsByClassName(
         "van-calendar__header-subtitle"
@@ -126,7 +342,7 @@ export default {
       header_subtitle.appendChild(right);
       this.pageTurnByBtn();
     },
-    // 日历翻页监听
+    // 日历滚动翻页监听
     calendarScroll: function() {
       let that = this;
       let calendarBody = document.getElementsByClassName(
@@ -161,7 +377,7 @@ export default {
         }
       };
     },
-    // 翻页
+    // 滚动翻页
     scrollToPage: function(e) {
       let that = this;
       let calendarBody = document.getElementsByClassName(
@@ -209,7 +425,7 @@ export default {
         that.scrollToPage(e);
       });
     },
-    // 标题选项翻页
+    // 打开标题选项
     pageTurnBytitle: function() {
       let header_subtitle = document.getElementsByClassName(
         "van-calendar__header-subtitle"
@@ -219,9 +435,11 @@ export default {
         datePicker.style.display = "block";
       });
     },
+    // 取消选项翻页
     cancelDatePicker: function() {
       document.getElementsByClassName("datePicker")[0].style.display = "none";
     },
+    // 确认选项翻页
     confirmDatePicker: function(val) {
       let that = this;
       let calendarMonth = document.getElementsByClassName(
@@ -245,6 +463,94 @@ export default {
       }
       this.scrollToPage();
       datePicker.style.display = "none";
+    },
+    // 每日一学倒计时
+    countDownFn: function() {
+      if (!this.popups.learnEveryDay) return;
+      let that = this;
+      let timer = setInterval(function() {
+        that.countDown = that.countDown - 1 < 0 ? 0 : that.countDown - 1;
+        if (that.countDown == 0) {
+          clearInterval(timer);
+        }
+      }, 1000);
+    },
+    // 返回一个特定的 DOM 节点，作为每日一学弹窗挂载的父节点
+    getContainer() {
+      return document.querySelector(".signin_calendarContainer");
+    },
+    // 打开弹框
+    openPopup: function(target, state) {
+      let that = this;
+      for (let key in that.popups) {
+        that.popups[key] = false;
+      }
+      that.popups[target] = state;
+    },
+    // 今日份签到
+    signinTotal: function() {
+      let that = this;
+      that.openPopup("confirmSignin", false);
+      console.log("健康状态", that.healthStatus);
+      console.log("签到地址", that.currentAddress);
+      that.is_SigninTotal = true;
+    },
+    // 重新定位签到地址
+    relocation: function() {},
+    // 点击日期绑定事件
+    selectFn: function(date) {
+      let that = this;
+      // 点击日期是否已签到
+      let dateType = "";
+      // 已签到的
+      if (
+        date < new Date(new Date(new Date().toLocaleDateString()).getTime())
+      ) {
+        dateType = "已签到的";
+      }
+      // 未签到的
+      if (date.getDay() == 0 || date.getDay() == 6) {
+        dateType = "未签到的";
+      }
+
+      if (
+        date > new Date(new Date(new Date().toLocaleDateString()).getTime())
+      ) {
+        console.log("以后");
+        return; // 点击日期为今天后的不打开签到弹框
+      } else if (
+        date < new Date(new Date(new Date().toLocaleDateString()).getTime())
+      ) {
+        console.log("以前");
+        // 点击日期为今天前的根据签到状态打开签到弹框
+        if (dateType == "未签到的") {
+          that.signinItem.is_signin = false;
+        } else if (dateType == "已签到的") {
+          that.signinItem.is_signin = true;
+        }
+        that.signinItem.date =
+          date.getFullYear() +
+          "年" +
+          (date.getMonth() + 1) +
+          "月" +
+          date.getDate() +
+          "日";
+        this.openPopup("signinDetails", true);
+      } else {
+        console.log("今天");
+        // 点击日期为当天先判断是否已经签到、未签到的不打开签到弹框、已签到的打开签到弹框
+        if (that.is_SigninTotal) {
+          that.signinItem.is_signin = true;
+          that.signinItem.date =
+            date.getFullYear() +
+            "年" +
+            (date.getMonth() + 1) +
+            "月" +
+            date.getDate() +
+            "日";
+          this.openPopup("signinDetails", true);
+        }
+      }
     }
   },
   computed: {
@@ -346,6 +652,119 @@ export default {
   box-sizing: border-box;
   padding: 140px 1rem 16px 1rem;
 }
+.everyDay_popup,
+.signin_popup {
+  width: 17.5rem;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+}
+.popup_titile,
+.signin_popupTitle {
+  font-size: 1rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: bold;
+  color: #333333;
+  padding: 20px 0px 15px 0px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.popup_content {
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #666666;
+  text-align: justify;
+  padding: 0px 1.25rem;
+  box-sizing: border-box;
+}
+.signin_popupContent {
+  box-sizing: border-box;
+  padding: 0px 1.25rem;
+}
+.popup_ContentItem {
+  border-bottom: 1px solid #eeeeee;
+  margin-bottom: 12px;
+}
+.signin_popupContent .popup_ContentItem:last-child {
+  border: none;
+  margin-bottom: 0px;
+}
+.popup_paddinTop {
+  padding-top: 20px;
+}
+.popup_itemTitle {
+  font-size: 1rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: bold;
+  color: #333333;
+  box-sizing: border-box;
+  padding: 0px 0px 12px 0px;
+}
+.popup_itemLabel {
+  display: inline-block;
+  box-sizing: border-box;
+  padding-left: 0.625rem;
+  font-size: 0.625rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #0090d8;
+}
+.popup_itemText {
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #666666;
+  box-sizing: border-box;
+  padding: 0px 0px 20px 0px;
+}
+
+.popup_author {
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #666666;
+  text-align: right;
+  padding: 15px 1.25rem 20px 1.25rem;
+  box-sizing: border-box;
+}
+.popup_bottomBtn,
+.signin_popupBottomBtn {
+  width: 100%;
+  padding: 10px 0px;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #cccccc;
+  border-radius: 0px 0px 0.5rem 0.5rem;
+  font-size: 1.125rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ffffff;
+}
+.popup_bottomBtnAble,
+.signin_popupBottomBtn {
+  background-color: #0090d8;
+}
+.health_radio {
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #666666;
+  box-sizing: border-box;
+  padding: 0px 0px 15px 0px;
+}
+.icon_radio {
+  display: flex;
+  align-items: center;
+}
+.icon_radioActive {
+  color: #0090d8;
+}
+.otherHealthStatus {
+  box-sizing: border-box;
+  padding: 0px;
+  border-bottom: 1px solid #eeeeee;
+  margin-bottom: 20px;
+}
 </style>
 <style>
 .signin_calendarContainer {
@@ -418,5 +837,8 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 99;
+}
+.signin_calendarContainer .van-popup {
+  background-color: transparent;
 }
 </style>
