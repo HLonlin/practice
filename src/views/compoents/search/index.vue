@@ -33,7 +33,8 @@ export default {
   methods: {
     onSearch: function() {
       // sourceOf
-      console.log(this.sourceOf, this.searchValue);
+      console.log("搜索来源：", this.sourceOf, "搜索文本：", this.searchValue);
+      this.$emit("search", this.searchValue);
     }
   }
 };
