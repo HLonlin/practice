@@ -6,6 +6,7 @@
 import axios from 'axios';
 import api from "./api.js";
 import { Toast } from 'vant';
+import tool from '@/assets/tools'; //常用工具集
 import Vue from 'vue'
 
 Vue.use(Toast);
@@ -24,8 +25,10 @@ const commonFn = {
 
 // axios 配置
 axios.defaults.timeout = 15000;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-axios.defaults.headers.get['Access-Token'] = '';
+let token = tool.getLocal('token');
+if (token) {
+    axios.defaults.headers.common["Access-Token"] = token;
+}
 axios.defaults.baseURL = api.host;
 
 // http request 拦截器

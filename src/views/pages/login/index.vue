@@ -94,8 +94,8 @@ export default {
       usertype: "1", // 账号类型，必填 1=教师，2=学生
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：手机号
       // passwd: "gz020slitsXX", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
-      userid: "13076207391", // 登录号，必填，教师：oa账号，学生：手机号
-      passwd: "10241x", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      userid: "17665166581", // 登录号，必填，教师：oa账号，学生：手机号
+      passwd: "201837", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
       userName: "",
       userHead: require("../../../assets/images/default.png")
     };
@@ -123,6 +123,7 @@ export default {
         })
         .then(res => {
           this.$toast.clear();
+          this.$tool.setLocal("token", res.data.tokenid);
           this.$tool.setLocal("userData", res.data);
           if (res.status !== 200) {
             return;

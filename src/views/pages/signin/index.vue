@@ -41,23 +41,19 @@
       />
       <van-popup
         v-model="popups.learnEveryDay"
-        :close-on-click-overlay="countDown == 0"
+        :close-on-click-overlay="false"
         :get-container="getContainer"
       >
         <div class="everyDay_popup">
           <div class="popup_titile">每日一学</div>
           <div class="popup_content">
-            只有在那崎岖的小路上仍不畏艰难奋勇攀登的人，才有希望到达光辉的顶点。
+            {{ learnContent.Context }}
           </div>
-          <div class="popup_author">——马克思</div>
+          <div class="popup_author">——{{ learnContent.WF_Creator }}</div>
           <div
             class="popup_bottomBtn"
             :class="{ popup_bottomBtnAble: countDown == 0 }"
-            @click="
-              countDown == 0
-                ? openPopup('learnEveryDay', false)
-                : openPopup('learnEveryDay', true)
-            "
+            @click="recordLearnToday"
           >
             确定{{ countDown == 0 ? "" : "（" + countDown + "s）" }}
           </div>
@@ -232,6 +228,7 @@ export default {
   name: "signin",
   data() {
     return {
+      userData: Object,
       popups: {
         learnEveryDay: false, // 每日一学
         signinDetails: false, // 签到详情
@@ -240,6 +237,11 @@ export default {
       },
       pageIndex: Number,
       currentYear: new Date(),
+      learnContent: {
+        Context: "",
+        WF_Creator: "",
+        wf_docUnid: ""
+      },
       countDown: 10, // 每日一学倒计时长
       signinItem: {
         // 签到详情内容
@@ -264,14 +266,22 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
+    this.getSigninDetailsList();
+    // this.isLearnToday();
+    this.isSigninTotal();
+    this.getHealthStatus();
+  },
   beforeMount() {},
   mounted() {
     this.resetCalendarContainerH();
     this.calendarScroll();
     this.addPageTurnButton();
     this.pageTurnBytitle();
-    this.countDownFn();
   },
   beforeUpdate() {},
   updated() {},
@@ -286,6 +296,79 @@ export default {
     }
   },
   methods: {
+    // 今日是否签到
+    isSigninTotal: function() {
+      let that = this;
+      that.$axios
+        .post(that.$api.isSignin, { cardid: that.userData.cardid })
+        .then(res => {
+          that.is_SigninTotal = res.data.hasQiandao;
+        });
+    },
+    isLearnToday: function() {
+      // 是否已经每日一学
+      let that = this;
+      that.$axios
+        .post(that.$api.isLearnToday, { cardid: that.userData.cardid })
+        .then(res => {
+          if (!res.data.hasMeizhouyixue) {
+            getLearnContent();
+          }
+        });
+      // 获取每日一学内容
+      function getLearnContent() {
+        that.$axios.post(that.$api.getLearnEveryDay, {}).then(res => {
+          for (let keys in res.data) {
+            that.$set(that.learnContent, keys, res.data[keys]);
+          }
+          that.popups.learnEveryDay = true;
+          // 每日一学倒计时
+          let timer = setInterval(function() {
+            that.countDown = that.countDown - 1 < 0 ? 0 : that.countDown - 1;
+            if (that.countDown == 0) {
+              clearInterval(timer);
+            }
+          }, 1000);
+        });
+      }
+    },
+    // 每日一学打卡
+    recordLearnToday: function() {
+      let that = this;
+      if (that.countDown != 0) {
+        return;
+      }
+      that.$axios
+        .post(that.$api.recordLearnEveryDay, {
+          wf_docUnid: that.learnContent.WF_DocUnid,
+          cardid: that.userData.cardid
+        })
+        .then(res => {
+          that.openPopup("learnEveryDay", false);
+        });
+    },
+    // 根据月份获取签到列表
+    getSigninDetailsList: function() {
+      let that = this;
+      that.$axios
+        .post(that.$api.signinList, {
+          cardid: that.userData.cardid,
+          month: "2020-12"
+        })
+        .then(res => {
+          console.log("signinList:", res);
+        });
+    },
+    // 获取健康状态字典
+    getHealthStatus: function() {
+      let that = this;
+      that.$axios.post(that.$api.healthStatus, {}).then(res => {
+        let data = res.data;
+        for (let i = 0, imax = data.length; i < imax; i++) {
+          that.healthRadio[i] = data[i].text;
+        }
+      });
+    },
     // 年月选项格式化函数
     yearFormatter(type, val) {
       if (type === "year") {
@@ -464,28 +547,21 @@ export default {
       this.scrollToPage();
       datePicker.style.display = "none";
     },
-    // 每日一学倒计时
-    countDownFn: function() {
-      if (!this.popups.learnEveryDay) return;
-      let that = this;
-      let timer = setInterval(function() {
-        that.countDown = that.countDown - 1 < 0 ? 0 : that.countDown - 1;
-        if (that.countDown == 0) {
-          clearInterval(timer);
-        }
-      }, 1000);
-    },
+
     // 返回一个特定的 DOM 节点，作为每日一学弹窗挂载的父节点
     getContainer() {
       return document.querySelector(".signin_calendarContainer");
     },
     // 打开弹框
-    openPopup: function(target, state) {
+    openPopup: function(target, state, fn) {
       let that = this;
       for (let key in that.popups) {
         that.popups[key] = false;
       }
       that.popups[target] = state;
+      if (fn) {
+        fn();
+      }
     },
     // 今日份签到
     signinTotal: function() {
@@ -494,12 +570,33 @@ export default {
       console.log("健康状态", that.healthStatus);
       console.log("签到地址", that.currentAddress);
       that.is_SigninTotal = true;
+      that.$axios.post(that.$api.signinTotal, {
+        cardid: that.userData.cardid, // 身份证号
+        latitude: "", // 纬度
+        longitude: "", // 经度
+        address: that.currentAddress, // 打卡地点
+        jiankangStatus: that.healthStatus, // 健康状态
+        remark: "" // 其他说明
+      });
     },
     // 重新定位签到地址
     relocation: function() {},
     // 点击日期绑定事件
     selectFn: function(date) {
       let that = this;
+      // 获取签到详情
+      function getSigninDetails() {
+        let dateStr = that.$tool.getDateStr(date, "-");
+        that.$axios
+          .post(that.$api.getSigninDetails, {
+            cardid: that.userData.cardid,
+            date: dateStr
+          })
+          .then(res => {
+            console.log(res);
+          });
+      }
+      getSigninDetails();
       // 点击日期是否已签到
       let dateType = "";
       // 已签到的
