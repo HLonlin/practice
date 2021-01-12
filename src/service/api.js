@@ -8,6 +8,7 @@ const API = {
     host: HOSTURL,
     login: '/api/practice/login', // 用户登录 POST
     logout: '/api/practice/logout', // 用户退出 GET
+    getWechatInvokesign: '', // 获取微信调用配置
     getLearnEveryDay: '/api/practice/student/meizhouyixue/context', // 获取每日一学内容
     recordLearnEveryDay: '/api/practice/student/meizhouyixue/record', // 每日一学学习记录打卡
     isLearnToday: '/api/practice/student/meizhouyixue/hasMeizhouyixue', // 判断是否已经学习每日一学

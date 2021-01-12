@@ -50,5 +50,12 @@ const date = {
                 return Dater.getTime();
         }
     },
+    // 获取某年某月天数
+    getDaysBy: function(yearMonth) {
+        var yearMonth = arguments[0] ? arguments[0] : this.getDateStr(new Date(), '-');
+        let arr = yearMonth.split("-");
+        let d = new Date(arr[0], arr[1], 0);
+        return d.getDate();
+    }
 }
 export default date;

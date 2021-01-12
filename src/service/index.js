@@ -66,6 +66,11 @@ axios.interceptors.response.use(
                         message: res.data.message
                     });
                     break;
+                case 410:
+                    Toast({
+                        message: res.data.message
+                    });
+                    break;
             }
         }
         return res;

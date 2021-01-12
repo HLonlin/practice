@@ -15,30 +15,42 @@
       </div>
     </div>
     <div class="signin_calendarContainer">
-      <van-datetime-picker
-        class="datePicker"
-        v-model="currentYear"
-        type="year-month"
-        title="选择年月"
-        :formatter="yearFormatter"
-        :item-height="45"
-        :min-date="minDate"
-        :max-date="maxDate"
-        @cancel="cancelDatePicker"
-        @confirm="confirmDatePicker"
-      />
-      <van-calendar
-        title="签到日历"
-        :show-title="false"
-        color="#ffffff"
-        :poppable="false"
-        :show-confirm="false"
-        :formatter="formatter"
-        @select="selectFn"
-        :min-date="minDate"
-        :max-date="maxDate"
-        :show-mark="false"
-      />
+      <div class="signin_titlePanel">
+        <div class="signin_lastMonth" @click="pageTurn(false)"></div>
+        <div class="signin_monthText">{{ currentYearMonth }}</div>
+        <div class="signin_nextMonth" @click="pageTurn(true)"></div>
+      </div>
+      <div class="signin_calendarListContainer">
+        <div class="signin_calendarTitle">
+          <div
+            class="signin_calendarTitleItem"
+            v-for="(item, i) in ['日', '一', '二', '三', '四', '五', '六']"
+            :key="i"
+          >
+            {{ item }}
+          </div>
+        </div>
+        <div class="signin_calendarList" type="flex" justify="space-between">
+          <div
+            v-for="(item, i) in signinList"
+            class="signin_calendarListItem"
+            :class="[
+              {
+                isSignin: item.isSignin,
+                firstDay: i == 0
+              },
+              item.dayClass
+            ]"
+            :key="i"
+            :style="{ marginLeft: i == 0 ? firstDay * 14.285 + '%' : 0 }"
+            @click="getSigninDetails(item.isSignin, item.dayClass, i + 1)"
+          >
+            <div class="listItem_text">
+              {{ item == i + 1 ? item : i + 1 }}
+            </div>
+          </div>
+        </div>
+      </div>
       <van-popup
         v-model="popups.learnEveryDay"
         :close-on-click-overlay="false"
@@ -98,7 +110,7 @@
                 >自觉正常
                 <template #icon="props">
                   <i
-                    class="iconItem "
+                    class="iconItem"
                     :class="{
                       icon_radioActive: props.checked,
                       icon_radio: true
@@ -113,7 +125,7 @@
                 >发热37.3℃以下
                 <template #icon="props">
                   <i
-                    class="iconItem "
+                    class="iconItem"
                     :class="{
                       icon_radioActive: props.checked,
                       icon_radio: true
@@ -128,7 +140,7 @@
                 >发热37.3℃（含）以上
                 <template #icon="props">
                   <i
-                    class="iconItem "
+                    class="iconItem"
                     :class="{
                       icon_radioActive: props.checked,
                       icon_radio: true
@@ -143,7 +155,7 @@
                 >干咳
                 <template #icon="props">
                   <i
-                    class="iconItem "
+                    class="iconItem"
                     :class="{
                       icon_radioActive: props.checked,
                       icon_radio: true
@@ -158,7 +170,7 @@
                 >乏力
                 <template #icon="props">
                   <i
-                    class="iconItem "
+                    class="iconItem"
                     :class="{
                       icon_radioActive: props.checked,
                       icon_radio: true
@@ -173,7 +185,7 @@
                 >其他症状
                 <template #icon="props">
                   <i
-                    class="iconItem "
+                    class="iconItem"
                     :class="{
                       icon_radioActive: props.checked,
                       icon_radio: true
@@ -206,24 +218,24 @@
             <div class="popup_ContentItem">
               <div class="popup_itemTitle">
                 签到地址
-                <div class="popup_itemLabel">重新定位</div>
+                <div class="popup_itemLabel" @click="relocation">重新定位</div>
               </div>
               <div class="popup_itemText">广东省广州市越秀区小北路22号</div>
             </div>
           </div>
-          <div class="signin_popupBottomBtn" @click="signinTotal">
-            确定
-          </div>
+          <div class="signin_popupBottomBtn" @click="signinTotal">确定</div>
         </div>
       </van-popup>
     </div>
   </div>
 </template>
-
 <script>
 /**
  * 签到页
+ * 3KWBZ-6TXWI-M2SGX-5SMDX-GD7N3-IIBMB
  */
+import wx from "weixin-js-sdk"; // 微信sdk
+import { Toast } from "vant";
 export default {
   name: "signin",
   data() {
@@ -235,8 +247,10 @@ export default {
         healthStatus: false, // 健康上报
         confirmSignin: false // 确认签到
       },
+      currentYearMonth: "",
+      firstDay: "",
+      signinList: [], // 签到列表
       pageIndex: Number,
-      currentYear: new Date(),
       learnContent: {
         Context: "",
         WF_Creator: "",
@@ -253,16 +267,11 @@ export default {
       is_SigninTotal: false, // 今日是否已签到
       healthStatus: "自觉正常", // 健康状态
       currentAddress: "广东省广州市越秀区小北路22号", // 当前签到地址
+      latitude: "113.345073", // 纬度
+      longitude: "23.182055", // 经度
       otherHealthStatus: "", // 其他症状输入框文本
       // 健康上报选项
-      healthRadio: [
-        "自觉正常",
-        "发热37.3℃以下",
-        "发热37.3℃（含）以上",
-        "干咳",
-        "乏力",
-        "其他症状"
-      ]
+      healthRadio: []
     };
   },
   beforeCreate() {},
@@ -279,9 +288,6 @@ export default {
   beforeMount() {},
   mounted() {
     this.resetCalendarContainerH();
-    this.calendarScroll();
-    this.addPageTurnButton();
-    this.pageTurnBytitle();
   },
   beforeUpdate() {},
   updated() {},
@@ -340,7 +346,7 @@ export default {
       }
       that.$axios
         .post(that.$api.recordLearnEveryDay, {
-          wf_docUnid: that.learnContent.WF_DocUnid,
+          wf_docUnid: that.learnContent.wf_docUnid,
           cardid: that.userData.cardid
         })
         .then(res => {
@@ -350,14 +356,109 @@ export default {
     // 根据月份获取签到列表
     getSigninDetailsList: function() {
       let that = this;
+      let today = new Date(new Date(new Date().toLocaleDateString()).getTime());
+      let currentYearMonth = arguments[0] ? new Date(arguments[0]) : new Date();
+      // : new Date("2020-12");
+      let month =
+        currentYearMonth.getMonth() + 1 < 10
+          ? "0" + (currentYearMonth.getMonth() + 1) + "月"
+          : currentYearMonth.getMonth() + 1 + "月";
+      that.currentYearMonth = currentYearMonth.getFullYear() + "年" + month;
+      let YearMonthStr = that.currentYearMonth
+        .replace(/年/, "-")
+        .replace(/月/, "");
+      that.firstDay = new Date(YearMonthStr + "-01").getDay();
       that.$axios
         .post(that.$api.signinList, {
           cardid: that.userData.cardid,
-          month: "2020-12"
+          month: YearMonthStr
         })
         .then(res => {
-          console.log("signinList:", res);
+          let data = res.data;
+          that.signinList = [];
+          for (
+            let j = 0, jmax = that.$tool.getDaysBy(YearMonthStr);
+            j < jmax;
+            j++
+          ) {
+            that.$set(that.signinList, j, {
+              wf_Created: j + 1,
+              isSignin: false
+            });
+          }
+          for (let i = 0, imax = data.length; i < imax; i++) {
+            let todayDate = new Date(data[i].wf_Created).getDate() - 1;
+            that.$set(that.signinList, todayDate, data[i]);
+            that.$set(that.signinList[todayDate], "isSignin", true);
+          }
+          for (let l = 0, lmax = that.signinList.length; l < lmax; l++) {
+            currentYearMonth.setDate(l + 1);
+            currentYearMonth = new Date(
+              new Date(currentYearMonth.toLocaleDateString()).getTime()
+            );
+            if (currentYearMonth > today) {
+              that.$set(that.signinList[l], "dayClass", "future");
+            } else if (currentYearMonth < today) {
+              that.$set(that.signinList[l], "dayClass", "before");
+            } else {
+              that.$set(that.signinList[l], "dayClass", "today");
+            }
+          }
         });
+    },
+    // 根据日期查看签到详情
+    getSigninDetails: function(isSignin, dayClass, dates) {
+      let that = this;
+      if (dates < 10) {
+        dates = "0" + dates;
+      }
+      if (dayClass != "future") {
+        that.signinItem.is_signin = false;
+        that.signinItem.date = that.currentYearMonth + dates + "日";
+        if (isSignin) {
+          let dateStr =
+            that.currentYearMonth.replace(/年/, "-").replace(/月/, "-") + dates;
+          that.$axios
+            .post(that.$api.getSigninDetails, {
+              cardid: that.userData.cardid,
+              date: dateStr
+            })
+            .then(res => {
+              that.signinItem.is_signin = true;
+              that.signinItem.signinAddress = res.data.address;
+              if (res.data.jiankangStatus == that.healthRadio.length) {
+                that.signinItem.healthStatus = res.data.remark;
+              } else {
+                that.signinItem.healthStatus = res.data.jiankangText;
+              }
+              that.openPopup("signinDetails", true);
+            });
+        } else {
+          that.openPopup("signinDetails", true);
+        }
+      }
+    },
+    pageTurn: function(add) {
+      let that = this,
+        dateArr = that.currentYearMonth.replace(/月/, "").split("年");
+      if (add) {
+        dateArr[1] = Number(dateArr[1]) + 1;
+        if (dateArr[1] > 12) {
+          dateArr[1] = "1";
+          dateArr[0] = Number(dateArr[0]) + 1;
+        }
+      } else {
+        dateArr[1] = Number(dateArr[1]) - 1;
+        if (dateArr[1] < 1) {
+          dateArr[1] = "12";
+          dateArr[0] = Number(dateArr[0]) - 1;
+        }
+      }
+      if (dateArr[1] < 10) {
+        dateArr[1] = "0" + dateArr[1];
+      }
+      that.currentYearMonth = dateArr[0] + "年" + dateArr[1] + "月";
+      that.getSigninDetailsList(dateArr[0] + "-" + dateArr[1]);
     },
     // 获取健康状态字典
     getHealthStatus: function() {
@@ -365,7 +466,7 @@ export default {
       that.$axios.post(that.$api.healthStatus, {}).then(res => {
         let data = res.data;
         for (let i = 0, imax = data.length; i < imax; i++) {
-          that.healthRadio[i] = data[i].text;
+          that.$set(that.healthRadio, i, data[i].text);
         }
       });
     },
@@ -378,176 +479,27 @@ export default {
       }
       return val;
     },
-    // 日历格式化函数
-    formatter: function(day) {
-      day.type = "selected";
-      // 今天
-      if (day.date.toLocaleDateString() == new Date().toLocaleDateString()) {
-        day.className = "isToday";
-      }
-      // 已签到的
-      if (
-        day.date < new Date(new Date(new Date().toLocaleDateString()).getTime())
-      ) {
-        day.className = "signedIn";
-      }
-      // 未签到的
-      if (day.date.getDay() == 0 || day.date.getDay() == 6) {
-        day.className = "noSignIn";
-      }
-      return day;
-    },
     // 动态日历面板高度
     resetCalendarContainerH: function() {
       let calendarContainer = document.getElementsByClassName(
-        "signin_calendarContainer"
-      )[0];
-      let signin_topPanel = document.getElementsByClassName(
-        "signin_topPanel"
-      )[0];
+          "signin_calendarContainer"
+        )[0],
+        topBar_container = document.getElementsByClassName(
+          "topBar_container"
+        )[0],
+        signin_topPanel = document.getElementsByClassName("signin_topPanel")[0],
+        tapList_container = document.getElementsByClassName(
+          "tapList_container"
+        )[0];
       let windowHight = window.screen.height;
-      calendarContainer.style.height =
-        windowHight - signin_topPanel.offsetHeight - 95 + "px";
-
-      let calendarDays = document.getElementsByClassName("van-calendar__days");
-      calendarDays[calendarDays.length - 1].style.paddingBottom = "44px";
+      let calendarContainerHeight =
+        windowHight -
+        topBar_container.offsetHeight -
+        signin_topPanel.offsetHeight -
+        tapList_container.offsetHeight +
+        "px";
+      calendarContainer.style.height = calendarContainerHeight;
     },
-    // 添加翻页按钮
-    addPageTurnButton: function() {
-      let header_subtitle = document.getElementsByClassName(
-        "van-calendar__header-subtitle"
-      )[0];
-      let left = document.createElement("div");
-      let right = document.createElement("div");
-      left.className = "van-lastPage";
-      right.className = "van-nextPage";
-      header_subtitle.appendChild(left);
-      header_subtitle.appendChild(right);
-      this.pageTurnByBtn();
-    },
-    // 日历滚动翻页监听
-    calendarScroll: function() {
-      let that = this;
-      let calendarBody = document.getElementsByClassName(
-        "van-calendar__body"
-      )[0];
-      let calendarMonth = document.getElementsByClassName(
-        "van-calendar__month"
-      );
-      calendarBody.onscroll = function() {
-        let offsetHeightTotal = 0;
-        // 实时更新当前码、作用关联于左右翻页
-        if (calendarBody.scrollTop <= calendarMonth[0].offsetHeight) {
-          that.pageIndex = 0;
-        } else {
-          for (var i = 0, imax = calendarMonth.length; i < imax; i++) {
-            offsetHeightTotal =
-              offsetHeightTotal + calendarMonth[i].offsetHeight;
-            if (calendarBody.scrollTop >= offsetHeightTotal) {
-              that.pageIndex = i + 1;
-            }
-          }
-        }
-        // 实时更新年月选项当前时间
-        if (that.pageIndex != 0) {
-          that.currentYear = new Date(
-            calendarMonth[that.pageIndex].children[0].innerHTML
-              .replace(/年/, "/")
-              .replace(/月/, "/")
-          );
-        } else {
-          that.currentYear = this.minDate;
-        }
-      };
-    },
-    // 滚动翻页
-    scrollToPage: function(e) {
-      let that = this;
-      let calendarBody = document.getElementsByClassName(
-        "van-calendar__body"
-      )[0];
-      let calendarMonth = document.getElementsByClassName(
-        "van-calendar__month"
-      );
-      let header_subtitle = document.getElementsByClassName(
-        "van-calendar__header-subtitle"
-      )[0];
-      // 阻止左右按钮事件冒泡
-      try {
-        e.stopPropagation(); //非IE浏览器
-      } catch (e) {
-        window.event.cancelBubble = true; //IE浏览器
-      }
-      if (that.pageIndex === 0) {
-        calendarBody.scrollTop = 0;
-      } else {
-        let offsetHeightTotal = 0;
-        for (var i = 0, imax = that.pageIndex; i < imax; i++) {
-          offsetHeightTotal = offsetHeightTotal + calendarMonth[i].offsetHeight;
-        }
-        calendarBody.scrollTop = offsetHeightTotal + 64;
-      }
-    },
-    // 左右按钮翻页
-    pageTurnByBtn: function() {
-      let that = this;
-      let lastPageBtn = document.getElementsByClassName("van-lastPage")[0];
-      let nextPageBtn = document.getElementsByClassName("van-nextPage")[0];
-      let calendarMonth = document.getElementsByClassName(
-        "van-calendar__month"
-      );
-      lastPageBtn.addEventListener("click", function(e) {
-        that.pageIndex = that.pageIndex - 1 > 0 ? that.pageIndex - 1 : 0;
-        that.scrollToPage(e);
-      });
-      nextPageBtn.addEventListener("click", function(e) {
-        that.pageIndex =
-          that.pageIndex + 1 < calendarMonth.length
-            ? that.pageIndex + 1
-            : calendarMonth.length;
-        that.scrollToPage(e);
-      });
-    },
-    // 打开标题选项
-    pageTurnBytitle: function() {
-      let header_subtitle = document.getElementsByClassName(
-        "van-calendar__header-subtitle"
-      )[0];
-      let datePicker = document.getElementsByClassName("datePicker")[0];
-      header_subtitle.addEventListener("click", function() {
-        datePicker.style.display = "block";
-      });
-    },
-    // 取消选项翻页
-    cancelDatePicker: function() {
-      document.getElementsByClassName("datePicker")[0].style.display = "none";
-    },
-    // 确认选项翻页
-    confirmDatePicker: function(val) {
-      let that = this;
-      let calendarMonth = document.getElementsByClassName(
-        "van-calendar__month"
-      );
-      let datePicker = document.getElementsByClassName("datePicker")[0];
-      let innerHTMLS = val.getFullYear() + "年" + (val.getMonth() + 1) + "月";
-      for (var i = 0, imax = calendarMonth.length; i < imax; i++) {
-        if (
-          i == 0 &&
-          that.minDate.getFullYear() +
-            "年" +
-            (that.minDate.getMonth() + 1) +
-            "月" ==
-            val.getFullYear() + "年" + (val.getMonth() + 1) + "月"
-        ) {
-          that.pageIndex = 0;
-        } else if (innerHTMLS == calendarMonth[i].children[0].innerHTML) {
-          that.pageIndex = i;
-        }
-      }
-      this.scrollToPage();
-      datePicker.style.display = "none";
-    },
-
     // 返回一个特定的 DOM 节点，作为每日一学弹窗挂载的父节点
     getContainer() {
       return document.querySelector(".signin_calendarContainer");
@@ -566,87 +518,105 @@ export default {
     // 今日份签到
     signinTotal: function() {
       let that = this;
-      that.openPopup("confirmSignin", false);
-      console.log("健康状态", that.healthStatus);
-      console.log("签到地址", that.currentAddress);
-      that.is_SigninTotal = true;
-      that.$axios.post(that.$api.signinTotal, {
-        cardid: that.userData.cardid, // 身份证号
-        latitude: "", // 纬度
-        longitude: "", // 经度
-        address: that.currentAddress, // 打卡地点
-        jiankangStatus: that.healthStatus, // 健康状态
-        remark: "" // 其他说明
+      //采用prototype原型实现方式，查找元素在数组中的索引值
+      Array.prototype.getArrayIndex = function(obj) {
+        for (var i = 0; i < this.length; i++) {
+          if (this[i] === obj) {
+            return i;
+          }
+        }
+        return -1;
+      };
+      let jiankangStatus =
+        that.healthRadio.getArrayIndex(that.healthStatus) + 1;
+      let remark = "";
+      if (jiankangStatus == that.healthRadio.length) {
+        remark = that.healthStatus;
+      }
+      that.$axios
+        .post(that.$api.signin, {
+          cardid: that.userData.cardid, // 身份证号
+          latitude: that.latitude, // 纬度
+          longitude: that.longitude, // 经度
+          address: that.currentAddress, // 打卡地点
+          jiankangStatus: jiankangStatus, // 健康状态
+          remark: remark // 其他说明
+        })
+        .then(res => {
+          that.openPopup("confirmSignin", false);
+          that.isSigninTotal();
+          that.getSigninDetailsList();
+        });
+    },
+    // 获取地址
+    getAddress: function() {
+      let geocoder = new qq.maps.Geocoder({
+        complete: function(result) {
+          console.log("成功：" + result.detail.address);
+        }
       });
+      var coord = new qq.maps.LatLng(39.987816, 116.328327);
+      geocoder.getAddress(coord);
     },
     // 重新定位签到地址
-    relocation: function() {},
-    // 点击日期绑定事件
-    selectFn: function(date) {
-      let that = this;
-      // 获取签到详情
-      function getSigninDetails() {
-        let dateStr = that.$tool.getDateStr(date, "-");
+    relocation() {
+      let that = this,
+        u = navigator.userAgent;
+      if (u.indexOf("MicroMessenger") > -1) {
+        console.log(0);
+        var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Linux") > -1; //g
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        let url = "";
+        if (isAndroid) {
+          url = location.href;
+        }
+        if (isIOS) {
+          url = location.href.split("#")[0]; //hash后面的部分如果带上ios中config会不对
+        }
+        console.log(url);
+        return;
         that.$axios
-          .post(that.$api.getSigninDetails, {
-            cardid: that.userData.cardid,
-            date: dateStr
+          .get(that.$api.getWechatInvokesign, {
+            url: url
           })
-          .then(res => {
-            console.log(res);
+          .then(response => {
+            let data = response.data;
+            wx.config({
+              beta: true,
+              debug: false,
+              appId: data.appId, // 必填，公众号的唯一标识
+              timestamp: data.timestamp, // 必填，生成签名的时间戳
+              nonceStr: data.nonceStr, // 必填，生成签名的随机串
+              signature: data.signature, // 必填，签名，见附录1
+              jsApiList: ["getLocation", "openLocation"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.ready(function() {
+              wx.getLocation({
+                type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: function(res) {
+                  var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                  var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                  var speed = res.speed; // 速度，以米/每秒计
+                  var accuracy = res.accuracy; // 位置精度
+                  that.nowPlace = {
+                    lat: latitude,
+                    lng: longitude
+                  };
+                  // that.distance()判断离打卡地址的距离
+                },
+                cancel: function(err) {
+                  Toast({
+                    message: "位置获取失败！"
+                  });
+                  console.log(err);
+                }
+              });
+            });
           });
-      }
-      getSigninDetails();
-      // 点击日期是否已签到
-      let dateType = "";
-      // 已签到的
-      if (
-        date < new Date(new Date(new Date().toLocaleDateString()).getTime())
-      ) {
-        dateType = "已签到的";
-      }
-      // 未签到的
-      if (date.getDay() == 0 || date.getDay() == 6) {
-        dateType = "未签到的";
-      }
-
-      if (
-        date > new Date(new Date(new Date().toLocaleDateString()).getTime())
-      ) {
-        console.log("以后");
-        return; // 点击日期为今天后的不打开签到弹框
-      } else if (
-        date < new Date(new Date(new Date().toLocaleDateString()).getTime())
-      ) {
-        console.log("以前");
-        // 点击日期为今天前的根据签到状态打开签到弹框
-        if (dateType == "未签到的") {
-          that.signinItem.is_signin = false;
-        } else if (dateType == "已签到的") {
-          that.signinItem.is_signin = true;
-        }
-        that.signinItem.date =
-          date.getFullYear() +
-          "年" +
-          (date.getMonth() + 1) +
-          "月" +
-          date.getDate() +
-          "日";
-        this.openPopup("signinDetails", true);
       } else {
-        console.log("今天");
-        // 点击日期为当天先判断是否已经签到、未签到的不打开签到弹框、已签到的打开签到弹框
-        if (that.is_SigninTotal) {
-          that.signinItem.is_signin = true;
-          that.signinItem.date =
-            date.getFullYear() +
-            "年" +
-            (date.getMonth() + 1) +
-            "月" +
-            date.getDate() +
-            "日";
-          this.openPopup("signinDetails", true);
-        }
+        Toast({
+          message: "请在微信端进行此操作"
+        });
       }
     }
   },
@@ -748,6 +718,85 @@ export default {
   color: #ffffff;
   box-sizing: border-box;
   padding: 140px 1rem 16px 1rem;
+}
+.signin_calendarContainer {
+  overflow: hidden;
+}
+.signin_titlePanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 15px 5rem;
+  border-bottom: 1px solid #eeeeee;
+  font-size: 1rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: bold;
+  color: #323233;
+}
+.signin_lastMonth,
+.signin_nextMonth {
+  transform: rotate(45deg);
+  width: 0.625rem;
+  height: 0.625rem;
+  border-left: 1px solid #666666;
+  border-bottom: 1px solid #666666;
+}
+.signin_nextMonth {
+  transform: rotate(-135deg);
+}
+.signin_calendarList {
+  display: flex;
+  flex-wrap: wrap;
+}
+.signin_calendarTitle {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  box-sizing: border-box;
+  padding: 10px 0px;
+}
+.signin_calendarTitleItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 14.285%;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: bold;
+  color: #666666;
+}
+.signin_calendarListItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 14.285%;
+  box-sizing: border-box;
+  padding: 10px 0px;
+}
+.listItem_text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #666666;
+}
+.today .listItem_text {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid #0090d8;
+}
+.before .listItem_text {
+  background-color: #eeeeee;
+}
+.isSignin .listItem_text {
+  background-color: #0090d8;
+  color: #ffffff;
 }
 .everyDay_popup,
 .signin_popup {
@@ -864,77 +913,6 @@ export default {
 }
 </style>
 <style>
-.signin_calendarContainer {
-  position: relative;
-}
-.signin_calendarContainer .van-calendar__header-subtitle {
-  position: relative;
-  font-size: 1rem;
-  color: #323233;
-  font-weight: bold;
-  border-bottom: 1px solid #eeeeee;
-}
-.signin_calendarContainer .van-lastPage {
-  position: absolute;
-  left: 5rem;
-  top: 50%;
-  transform: rotate(45deg) translateY(-50%);
-  width: 0.625rem;
-  height: 0.625rem;
-  border-left: 1px solid #666666;
-  border-bottom: 1px solid #666666;
-}
-.signin_calendarContainer .van-nextPage {
-  position: absolute;
-  right: 5rem;
-  top: 50%;
-  transform: rotate(45deg) translateY(-50%);
-  width: 0.625rem;
-  height: 0.625rem;
-  border-right: 1px solid #666666;
-  border-top: 1px solid #666666;
-}
-.signin_calendarContainer .van-calendar__weekday {
-  font-size: 0.875rem;
-  color: #666666;
-}
-.signin_calendarContainer .van-calendar__month {
-  box-shadow: 0 2px 10px rgba(125, 126, 128, 0.1);
-}
-.signin_calendarContainer .van-calendar__month-title {
-  height: 4rem;
-  box-sizing: border-box;
-  padding-top: 1.25rem;
-}
-.signin_calendarContainer .van-calendar__day {
-  height: 3.125rem;
-}
-.signin_calendarContainer .van-calendar__selected-day {
-  width: 1.625rem;
-  height: 1.625rem;
-  border-radius: 50%;
-  color: #666666;
-  background-color: rgba(0, 0, 0, 0) !important;
-}
-.signin_calendarContainer .isToday .van-calendar__selected-day {
-  background-color: #ffffff !important;
-  border: 1px solid #0090d8;
-}
-.signin_calendarContainer .signedIn .van-calendar__selected-day {
-  background-color: #0090d8 !important;
-  color: #ffffff;
-  border: none;
-}
-.signin_calendarContainer .noSignIn .van-calendar__selected-day {
-  background-color: #eeeeee !important;
-}
-.signin_calendarContainer .datePicker {
-  display: none;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 99;
-}
 .signin_calendarContainer .van-popup {
   background-color: transparent;
 }
