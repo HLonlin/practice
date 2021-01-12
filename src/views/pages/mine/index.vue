@@ -5,11 +5,15 @@
         <div class="info_head">
           <img
             class="info_headImg"
-            :src="headImg ? headImg : require('@/assets/images/default.png')"
+            :src="
+              userData.headImg
+                ? userData.headImg
+                : require('@/assets/images/default.png')
+            "
             style="object-fit: cover;"
           />
         </div>
-        <div class="info_name">{{ userName }}</div>
+        <div class="info_name">{{ userData.userName }}</div>
       </router-link>
     </div>
     <div class="middle_panel">
@@ -51,6 +55,7 @@ export default {
   name: "mine",
   data() {
     return {
+      userData: Object,
       headImg: require("../../../assets/images/default.png"),
       userName: ""
     };
@@ -76,9 +81,9 @@ export default {
     getUserData: function() {
       let userData = this.$tool.getLocal("userData");
       if (userData) {
-        this.userName = userData.UserName;
-        this.headImg = userData.logo;
+        this.userData = userData;
       }
+      console.log(userData);
     }
   }
 };

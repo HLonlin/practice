@@ -14,19 +14,19 @@
         <div class="selfinfo_label">头像</div>
         <van-uploader
           class="selfinfo_headIcon"
-          v-model="info.headImg"
+          v-model="userData.headImg"
           :max-count="1"
           :before-read="beforeRead"
           :after-read="afterRead"
           preview-size="3.75rem"
           :deletable="false"
           :preview-options="{ showIndex: false }"
-          v-if="!editing"
+          v-if="!editing" 
         >
         </van-uploader>
         <van-uploader
           class="selfinfo_headIcon"
-          v-model="info.headImg"
+          v-model="userData.headImg"
           :max-count="1"
           :before-read="beforeRead"
           :after-read="afterRead"
@@ -37,35 +37,27 @@
         </van-uploader>
       </div>
       <div class="selfinfo_panel ">
-        <van-field v-model="info.UserName" label="姓名" :readonly="true" />
+        <van-field v-model="userData.userName" label="姓名" :readonly="true" />
       </div>
     </div>
     <div class="selfinfo_middlePanel">
       <div class="selfinfo_panel">
         <div class="selfinfo_label">就业方式</div>
-        <div class="selfinfo_text" v-if="!editing">{{ info.jiuyefangshi }}</div>
-        <van-radio-group v-model="info.jiuyefangshi" v-else>
-          <van-radio name="自谋" checked-color="#0090d8"
-            >自谋
+        <div class="selfinfo_text" v-if="!editing">
+          {{ userData.jiuyefangshi }}
+        </div>
+        <van-radio-group v-model="userData.jiuyefangshi" v-else>
+          <van-radio
+            v-for="(item, i) in jiuyefangshiRadioList"
+            :key="i"
+            :name="item.value"
+            checked-color="#0090d8"
+            >{{ item.text }}
             <template #icon="props">
               <i
                 class="iconItem "
                 :class="{
                   selfinfo_radioActive: props.checked,
-                  icon_radioActive: props.checked,
-                  icon_radio: !props.checked
-                }"
-              ></i>
-            </template>
-          </van-radio>
-          <van-radio name="推荐" checked-color="#0090d8"
-            >推荐
-            <template #icon="props">
-              <i
-                class="iconItem "
-                :class="{
-                  selfinfo_radioActive: props.checked,
-                  selfinfo_radio: !props.checked,
                   icon_radioActive: props.checked,
                   icon_radio: !props.checked
                 }"
@@ -77,15 +69,15 @@
       <div class="selfinfo_panel">
         <div class="selfinfo_label">就业状态</div>
         <div class="selfinfo_text" v-if="!editing">
-          {{ info.jiuyezhuangtai }}
+          {{ userData.jiuyezhuangtai }}
         </div>
-        <van-radio-group v-model="info.jiuyezhuangtai" v-else>
+        <van-radio-group v-model="userData.jiuyezhuangtai" v-else>
           <van-radio
             v-for="(item, i) in stateRadioList"
             :key="i"
-            :name="item"
+            :name="item.value"
             checked-color="#0090d8"
-            >{{ item }}
+            >{{ item.text }}
             <template #icon="props">
               <i
                 class="iconItem "
@@ -101,10 +93,10 @@
       </div>
       <div
         class="selfinfo_panel"
-        :class="{ selfinfo_area: info.shixidanwei.length > 16 }"
+        :class="{ selfinfo_area: userData.shixidanwei.length > 16 }"
       >
         <van-field
-          v-model="info.shixidanwei"
+          v-model="userData.shixidanwei"
           rows="1"
           autosize
           label="实习单位"
@@ -115,10 +107,10 @@
       </div>
       <div
         class="selfinfo_panel"
-        :class="{ selfinfo_area: info.danweidizhi.length > 16 }"
+        :class="{ selfinfo_area: userData.danweidizhi.length > 16 }"
       >
         <van-field
-          v-model="info.danweidizhi"
+          v-model="userData.danweidizhi"
           rows="1"
           autosize
           label="单位地址"
@@ -131,7 +123,7 @@
     <div class="selfinfo_bottomPanel">
       <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
         <van-field
-          v-model="info.phone"
+          v-model="userData.phone"
           label="联系电话"
           placeholder="请输入联系电话"
           :readonly="!editing"
@@ -139,7 +131,7 @@
       </div>
       <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
         <van-field
-          v-model="info.jjlxr"
+          v-model="userData.jjlxr"
           label="紧急联系电话"
           placeholder="请输入紧急联系电话"
           :readonly="!editing"
@@ -147,7 +139,7 @@
       </div>
       <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
         <van-field
-          v-model="info.workTelephone"
+          v-model="userData.jzdh"
           label="单位电话"
           placeholder="请输入单位电话"
           :readonly="!editing"
@@ -155,7 +147,7 @@
       </div>
       <div class="selfinfo_panel">
         <van-field
-          v-model="info.qylxr"
+          v-model="userData.qylxr"
           label="企业联系人"
           placeholder="请输入企业联系人"
           :readonly="!editing"
@@ -163,7 +155,7 @@
       </div>
       <div class="selfinfo_panel">
         <van-field
-          v-model="info.job"
+          v-model="userData.job"
           label="岗位"
           placeholder="请输入岗位"
           :readonly="!editing"
@@ -176,7 +168,7 @@
       </div>
     </div>
     <div class="selfinfo_bottomBtnBox" v-else>
-      <div class="selfinfo_submitBtn">提交</div>
+      <div class="selfinfo_submitBtn" @click="submitChange">提交</div>
       <div class="selfinfo_cancelBtn" @click="onCancel">取消</div>
     </div>
   </div>
@@ -191,20 +183,9 @@ export default {
   data() {
     return {
       editing: false,
-      info: {
-        headImg: [{ url: "../../../assets/images/default.png" }],
-        UserName: "卢保希",
-        jiuyefangshi: "自谋",
-        jiuyezhuangtai: "已上岗",
-        shixidanwei: "艺影广告发展有限公司",
-        danweidizhi: "广州市海珠区南洲路143号 艺影小洲影视基地",
-        phone: "13332838357",
-        jjlxr: "13924221482",
-        workTelephone: "02084122541",
-        qylxr: "刘丽",
-        job: "组长"
-      },
+      userData: Object,
       infoOfbeforeEdit: {},
+      jiuyefangshiRadioList: [],
       stateRadioList: [
         "待业",
         "待上岗",
@@ -219,6 +200,7 @@ export default {
   beforeCreate() {},
   created() {
     this.getUserData();
+    this.getRadioOption();
   },
   beforeMount() {},
   mounted() {},
@@ -230,14 +212,12 @@ export default {
     getUserData: function() {
       let userData = this.$tool.getLocal("userData");
       if (userData) {
-        for (let keys in this.info) {
-          if (userData[keys]) {
-            this.info[keys] = userData[keys];
-          }
-        }
-        this.userName = userData.UserName;
-        this.headImg = userData.logo || "../../../assets/images/default.png";
+        this.userData = userData;
+        userData.headImg = userData.headImg
+          ? [{ url: userData.headImg }]
+          : [{ url: "../../../assets/images/default.png" }];
       }
+      console.log(userData);
     },
     onClickLeft: function() {
       this.$router.push({
@@ -274,12 +254,52 @@ export default {
         that.$set(that.infoOfbeforeEdit, key, that.info[key]);
       }
     },
+    submitChange: function() {
+      let that = this;
+      that.$axios
+        .post(that.$api.updateInfo_student, {
+          cardid: that.userData.cardid,
+          phone: that.userData.phone,
+          jiuyezhuangtai: that.userData.jiuyezhuangtai,
+          jiuyefangshi: that.userData.jiuyefangshi,
+          shixidanwei: that.userData.shixidanwei,
+          danweidizhi: that.userData.danweidizhi,
+          jjlxr: that.userData.jjlxr,
+          jzdh: that.userData.jzdh,
+          qylxr: that.userData.qylxr,
+          job: that.userData.job
+        })
+        .then(res => {
+          that.editing = false;
+        });
+    },
     onCancel: function() {
       let that = this;
       that.editing = false;
       for (let key in that.info) {
         that.$set(that.info, key, that.infoOfbeforeEdit[key]);
       }
+    },
+    getRadioOption: function() {
+      let that = this;
+      that.jiuyefangshiRadioList = [];
+      that.stateRadioList = [];
+      that.$axios.post(that.$api.jiuyefangshi, {}).then(res => {
+        for (let i = 0, imax = res.data.length; i < imax; i++) {
+          if (res.data[i].text != "请选择") {
+            that.$set(
+              that.jiuyefangshiRadioList,
+              that.jiuyefangshiRadioList.length,
+              res.data[i]
+            );
+          }
+        }
+      });
+      that.$axios.post(that.$api.jiuyezhuangtai, {}).then(res => {
+        for (let i = 0, imax = res.data.length; i < imax; i++) {
+          that.$set(that.stateRadioList, i, res.data[i]);
+        }
+      });
     }
   }
 };
