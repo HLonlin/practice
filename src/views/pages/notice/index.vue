@@ -1,32 +1,31 @@
 <template>
   <div class="container">
     <div class="search_panel">
-      <search sourceOf="notice"></search>
+      <search sourceOf="notice" v-on:searchNotice="onSearch"></search>
     </div>
     <div class="noticeList_panel">
-      <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+      <van-pull-refresh v-model="refreshing" @refresh="dropDownRefresh">
         <div
           class="notice_Item"
           v-for="(item, i) in topList"
           :key="i"
-          :title="item.title"
-          @click="notice_Details(item)"
+          :title="item.subject"
+          @click="notice_Details(item.wf_docUnid)"
         >
           <div
             class="notice_title"
             :class="{
-              notice_titleBold: item.important,
-              notice_titleTop: item.intop
+              notice_titleTop: item.zhiding
             }"
           >
             <i
               class="iconItem icon_zhidingtubiao icon_intop"
-              v-if="item.intop"
+              v-if="item.zhiding"
             ></i>
-            {{ item.title }}
+            {{ item.subject }}
           </div>
-          <div class="notice_label">发起人：{{ item.label }}</div>
-          <div class="notice_date">{{ item.date }}</div>
+          <div class="notice_label">发起人：{{ item.wf_Creator }}</div>
+          <div class="notice_date">{{ item.wf_Created }}</div>
         </div>
         <van-list
           v-model="loading"
@@ -38,24 +37,23 @@
             class="notice_Item"
             v-for="(item, i) in noticeList"
             :key="i"
-            :title="item.title"
-            @click="notice_Details(item)"
+            :title="item.subject"
+            @click="notice_Details(item.wf_docUnid)"
           >
             <div
               class="notice_title"
               :class="{
-                notice_titleBold: item.important,
-                notice_titleTop: item.intop
+                notice_titleTop: item.zhiding
               }"
             >
               <i
                 class="iconItem icon_zhidingtubiao icon_intop"
                 v-if="item.intop"
               ></i>
-              {{ item.title }}
+              {{ item.subject }}
             </div>
-            <div class="notice_label">发起人：{{ item.label }}</div>
-            <div class="notice_date">{{ item.date }}</div>
+            <div class="notice_label">发起人：{{ item.wf_Creator }}</div>
+            <div class="notice_date">{{ item.wf_Created }}</div>
           </div>
         </van-list>
       </van-pull-refresh>
@@ -75,16 +73,24 @@ export default {
   },
   data() {
     return {
+      userData: Object,
       topList: [],
       noticeList: [],
-      loading: false,
-      finished: false,
-      refreshing: false,
-      noReadAll: false
+      loading: false, // 加载状态
+      finished: false, // 是否已加载全部
+      refreshing: false, //
+      noReadAll: false,
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -92,78 +98,69 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    onLoad() {
-      // 加载列表
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.noticeList = [];
-          this.refreshing = false;
-        }
-        for (let i = 0; i < 10; i++) {
-          if (i < 3) {
-            this.topList.push({
-              i: i,
-              title:
-                "防诈骗：花1万培训，动动嘴就轻松月入过万？！防诈骗：花1万培训，动动嘴就轻松月入过万？！",
-              label: "王永润",
-              date: "12月1日 19:18",
-              intop: i < 3 ? true : false,
-              important: i % 2 == 0 ? false : true,
-              read: false,
-              type: i == 0 ? "normal" : "enclosure"
-            });
-          } else {
-            this.noticeList.push({
-              i: i,
-              title:
-                "防诈骗：花1万培训，动动嘴就轻松月入过万？！防诈骗：花1万培训，动动嘴就轻松月入过万？！",
-              label: "王永润",
-              date: "12月1日 19:18",
-              intop: i < 3 ? true : false,
-              important: i % 2 == 0 ? false : true,
-              read: true,
-              type: "outLink"
-            });
-          }
-        }
-        this.loading = false;
-        if (this.noticeList.length >= 40) {
-          this.finished = true;
-        }
-        this.checkAllRead();
-      }, 1000);
-    },
-    onRefresh() {
-      // 下拉刷新
+    onSearch: function(searchkeywords) {
       // 清空列表数据
+      this.noticeList = [];
+      this.topList = [];
+      // 重置页码
+      this.pageIndex = 1;
+      this.refreshing = false;
       this.finished = false;
-
-      // 重新加载数据
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
+      this.onLoad(searchkeywords);
+    },
+    onLoad() {
+      // 加载列表
+      let that = this,
+        keyword = arguments[0] ? arguments[0] : "";
+      that.$axios
+        .post(that.$api.noticeList, {
+          cardid: that.userData.cardid,
+          searchkeywords: keyword,
+          pageNum: that.pageIndex,
+          pageSize: arguments[0] ? 1000 : that.pageSize
+        })
+        .then(res => {
+          that.loading = false;
+          that.pageIndex = that.pageIndex + 1;
+          let noticeList = res.data.noticeList;
+          for (let i = 0, imax = noticeList.length; i < imax; i++) {
+            if (noticeList[i].zhiding == "1") {
+              that.topList.push(noticeList[i]);
+            } else {
+              that.noticeList.push(noticeList[i]);
+            }
+          }
+          if (
+            that.noticeList.length + that.topList.length >=
+            res.data.totalRecord
+          ) {
+            that.finished = true;
+          }
+          // 是否全部已读
+        });
+    },
+    // 下拉刷新
+    dropDownRefresh() {
+      if (this.refreshing) {
+        // 清空列表数据
+        this.noticeList = [];
+        this.topList = [];
+        // 重置页码
+        this.pageIndex = 1;
+        this.refreshing = false;
+        this.finished = false;
+        // 将 loading 设置为 true，表示处于加载状态
+        this.loading = true;
+      }
+      // 重新加载数据
       this.onLoad();
     },
-    checkAllRead: function() {
-      // 检查是否全部已读
-      for (let i = 0, imax = this.topList.length; i < imax; i++) {
-        if (!this.topList[i].read) {
-          this.noReadAll = true;
-        }
-      }
-      for (let i = 0, imax = this.noticeList.length; i < imax; i++) {
-        if (!this.noticeList[i].read) {
-          this.noReadAll = true;
-        }
-      }
-      // checkAllRead是在父组件on监听的方法
-      // this.noReadAll是需要传的值
-      this.$emit("checkAllRead", this.noReadAll);
-    },
-    notice_Details: function(item) {
-      let Item = encodeURIComponent(JSON.stringify(item));
+    notice_Details: function(id) {
       this.$router.push({
         path: "/detailPage",
-        query: { detailId: Item }
+        query: { wf_docUnid: id, cardid: this.userData.cardid }
       });
     }
   }
@@ -199,10 +196,6 @@ export default {
   padding-bottom: 10px;
 }
 .notice_titleTop {
-  color: #333333;
-}
-.notice_titleBold {
-  font-weight: bold;
   color: #333333;
 }
 .notice_label,

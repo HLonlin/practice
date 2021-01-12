@@ -32,9 +32,15 @@ export default {
   destroyed() {},
   methods: {
     onSearch: function() {
-      // sourceOf
-      console.log("搜索来源：", this.sourceOf, "搜索文本：", this.searchValue);
-      this.$emit("search", this.searchValue);
+      // console.log("搜索来源：", this.sourceOf, "搜索文本：", this.searchValue);
+      switch (this.sourceOf) {
+        case "notice":
+          this.$emit("searchNotice", this.searchValue);
+          break;
+        case "news":
+          this.$emit("searchNews", this.searchValue);
+          break;
+      }
     }
   }
 };

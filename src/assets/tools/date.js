@@ -26,7 +26,7 @@ const date = {
         return dateStr;
     },
     /**
-     * 根据unit获取当前时间戳 h截止时、h截止分、h截止秒、ms截止毫秒
+     * 根据unit获取当前时间戳 h截止时、m截止分、s截止秒、ms截止毫秒
      * @param {string} unit - 规定返回单位的级别
      */
     getTimeStamp: function(unit) {
@@ -56,6 +56,32 @@ const date = {
         let arr = yearMonth.split("-");
         let d = new Date(arr[0], arr[1], 0);
         return d.getDate();
+    },
+    // 获取年月日
+    getYearMonthDate: function() {
+        let date = arguments[0] ? new Date(arguments[0]) : new Date();
+        let year = date.getFullYear(),
+            month =
+            date.getMonth() + 1 < 10 ?
+            "0" + (date.getMonth() + 1) :
+            date.getMonth() + 1,
+            day =
+            date.getDate() < 10 ? "0" + date.getDate() : date.getDate(),
+            hour =
+            date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+            minute =
+            date.getMinutes() < 10 ?
+            "0" + date.getMinutes() :
+            date.getMinutes(),
+            second =
+            date.getSeconds() < 10 ?
+            "0" + date.getSeconds() :
+            date.getSeconds();
+        if (arguments[1]) {
+            return year + arguments[1] + month + arguments[1] + day + ' ' + hour + ':' + minute + ':' + second;
+        } else {
+            return year + '年' + month + '月' + day + '日 ' + hour + ':' + minute + ':' + second;
+        }
     }
 }
 export default date;
