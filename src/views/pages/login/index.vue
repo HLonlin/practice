@@ -91,7 +91,7 @@ export default {
       entSelectShow: false,
       entSelect_banzhurenBtn: false,
       entSelect_xibuBtn: false,
-      usertype: "1", // 账号类型，必填 1=教师，2=学生
+      usertype: "2", // 账号类型，必填 1=教师，2=学生
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：手机号
       // passwd: "gz020slitsXX", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
       userid: "15768531482", // 登录号，必填，教师：oa账号，学生：手机号

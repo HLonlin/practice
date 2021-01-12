@@ -16,7 +16,12 @@ const API = {
     signinList: '/api/practice/student/qiandao/monthQiandaoList', // 根据月份获取学员签到列表
     signin: '/api/practice/student/qiandao/signIn', // 学员签到
     getSigninDetails: '/api/practice/student/qiandao/dateQiandao', // 根据日期查看签到详情
+    noticeList: '/api/practice/student/notice/noticeList', // 分页条件查询公告列表
+    noticeDetail: '/api/practice/student/notice/noticeDetail', // 公告详情
+    readNotice: '/api/practice/student/notice/readNotice', // 阅读公告（设置为已读）
+    updateInfo_student: '/api/practice/student/profile/updateProfile', // 修改学生个人信息
     healthStatus: '/api/practice/dic/healthStatus', // 健康状态数据字典
-
+    jiuyefangshi: '/api/practice/dic/jiuyefangshi', //就业方式数据字典
+    jiuyezhuangtai: '/api/practice/dic/jiuyezhuangtai', // 就业状态数据字典
 }
 export default API
