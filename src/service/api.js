@@ -19,7 +19,15 @@ const API = {
     getLearnEveryDay: '/api/practice/student/meizhouyixue/context', // 获取每日一学内容
     recordLearnEveryDay: '/api/practice/student/meizhouyixue/record', // 每日一学学习记录打卡
     isLearnToday: '/api/practice/student/meizhouyixue/hasMeizhouyixue', // 判断是否已经学习每日一学
+    getLearnEveryDayByDate: '/api/practice/student/meizhouyixue/dateYixue', // 根据日期获取每日一学内容
     // ------------------------消息---------------------------------
+    msgList: '/api/practice/student/xiaoxi/xiaoxiList', // 消息列表
+    msgDetail: '/api/practice/student/xiaoxi/xiaoxiDetail', // 消息详情
+    readMsg: '/openapi/api/practice/student/xiaoxi/markRead', // 标记消息为已读
+    sendMsg_student: '/api/practice/student/xiaoxi/sendXiaoxi', // 学生发送消息
+    sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 老师发送消息
+    searchMsg: '/api/practice/student/xiaoxi/historyList', // 条件查询历史消息列表
+    historyMsgDetailList: ' /api/practice/student/xiaoxi/historyDetailList', // 分页条件查询历史消息详情列表
     // ------------------------公告---------------------------------
     noticeList: '/api/practice/student/notice/noticeList', // 分页条件查询公告列表
     noticeDetail: '/api/practice/student/notice/noticeDetail', // 公告详情
@@ -32,6 +40,8 @@ const API = {
     monthlyList: '/api/practice/student/zhoubao/zhoubaoList', // 月记列表
     monthlyDetail: '/api/practice/student/zhoubao/zhoubaoDetail', // 月记详情
     addMonthly: '/api/practice/student/zhoubao/zhoubaoAdd', // 添加月记
+    contactDetail: '/api/practice/student/contact/contactDetail', // 通讯录
+    about: '/api/practice/dic/guanyu', // 移动端关于菜单配置
 
 }
 export default API
