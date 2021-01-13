@@ -1,7 +1,7 @@
 <template>
-  <div class="dailystudy_container">
+  <div class="mySignin_container">
     <van-nav-bar
-      title="每日一学"
+      title="我的签到"
       :fixed="true"
       :placeholder="true"
       :safe-area-inset-top="true"
@@ -27,18 +27,18 @@
         </div>
         <div class="signin_calendarList" type="flex" justify="space-between">
           <div
-            v-for="(item, i) in dateList"
+            v-for="(item, i) in signinList"
             class="signin_calendarListItem"
             :class="[
               {
-                firstDay: i == 0,
-                active: item.active
+                isSignin: item.isSignin,
+                firstDay: i == 0
               },
               item.dayClass
             ]"
             :key="i"
             :style="{ marginLeft: i == 0 ? firstDay * 14.285 + '%' : 0 }"
-            @click="getDailyStudy(item)"
+            @click="getSigninDetails(item)"
           >
             <div class="listItem_text">
               {{ item == i + 1 ? item : i + 1 }}
@@ -47,29 +47,49 @@
         </div>
       </div>
     </div>
-    <div class="dailyStudy_panel">
-      <div class="dailyStudy_title">每日一学</div>
-      <div class="dailyStudy_date">
-        {{ $tool.getYearMonthDate(dailyStudy.learntime) }}
+    <div class="signinDetail_panel">
+      <div class="signinDetail_title">
+        {{ signinDetail.dateStr }}
       </div>
-      <div class="dailyStudy_text">
-        {{ dailyStudy.context }}
+      <div class="signinDetail_isSignin" v-if="signinDetail.isSignin">
+        <div class="signinDetail_company signinDetail_container">
+          <div class="signinDetail_label">实习单位</div>
+          <div class="signinDetail_content">
+            {{ signinDetail.company }}
+          </div>
+        </div>
+        <div class="signinDetail_time signinDetail_container">
+          <div class="signinDetail_label ">签到时间</div>
+          <div class="signinDetail_content">
+            {{ signinDetail.time }}
+          </div>
+        </div>
+        <div class="signinDetail_address signinDetail_container">
+          <div class="signinDetail_label ">签到地点</div>
+          <div class="signinDetail_content">
+            {{ signinDetail.address }}
+          </div>
+        </div>
+        <div class="signinDetail_map">查看坐标地图</div>
       </div>
-      <div class="dailyStudy_author">——{{ dailyStudy.wf_Creator }}</div>
+      <div class="signinDetail_noSignin" v-else>
+        未签到
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "dailystudy",
+  name: "mySignin",
   data() {
     return {
       userData: Object,
-      firstDay: "",
-      dateList: [], // 签到列表
       currentYearMonth: "",
-      dailyStudy: {}
+      firstDay: "",
+      signinList: [], // 签到列表
+      pageIndex: Number,
+      signinDetail: {}
     };
   },
   beforeCreate() {},
@@ -79,7 +99,7 @@ export default {
       this.userData = userData;
     }
     this.getSigninDetailsList();
-    this.getDailyStudy();
+    // this.getSigninDetails();
   },
   beforeMount() {},
   mounted() {},
@@ -91,35 +111,9 @@ export default {
     onClickLeft: function() {
       this.$router.go(-1);
     },
-    // 根据日期加载每日一学
-    getDailyStudy: function(item) {
-      let that = this;
-      let learntime =
-        that.currentYearMonth.replace(/年/, "-").replace(/月/, "-") +
-        (new Date().getDate() < 10
-          ? "0" + new Date().getDate()
-          : new Date().getDate());
-      if (arguments[0]) {
-        for (let i = 0, imax = that.dateList.length; i < imax; i++) {
-          that.dateList[i].active = false;
-        }
-        that.dateList[item.date - 1].active = true;
-        learntime =
-          that.currentYearMonth.replace(/年/, "-").replace(/月/, "-") +
-          item.date;
-      }
-      that.$axios
-        .post(that.$api.getDailyStudyByDate, { learntime: learntime })
-        .then(res => {
-          for (let keys in res.data) {
-            that.$set(that.dailyStudy, keys, res.data[keys]);
-          }
-        });
-    },
-    // 日历列表
+    // 根据月份获取签到列表
     getSigninDetailsList: function() {
       let that = this;
-      that.dateList = [];
       let today = new Date(new Date(new Date().toLocaleDateString()).getTime());
       let currentYearMonth = arguments[0] ? new Date(arguments[0]) : new Date();
       // : new Date("2020-12");
@@ -132,25 +126,64 @@ export default {
         .replace(/年/, "-")
         .replace(/月/, "");
       that.firstDay = new Date(YearMonthStr + "-01").getDay();
-      for (
-        let j = 0, jmax = that.$tool.getDaysBy(YearMonthStr);
-        j < jmax;
-        j++
-      ) {
-        that.$set(that.dateList, j, {
-          date: j + 1 < 10 ? "0" + (j + 1) : j + 1
+      that.$axios
+        .post(that.$api.signinList, {
+          month: YearMonthStr
+        })
+        .then(res => {
+          let data = res.data;
+          that.signinList = [];
+          for (
+            let j = 0, jmax = that.$tool.getDaysBy(YearMonthStr);
+            j < jmax;
+            j++
+          ) {
+            that.$set(that.signinList, j, {
+              wf_Created: j + 1,
+              isSignin: false
+            });
+          }
+          for (let i = 0, imax = data.length; i < imax; i++) {
+            let todayDate = new Date(data[i].wf_Created).getDate() - 1;
+            that.$set(that.signinList, todayDate, data[i]);
+            that.$set(that.signinList[todayDate], "isSignin", true);
+          }
+          for (let l = 0, lmax = that.signinList.length; l < lmax; l++) {
+            currentYearMonth.setDate(l + 1);
+            currentYearMonth = new Date(
+              new Date(currentYearMonth.toLocaleDateString()).getTime()
+            );
+            if (currentYearMonth > today) {
+              that.$set(that.signinList[l], "dayClass", "future");
+            } else if (currentYearMonth < today) {
+              that.$set(that.signinList[l], "dayClass", "before");
+            } else {
+              that.$set(that.signinList[l], "dayClass", "today");
+              that.getSigninDetails(that.signinList[l]);
+            }
+          }
         });
-        currentYearMonth.setDate(j + 1);
-        currentYearMonth = new Date(
-          new Date(currentYearMonth.toLocaleDateString()).getTime()
-        );
-        if (currentYearMonth > today) {
-          that.$set(that.dateList[j], "active", false);
-        } else if (currentYearMonth < today) {
-          that.$set(that.dateList[j], "active", false);
-        } else {
-          that.$set(that.dateList[j], "active", true);
-        }
+    },
+    // 获取签到详情
+    getSigninDetails: function(item) {
+      console.log(item);
+      if (item.dayClass == "future") {
+        return;
+      }
+      let that = this;
+      that.$set(that.signinDetail, "isSignin", item.isSignin);
+      if (item.isSignin) {
+        let dateStr = that.$tool.getYearMonthDate(item.wf_Created);
+        that.$set(that.signinDetail, "dateStr", dateStr);
+        that.$set(that.signinDetail, "company", that.userData.danweidizhi);
+        that.$set(that.signinDetail, "time", item.wf_Created);
+        that.$set(that.signinDetail, "address", item.address);
+      } else {
+        let dateStr =
+          that.currentYearMonth +
+          (item.wf_Created < 10 ? "0" + item.wf_Created : item.wf_Created) +
+          "日";
+        that.$set(that.signinDetail, "dateStr", dateStr);
       }
     },
     pageTurn: function(add) {
@@ -255,127 +288,83 @@ export default {
   font-weight: 400;
   color: #666666;
 }
-.active .listItem_text {
+.today .listItem_text {
   width: 1.5rem;
   height: 1.5rem;
   border: 1px solid #0090d8;
 }
-
-.signin_popup {
-  width: 17.5rem;
-  border-radius: 0.5rem;
-  background-color: #ffffff;
+.before .listItem_text {
+  background-color: #eeeeee;
 }
-.signin_popupTitle {
-  font-size: 1rem;
-  font-family: PingFangSC-Medium, PingFang SC;
-  font-weight: bold;
-  color: #333333;
-  padding: 20px 0px 15px 0px;
-  box-sizing: border-box;
-  text-align: center;
-}
-.signin_popupContent {
-  box-sizing: border-box;
-  padding: 0px 1.25rem;
-}
-.popup_ContentItem {
-  border-bottom: 1px solid #eeeeee;
-  margin-bottom: 12px;
-}
-.signin_popupContent .popup_ContentItem:last-child {
-  border: none;
-  margin-bottom: 0px;
-}
-.popup_itemTitle {
-  font-size: 1rem;
-  font-family: PingFangSC-Medium, PingFang SC;
-  font-weight: bold;
-  color: #333333;
-  box-sizing: border-box;
-  padding: 0px 0px 12px 0px;
-}
-.popup_itemText {
-  font-size: 0.875rem;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #666666;
-  box-sizing: border-box;
-  padding: 0px 0px 20px 0px;
-}
-.signin_popupBottomBtn {
-  width: 100%;
-  padding: 10px 0px;
-  box-sizing: border-box;
-  text-align: center;
-  background-color: #cccccc;
-  border-radius: 0px 0px 0.5rem 0.5rem;
-  font-size: 1.125rem;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
+.isSignin .listItem_text {
+  background-color: #0090d8;
   color: #ffffff;
 }
-.signin_popupBottomBtn {
-  background-color: #0090d8;
-}
-.dailyStudy_panel {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.signinDetail_panel {
   box-sizing: border-box;
-  padding: 15px 1rem;
-  background-color: #ffffff;
+  padding: 0px 1rem;
 }
-.dailyStudy_title,
-.dailyStudy_date,
-.dailyStudy_text,
-.dailyStudy_author {
-  width: 100%;
+.signinDetail_title {
   text-align: center;
-  box-sizing: border-box;
-  padding: 0px 0px 10px 0px;
-}
-.dailyStudy_title {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: bold;
+  color: #333333;
+  box-sizing: border-box;
+  padding: 15px 0px 0px 0px;
+}
+.signinDetail_container {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eeeeee;
+}
+.signinDetail_address {
+  border: none;
+}
+.signinDetail_label {
+  font-size: 1rem;
+  font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 500;
-  color: #555555;
+  color: #333333;
 }
-.dailyStudy_date {
-  font-size: 0.75rem;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #999999;
-}
-.dailyStudy_text {
-  text-align: justify;
-  font-size: 0.875rem;
+.signinDetail_content {
+  max-width: 15rem;
+  font-size: 14px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #666666;
-  padding-top: 10px;
 }
-.dailyStudy_author {
+.signinDetail_map {
   text-align: right;
-  font-size: 0.875rem;
+  font-size: 0.625rem;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: #666666;
-  padding-top: 10px;
+  color: #0090d8;
+}
+.signinDetail_noSignin {
+  text-align: center;
+  font-size: 1rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: bold;
+  color: #333333;
+  box-sizing: border-box;
+  padding: 15px 0px;
 }
 </style>
 <style>
-.dailystudy_container .van-nav-bar {
+.mySignin_container .van-nav-bar {
   background-color: #0090d8;
 }
-.dailystudy_container .van-nav-bar__placeholder,
-.dailystudy_container .van-nav-bar__content {
+.mySignin_container .van-nav-bar__placeholder,
+.mySignin_container .van-nav-bar__content {
   height: 44px !important;
 }
-.dailystudy_container .van-nav-bar .van-icon {
+.mySignin_container .van-nav-bar .van-icon {
   color: #ffffff;
 }
-.dailystudy_container .van-nav-bar__title {
+.mySignin_container .van-nav-bar__title {
   font-size: 1.125rem;
   color: #ffffff;
 }

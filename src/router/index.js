@@ -107,6 +107,13 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        name: 'mySignin',
+        path: '/mySignin',
+        component: () =>
+            import ('@/views/pages/mine/subpage/mySignin'),
+        hidden: true
+    },
+    {
         name: 'library',
         path: '/library',
         component: () =>
