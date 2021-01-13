@@ -14,9 +14,10 @@
         {{ monthlyDetail.year }}年{{ monthlyDetail.zhou }}月
       </div>
       <div class="monthlydetail_articleContent">
-        <p>
+        <!-- <p>
           {{ monthlyDetail.info }}
-        </p>
+        </p> -->
+        {{ monthlyDetail.info }}
       </div>
       <div class="monthlydetail_articlePhoto">
         <div
@@ -151,6 +152,8 @@ export default {
   letter-spacing: 0.4px;
   box-sizing: border-box;
   padding: 10px 0px 0px 0px;
+  word-wrap: break-word;
+  word-break: normal;
 }
 .monthlydetail_articlePhoto {
   box-sizing: border-box;

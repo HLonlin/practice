@@ -8,7 +8,11 @@
       :border="false"
       left-arrow
       @click-left="onClickLeft"
-    />
+    >
+      <template #right>
+        <i class="iconItem icon_tianjiatubiao icon_add" @click="addMonthly"></i>
+      </template>
+    </van-nav-bar>
     <div class="monthlylist_listPanel">
       <van-pull-refresh v-model="refreshing" @refresh="dropDownRefresh">
         <van-list
@@ -118,6 +122,13 @@ export default {
       }
       // 重新加载数据
       this.onLoad();
+    },
+    // 添加月记
+    addMonthly: function() {
+      let that = this;
+      this.$router.push({
+        path: "/addmonthly"
+      });
     }
   }
 };
@@ -130,6 +141,10 @@ export default {
   background-color: #f6f6f6;
   box-sizing: border-box;
   padding: 10px 0px;
+}
+.icon_add {
+  font-size: 1rem;
+  color: #ffffff;
 }
 .monthlylist_yearPanel {
   width: 100%;
