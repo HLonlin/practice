@@ -112,8 +112,8 @@ export default {
             date.getSeconds() > 10
               ? date.getSeconds()
               : "0" + date.getSeconds();
-          that.detail.date = that.$tool.getYearMonthDate(res.data.wf_Created);
-          that.detail.readTime = that.$tool.getYearMonthDate(res.data.readTime);
+          that.detail.date = that.$tool.getFullDate(res.data.wf_Created);
+          that.detail.readTime = that.$tool.getFullDate(res.data.readTime);
           let detail_content = document.getElementsByClassName(
             "detail_content"
           )[0];

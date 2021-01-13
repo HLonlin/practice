@@ -100,6 +100,13 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        name: 'dailystudy',
+        path: '/dailystudy',
+        component: () =>
+            import ('@/views/pages/mine/subpage/dailystudy'),
+        hidden: true
+    },
+    {
         name: 'library',
         path: '/library',
         component: () =>

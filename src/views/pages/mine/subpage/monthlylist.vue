@@ -99,7 +99,7 @@ export default {
         that.pageIndex = that.pageIndex + 1;
         let monthlyList = res.data;
         for (let i = 0, imax = monthlyList.length; i < imax; i++) {
-          monthlyList[i].date = that.$tool.getYearMonthDate(
+          monthlyList[i].date = that.$tool.getFullDate(
             monthlyList[i].wf_Created
           );
           that.monthlyList.push(monthlyList[i]);

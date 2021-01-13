@@ -57,8 +57,8 @@ const date = {
         let d = new Date(arr[0], arr[1], 0);
         return d.getDate();
     },
-    // 获取年月日
-    getYearMonthDate: function() {
+    // 获取年月日时分秒
+    getFullDate: function() {
         let date = arguments[0] ? new Date(arguments[0]) : new Date();
         let year = date.getFullYear(),
             month =
@@ -81,6 +81,22 @@ const date = {
             return year + arguments[1] + month + arguments[1] + day + ' ' + hour + ':' + minute + ':' + second;
         } else {
             return year + '年' + month + '月' + day + '日 ' + hour + ':' + minute + ':' + second;
+        }
+    },
+    // 获取年月日
+    getYearMonthDate: function() {
+        let date = arguments[0] ? new Date(arguments[0]) : new Date();
+        let year = date.getFullYear(),
+            month =
+            date.getMonth() + 1 < 10 ?
+            "0" + (date.getMonth() + 1) :
+            date.getMonth() + 1,
+            day =
+            date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+        if (arguments[1]) {
+            return year + arguments[1] + month + arguments[1] + day
+        } else {
+            return year + '年' + month + '月' + day + '日'
         }
     }
 }
