@@ -116,7 +116,6 @@ export default {
         keyword = arguments[0] ? arguments[0] : "";
       that.$axios
         .post(that.$api.noticeList, {
-          cardid: that.userData.cardid,
           searchkeywords: keyword,
           pageNum: that.pageIndex,
           pageSize: arguments[0] ? 1000 : that.pageSize

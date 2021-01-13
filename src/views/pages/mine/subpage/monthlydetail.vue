@@ -10,15 +10,13 @@
       @click-left="onClickLeft"
     />
     <div class="monthlydetail_articlePanel">
-      <div class="monthlydetail_articleTitle">2020年11月</div>
+      <div class="monthlydetail_articleTitle">
+        {{ monthlyDetail.year }}年{{ monthlyDetail.zhou }}月
+      </div>
       <div class="monthlydetail_articleContent">
         <p>
-          在这个月，学的做的相比上月多了很多，修图、跟拍片场置景过程视频（7号-10号），过后再把这些视频素材浓缩剪辑成一个快节奏的短视频选曲快节奏的纯音乐进行配乐，算是实习以来第一个作品了。
+          {{ monthlyDetail.info }}
         </p>
-        <p>
-          去片场跟了一通宵边看边学习和搬搬抬抬，（导演如何去演员调度、现场场景灯光的设计、根据场景变化去调整灯光的摆放）。
-        </p>
-        <p>进一步学到了修图，剪辑思路音乐卡节奏。</p>
       </div>
       <div class="monthlydetail_articlePhoto">
         <div
@@ -80,11 +78,14 @@ export default {
         "https://img.yzcdn.cn/vant/apple-4.jpg",
         "https://img.yzcdn.cn/vant/apple-5.jpg",
         "https://img.yzcdn.cn/vant/apple-6.jpg"
-      ]
+      ],
+      monthlyDetail: Object
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.getDEtail();
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -92,6 +93,17 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    // 加载详情
+    getDEtail: function() {
+      let that = this;
+      that.$axios
+        .post(that.$api.monthlyDetail, {
+          wf_docUnid: that.$route.query.wf_docUnid
+        })
+        .then(res => {
+          that.monthlyDetail = res.data.noticeJson;
+        });
+    },
     onClickLeft: function() {
       this.$router.push({
         path: "/monthlylist"

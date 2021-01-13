@@ -305,22 +305,18 @@ export default {
     // 今日是否签到
     isSigninTotal: function() {
       let that = this;
-      that.$axios
-        .post(that.$api.isSignin, { cardid: that.userData.cardid })
-        .then(res => {
-          that.is_SigninTotal = res.data.hasQiandao;
-        });
+      that.$axios.post(that.$api.isSignin, {}).then(res => {
+        that.is_SigninTotal = res.data.hasQiandao;
+      });
     },
     isLearnToday: function() {
       // 是否已经每日一学
       let that = this;
-      that.$axios
-        .post(that.$api.isLearnToday, { cardid: that.userData.cardid })
-        .then(res => {
-          if (!res.data.hasMeizhouyixue) {
-            getLearnContent();
-          }
-        });
+      that.$axios.post(that.$api.isLearnToday, {}).then(res => {
+        if (!res.data.hasMeizhouyixue) {
+          getLearnContent();
+        }
+      });
       // 获取每日一学内容
       function getLearnContent() {
         that.$axios.post(that.$api.getLearnEveryDay, {}).then(res => {
@@ -346,8 +342,7 @@ export default {
       }
       that.$axios
         .post(that.$api.recordLearnEveryDay, {
-          wf_docUnid: that.learnContent.wf_docUnid,
-          cardid: that.userData.cardid
+          wf_docUnid: that.learnContent.wf_docUnid
         })
         .then(res => {
           that.openPopup("learnEveryDay", false);
@@ -370,7 +365,6 @@ export default {
       that.firstDay = new Date(YearMonthStr + "-01").getDay();
       that.$axios
         .post(that.$api.signinList, {
-          cardid: that.userData.cardid,
           month: YearMonthStr
         })
         .then(res => {
@@ -420,7 +414,6 @@ export default {
             that.currentYearMonth.replace(/年/, "-").replace(/月/, "-") + dates;
           that.$axios
             .post(that.$api.getSigninDetails, {
-              cardid: that.userData.cardid,
               date: dateStr
             })
             .then(res => {
@@ -535,7 +528,6 @@ export default {
       }
       that.$axios
         .post(that.$api.signin, {
-          cardid: that.userData.cardid, // 身份证号
           latitude: that.latitude, // 纬度
           longitude: that.longitude, // 经度
           address: that.currentAddress, // 打卡地点

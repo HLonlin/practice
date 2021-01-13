@@ -9,64 +9,35 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <div class="monthlylist_topPanel">
-      <div class="monthlylist_yearPanel">
-        <div class="monthlylist_lastYear" @click="lastYear"></div>
-        <div class="monthlylist_currentYear">{{ currentYear }}年</div>
-        <div class="monthlylist_nextYear" @click="nextYear"></div>
-      </div>
-    </div>
     <div class="monthlylist_listPanel">
-      <router-link
-        :to="{ path: 'monthlydetail', query: { detailId: 1 } }"
-        class="monthlylist_listItem"
-      >
-        <div class="monthlylist_listTitle">2020年12月月记</div>
-        <div class="monthlylist_listLabel">
-          <div class="monthlylist_listAuthor">姓名：卢保希</div>
-          <div class="monthlylist_listDate">2020年12月19日 17:13</div>
-        </div>
-      </router-link>
-      <router-link
-        :to="{ path: 'monthlydetail', query: { detailId: 2 } }"
-        class="monthlylist_listItem"
-      >
-        <div class="monthlylist_listTitle">2020年11月月记</div>
-        <div class="monthlylist_listLabel">
-          <div class="monthlylist_listAuthor">姓名：卢保希</div>
-          <div class="monthlylist_listDate">2020年11月19日 18:32</div>
-        </div>
-      </router-link>
-      <router-link
-        :to="{ path: 'monthlydetail', query: { detailId: 3 } }"
-        class="monthlylist_listItem"
-      >
-        <div class="monthlylist_listTitle">2020年10月月记</div>
-        <div class="monthlylist_listLabel">
-          <div class="monthlylist_listAuthor">姓名：卢保希</div>
-          <div class="monthlylist_listDate">2020年10月19日 14:25</div>
-        </div>
-      </router-link>
-      <router-link
-        :to="{ path: 'monthlydetail', query: { detailId: 4 } }"
-        class="monthlylist_listItem"
-      >
-        <div class="monthlylist_listTitle">2020年9月月记</div>
-        <div class="monthlylist_listLabel">
-          <div class="monthlylist_listAuthor">姓名：卢保希</div>
-          <div class="monthlylist_listDate">2020年9月19日 16:46</div>
-        </div>
-      </router-link>
-      <router-link
-        :to="{ path: 'monthlydetail', query: { detailId: 5 } }"
-        class="monthlylist_listItem"
-      >
-        <div class="monthlylist_listTitle">2020年8月月记</div>
-        <div class="monthlylist_listLabel">
-          <div class="monthlylist_listAuthor">姓名：卢保希</div>
-          <div class="monthlylist_listDate">2020年8月19日 17:51</div>
-        </div>
-      </router-link>
+      <van-pull-refresh v-model="refreshing" @refresh="dropDownRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+        >
+          <router-link
+            v-for="(item, i) in monthlyList"
+            :key="i"
+            :to="{
+              path: 'monthlydetail',
+              query: { wf_docUnid: item.wf_docUnid }
+            }"
+            class="monthlylist_listItem"
+          >
+            <div class="monthlylist_listTitle">
+              {{ item.year }}年{{ item.zhou }}月月记
+            </div>
+            <div class="monthlylist_listLabel">
+              <div class="monthlylist_listAuthor">
+                姓名：{{ item.username }}
+              </div>
+              <div class="monthlylist_listDate">{{ item.date }}</div>
+            </div>
+          </router-link>
+        </van-list>
+      </van-pull-refresh>
     </div>
   </div>
 </template>
@@ -79,7 +50,13 @@ export default {
   name: "monthlylist",
   data() {
     return {
-      currentYear: new Date().getFullYear()
+      monthlyList: [],
+      currentYear: new Date().getFullYear(),
+      loading: false, // 加载状态
+      finished: false, // 是否已加载全部
+      refreshing: false,
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   beforeCreate() {},
@@ -108,6 +85,39 @@ export default {
       if (this.currentYear >= new Date().getFullYear() + 10) {
         this.currentYear = new Date().getFullYear() + 10;
       }
+    },
+    // 加载月记列表
+    onLoad() {
+      let that = this,
+        keyword = arguments[0] ? arguments[0] : "";
+      that.$axios.post(that.$api.monthlyList, {}).then(res => {
+        that.loading = false;
+        that.pageIndex = that.pageIndex + 1;
+        let monthlyList = res.data;
+        for (let i = 0, imax = monthlyList.length; i < imax; i++) {
+          monthlyList[i].date = that.$tool.getYearMonthDate(
+            monthlyList[i].wf_Created
+          );
+          that.monthlyList.push(monthlyList[i]);
+        }
+        that.finished = true;
+        // 是否全部已读
+      });
+    },
+    // 下拉刷新
+    dropDownRefresh() {
+      if (this.refreshing) {
+        // 清空列表数据
+        this.monthlyList = [];
+        // 重置页码
+        this.pageIndex = 1;
+        this.refreshing = false;
+        this.finished = false;
+        // 将 loading 设置为 true，表示处于加载状态
+        this.loading = true;
+      }
+      // 重新加载数据
+      this.onLoad();
     }
   }
 };
@@ -118,6 +128,8 @@ export default {
 .monthlylist_container {
   height: 100vh;
   background-color: #f6f6f6;
+  box-sizing: border-box;
+  padding: 10px 0px;
 }
 .monthlylist_yearPanel {
   width: 100%;

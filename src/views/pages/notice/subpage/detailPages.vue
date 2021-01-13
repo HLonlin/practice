@@ -89,7 +89,6 @@ export default {
       let that = this;
       that.$axios
         .post(that.$api.noticeDetail, {
-          cardid: that.$route.query.cardid,
           noticeid: that.$route.query.wf_docUnid
         })
         .then(res => {
@@ -127,7 +126,6 @@ export default {
       function setIsRead() {
         that.$axios
           .post(that.$api.readNotice, {
-            cardid: that.$route.query.cardid,
             noticeid: that.$route.query.wf_docUnid
           })
           .then(res => {
