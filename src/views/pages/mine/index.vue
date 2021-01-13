@@ -83,7 +83,6 @@ export default {
       if (userData) {
         this.userData = userData;
       }
-      console.log(userData);
     }
   }
 };

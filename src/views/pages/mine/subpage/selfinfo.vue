@@ -14,19 +14,19 @@
         <div class="selfinfo_label">头像</div>
         <van-uploader
           class="selfinfo_headIcon"
-          v-model="userData.headImg"
+          v-model="userData.logo"
           :max-count="1"
           :before-read="beforeRead"
           :after-read="afterRead"
           preview-size="3.75rem"
           :deletable="false"
           :preview-options="{ showIndex: false }"
-          v-if="!editing" 
+          v-if="!editing"
         >
         </van-uploader>
         <van-uploader
           class="selfinfo_headIcon"
-          v-model="userData.headImg"
+          v-model="userData.logo"
           :max-count="1"
           :before-read="beforeRead"
           :after-read="afterRead"
@@ -213,11 +213,7 @@ export default {
       let userData = this.$tool.getLocal("userData");
       if (userData) {
         this.userData = userData;
-        userData.headImg = userData.headImg
-          ? [{ url: userData.headImg }]
-          : [{ url: "../../../assets/images/default.png" }];
       }
-      console.log(userData);
     },
     onClickLeft: function() {
       this.$router.push({
