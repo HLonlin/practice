@@ -59,9 +59,9 @@
         <div class="everyDay_popup">
           <div class="popup_titile">每日一学</div>
           <div class="popup_content">
-            {{ learnContent.Context }}
+            {{ learnContent.context }}
           </div>
-          <div class="popup_author">——{{ learnContent.WF_Creator }}</div>
+          <div class="popup_author">——{{ learnContent.wf_Creator }}</div>
           <div
             class="popup_bottomBtn"
             :class="{ popup_bottomBtnAble: countDown == 0 }"
@@ -252,8 +252,8 @@ export default {
       signinList: [], // 签到列表
       pageIndex: Number,
       learnContent: {
-        Context: "",
-        WF_Creator: "",
+        context: "",
+        wf_Creator: "",
         wf_docUnid: ""
       },
       countDown: 10, // 每日一学倒计时长
@@ -281,7 +281,7 @@ export default {
       this.userData = userData;
     }
     this.getSigninDetailsList();
-    // this.isLearnToday();
+    this.isLearnToday();
     this.isSigninTotal();
     this.getHealthStatus();
   },
@@ -319,7 +319,7 @@ export default {
       });
       // 获取每日一学内容
       function getLearnContent() {
-        that.$axios.post(that.$api.getLearnEveryDay, {}).then(res => {
+        that.$axios.post(that.$api.getDailyStudy, {}).then(res => {
           for (let keys in res.data) {
             that.$set(that.learnContent, keys, res.data[keys]);
           }

@@ -16,10 +16,10 @@ const API = {
     getSigninDetails: '/api/practice/student/qiandao/dateQiandao', // 根据日期查看签到详情
     healthStatus: '/api/practice/dic/healthStatus', // 健康状态数据字典
     getWechatInvokesign: '', // 获取微信调用配置
-    getLearnEveryDay: '/api/practice/student/meizhouyixue/context', // 获取每日一学内容
+    getDailyStudy: '/api/practice/student/meizhouyixue/context', // 获取每日一学内容
     recordLearnEveryDay: '/api/practice/student/meizhouyixue/record', // 每日一学学习记录打卡
     isLearnToday: '/api/practice/student/meizhouyixue/hasMeizhouyixue', // 判断是否已经学习每日一学
-    getLearnEveryDayByDate: '/api/practice/student/meizhouyixue/dateYixue', // 根据日期获取每日一学内容
+    getDailyStudyByDate: '/api/practice/student/meizhouyixue/dateYixue', // 根据日期获取每日一学内容
     // ------------------------消息---------------------------------
     msgList: '/api/practice/student/xiaoxi/xiaoxiList', // 消息列表
     msgDetail: '/api/practice/student/xiaoxi/xiaoxiDetail', // 消息详情
