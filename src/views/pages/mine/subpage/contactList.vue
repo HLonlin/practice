@@ -290,7 +290,7 @@ export default {
   font-size: 1.125rem;
   color: #ffffff;
 }
-.search_panel .van-search {
+.contactList_container .van-search {
   background-color: #f6f6f6 !important;
 }
 .contactList_panel .van-index-anchor {

@@ -39,7 +39,7 @@
         <i class="iconItem icon_tongxunlutubiaobeifen icon_left"></i>
         <div class="middle_title">通讯录</div>
       </router-link>
-      <router-link :to="{ path: 'signin' }" class="cell_panel">
+      <router-link :to="{ path: 'about' }" class="cell_panel">
         <i class="iconItem icon_guanyutubiao icon_left"></i>
         <div class="middle_title">关于</div>
       </router-link>
