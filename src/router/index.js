@@ -114,6 +114,13 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        name: 'contactList',
+        path: '/contactList',
+        component: () =>
+            import ('@/views/pages/mine/subpage/contactList'),
+        hidden: true
+    },
+    {
         name: 'library',
         path: '/library',
         component: () =>

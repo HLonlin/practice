@@ -40,7 +40,8 @@ const API = {
     monthlyList: '/api/practice/student/zhoubao/zhoubaoList', // 月记列表
     monthlyDetail: '/api/practice/student/zhoubao/zhoubaoDetail', // 月记详情
     addMonthly: '/api/practice/student/zhoubao/zhoubaoAdd', // 添加月记
-    contactDetail: '/api/practice/student/contact/contactDetail', // 通讯录
+    contactList: '/api/practice/student/contact/contactList', // 通讯录
+    contactDetail: '/api/practice/student/contact/contactDetail', // 通讯录用户详情
     about: '/api/practice/dic/guanyu', // 移动端关于菜单配置
 
 }

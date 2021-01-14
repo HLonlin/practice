@@ -5,8 +5,8 @@ import '@/assets/styles/default.css'; // 默认样式
 
 // 按需引入vant组件
 import 'vant/lib/index.css'
-import { Col, Row, Badge, Calendar, DatetimePicker, NavBar, Search, List, PullRefresh, Notify, Field, RadioGroup, Radio, Uploader, Tabbar, TabbarItem, Toast, ImagePreview, Popup } from "vant";
-const vantComponentsObj = { Col, Row, Badge, Calendar, DatetimePicker, NavBar, Search, List, PullRefresh, Notify, Field, RadioGroup, Radio, Uploader, Tabbar, TabbarItem, Toast, ImagePreview, Popup }
+import { Col, Row, Badge, Calendar, DatetimePicker, NavBar, Search, List, PullRefresh, Notify, Field, RadioGroup, Radio, Uploader, Tabbar, TabbarItem, Toast, ImagePreview, Popup, IndexBar, IndexAnchor } from "vant";
+const vantComponentsObj = { Col, Row, Badge, Calendar, DatetimePicker, NavBar, Search, List, PullRefresh, Notify, Field, RadioGroup, Radio, Uploader, Tabbar, TabbarItem, Toast, ImagePreview, Popup, IndexBar, IndexAnchor }
 const vantComponents = {
     install(Vue) {
         Object.keys(vantComponentsObj).forEach(key => Vue.use(vantComponentsObj[key]))

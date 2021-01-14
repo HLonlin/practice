@@ -37,8 +37,8 @@ export default {
         case "notice":
           this.$emit("searchNotice", this.searchValue);
           break;
-        case "news":
-          this.$emit("searchNews", this.searchValue);
+        case "contactList":
+          this.$emit("searchContactList", this.searchValue);
           break;
       }
     }

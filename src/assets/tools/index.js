@@ -8,8 +8,10 @@ import img from '@/assets/tools/image.js';
 import math from '@/assets/tools/math.js';
 import string from '@/assets/tools/string.js';
 import common from '@/assets/tools/common.js';
+import pinying from '@/assets/tools/pinying.js';
+
 import { localStorage } from "@/assets/tools/webstorage";
 const tools = {};
 
-Object.assign(tools, arr, date, img, math, string, common, localStorage);
+Object.assign(tools, arr, date, img, math, string, common, pinying, localStorage);
 export default tools;

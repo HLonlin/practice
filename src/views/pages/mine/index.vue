@@ -35,7 +35,7 @@
       </router-link>
     </div>
     <div class="bottom_panel">
-      <router-link :to="{ path: 'signin' }" class="cell_panel">
+      <router-link :to="{ path: 'contactList' }" class="cell_panel">
         <i class="iconItem icon_tongxunlutubiaobeifen icon_left"></i>
         <div class="middle_title">通讯录</div>
       </router-link>
