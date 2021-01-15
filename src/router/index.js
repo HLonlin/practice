@@ -53,6 +53,7 @@ export const constantRouter = [{
         ]
     },
     {
+        title: '404',
         path: '/404',
         component: () =>
             import ('@/views/pages/lose'),
@@ -65,6 +66,15 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '聊天室',
+        name: 'chatroom',
+        path: '/chatroom',
+        component: () =>
+            import ('@/views/pages/news/subpage/chatroom'),
+        hidden: true
+    },
+    {
+        title: '公告详情',
         name: 'detailPage',
         path: '/detailPage',
         component: () =>
@@ -72,6 +82,7 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '个人信息',
         name: 'selfinfo',
         path: '/selfinfo',
         component: () =>
@@ -79,6 +90,7 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '月记列表',
         name: 'monthlylist',
         path: '/monthlylist',
         component: () =>
@@ -86,6 +98,7 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '月记详情',
         name: 'monthlydetail',
         path: '/monthlydetail',
         component: () =>
@@ -93,6 +106,7 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '新增月记',
         name: 'addmonthly',
         path: '/addmonthly',
         component: () =>
@@ -100,6 +114,7 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '每日一学',
         name: 'dailystudy',
         path: '/dailystudy',
         component: () =>
@@ -107,6 +122,15 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '教学文档库',
+        name: 'library',
+        path: '/library',
+        component: () =>
+            import ('@/views/pages/mine/subpage/library'),
+        hidden: true
+    },
+    {
+        title: '我的签到',
         name: 'mySignin',
         path: '/mySignin',
         component: () =>
@@ -114,6 +138,7 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '通讯录',
         name: 'contactList',
         path: '/contactList',
         component: () =>
@@ -121,19 +146,13 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '关于',
         name: 'about',
         path: '/about',
         component: () =>
             import ('@/views/pages/mine/subpage/about'),
         hidden: true
     },
-    {
-        name: 'library',
-        path: '/library',
-        component: () =>
-            import ('@/views/pages/mine/subpage/library'),
-        hidden: true
-    }
 
 
 ]

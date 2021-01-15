@@ -166,7 +166,6 @@ export default {
     },
     // 获取签到详情
     getSigninDetails: function(item) {
-      console.log(item);
       if (item.dayClass == "future") {
         return;
       }

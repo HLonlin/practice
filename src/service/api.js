@@ -28,6 +28,10 @@ const API = {
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 老师发送消息
     searchMsg: '/api/practice/student/xiaoxi/historyList', // 条件查询历史消息列表
     historyMsgDetailList: ' /api/practice/student/xiaoxi/historyDetailList', // 分页条件查询历史消息详情列表
+    remarkList: '/api/practice/student/xiaoxi/remarkList', // 学员常用语列表
+    remarkAdd: '/api/practice/student/xiaoxi/remarkAdd', // 添加学员常用语
+    remarkEdit: '/api/practice/student/xiaoxi/remarkEdit', // 修改学员常用语
+    remarkDelete: '/api/practice/student/xiaoxi/remarkDelete', // 删除学员常用语
     // ------------------------公告---------------------------------
     noticeList: '/api/practice/student/notice/noticeList', // 分页条件查询公告列表
     noticeDetail: '/api/practice/student/notice/noticeDetail', // 公告详情

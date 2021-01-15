@@ -73,10 +73,10 @@
           <div class="message_headImg"></div>
           <div class="message_Item">
             <div class="message_label">
-              <div class="message_name">赵老师</div>
-              <div class="message_date">12月14日</div>
+              <div class="message_name">江老师</div>
+              <div class="message_date">2020-12-16 10:40</div>
             </div>
-            <div class="message_text">通知大家明天带上练习册</div>
+            <div class="message_text">3条聊天记录</div>
           </div>
         </div>
       </div>
@@ -97,12 +97,15 @@ export default {
   data() {
     return {
       popups: {
-        chatRecord: true
-      }
+        chatRecord: false
+      },
+      msgList: []
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.getMsgList();
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -155,6 +158,13 @@ export default {
         console.log(highlight[i].outerHTML);
         highlight[i].outerHTML = thishtml;
       }
+    },
+    // 加载消息列表
+    getMsgList: function() {
+      let that = this;
+      that.$axios.post(that.$api.msgList, {}).then(res => {
+        console.log(res);
+      });
     }
   }
 };

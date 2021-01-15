@@ -166,7 +166,10 @@ export default {
       return document.querySelector(".contactList_container");
     },
     sendMsg: function(item) {
-      console.log(item);
+      this.$router.push({
+        path: "/chatroom",
+        query: { chatWith: JSON.stringify(item) }
+      });
     },
     call: function(phonenum) {
       this.$refs.tels.href = "tel://" + phonenum;
