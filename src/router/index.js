@@ -74,6 +74,14 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '常用语',
+        name: 'commonwords',
+        path: '/commonwords',
+        component: () =>
+            import ('@/views/pages/news/subpage/commonwords'),
+        hidden: true
+    },
+    {
         title: '公告详情',
         name: 'detailPage',
         path: '/detailPage',

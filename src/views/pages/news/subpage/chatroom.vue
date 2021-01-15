@@ -53,156 +53,38 @@
         :get-container="getContainer"
       >
         <div class="commonText_container">
-          <div
-            v-for="(item, i) in commonList"
-            :key="i"
-            class="commonText_label"
-            :title="item.content"
-            @click="useCommonText(item.content)"
-          >
-            {{ item.content }}
-          </div>
-          <div
-            class="commonText_label"
-            v-if="commonList.length == 0"
-            :style="{ color: '#999999' }"
-          >
-            请先添加常用语
+          <div class="commonList_panel">
+            <div
+              v-for="(item, i) in commonList"
+              :key="i"
+              class="commonText_label"
+              :title="item.content"
+              @click="useCommonText(item.content)"
+            >
+              {{ item.content }}
+            </div>
+            <div
+              class="commonText_label"
+              v-if="commonList.length == 0"
+              :style="{ color: '#999999' }"
+            >
+              请先添加常用语
+            </div>
           </div>
           <div class="commonText_bottomPanel">
             <div class="commonText_bottomBtn">
               <i class="iconItem icon_tianjiatubiao icon_bottomIcon"></i>
-              <div class="bottomBtn_text" @click="openPopup('addCommon', true)">
+              <div class="bottomBtn_text" @click="turnCommonWord(0)">
                 添加
               </div>
             </div>
             <div class="commonText_bottomBtn">
               <i class="iconItem icon_guanlitubiao icon_bottomIcon"></i>
-              <div
-                class="bottomBtn_text"
-                @click="openPopup('manageCommon', true)"
-              >
+              <div class="bottomBtn_text" @click="turnCommonWord(2)">
                 管理
               </div>
             </div>
           </div>
-        </div>
-      </van-popup>
-      <van-popup
-        class="addCommon_popup"
-        position="right"
-        :close-on-click-overlay="false"
-        v-model="popups.addCommon"
-        :get-container="getContainer"
-        :overlay-style="{
-          backgroundColor: 'rgba(255, 255, 255, 1)'
-        }"
-      >
-        <div class="addCommon_panel">
-          <van-nav-bar
-            title="添加常用语"
-            :fixed="true"
-            :placeholder="true"
-            :safe-area-inset-top="true"
-            :border="false"
-            left-arrow
-            right-text="完成"
-            @click-left="cancelAddCommon"
-            @click-right="addText"
-          >
-          </van-nav-bar>
-          <van-field
-            class="addCommon_text"
-            v-model="addCommonText"
-            :autosize="{ maxHeight: 500, minHeight: 500 }"
-            type="textarea"
-            placeholder="请输入您想要添加的常用语。"
-          />
-        </div>
-      </van-popup>
-      <van-popup
-        class="manageCommon_popup"
-        position="right"
-        :close-on-click-overlay="false"
-        v-model="popups.manageCommon"
-        :get-container="getContainer"
-        :overlay-style="{
-          backgroundColor: 'rgba(255, 255, 255, 1)'
-        }"
-      >
-        <div class="manageCommon_panel">
-          <van-nav-bar
-            title="管理常用语"
-            :fixed="true"
-            :placeholder="true"
-            :safe-area-inset-top="true"
-            :border="false"
-            left-arrow
-            @click-left="openPopup('manageCommon', false)"
-          >
-          </van-nav-bar>
-          <div class="commonList_panel">
-            <div class="commonItem_panel">
-              <div class="common_item" v-for="(item, i) in commonList" :key="i">
-                <div class="commonItem_label">
-                  {{ item.content }}
-                </div>
-                <div class="commonItemBtn_panel">
-                  <div class="commonItem_btn" @click="openEditCommon(item)">
-                    <i class="iconItem icon_bianjitubiao"></i>
-                    编辑
-                  </div>
-                  <div class="commonItem_btn" @click="delCommon(item)">
-                    <i class="iconItem icon_shanchutubiao"></i>
-                    删除
-                  </div>
-                </div>
-              </div>
-              <div class="common_emptyList" v-if="commonList.length == 0">
-                请先添加常用语
-              </div>
-            </div>
-          </div>
-          <div class="popupBottomBtn_panel">
-            <div
-              class="bottomBtn_addCommonText"
-              @click="openPopup('addCommon', true)"
-            >
-              添加常用语
-            </div>
-          </div>
-        </div>
-      </van-popup>
-      <van-popup
-        class="editCommon_popup"
-        position="right"
-        :close-on-click-overlay="false"
-        v-model="popups.editCommon"
-        :get-container="getContainer"
-        :overlay-style="{
-          backgroundColor: 'rgba(255, 255, 255, 1)'
-        }"
-      >
-        <div class="editCommon_panel">
-          <van-nav-bar
-            title="编辑常用语"
-            :fixed="true"
-            :placeholder="true"
-            :safe-area-inset-top="true"
-            :border="false"
-            left-arrow
-            right-text="完成"
-            @click-left="cancelEditCommon"
-            @click-right="editCommon"
-          >
-          </van-nav-bar>
-          <van-field
-            class="editCommon_text"
-            v-model="editItem.content"
-            :autosize="{ maxHeight: 500, minHeight: 500 }"
-            type="textarea"
-            placeholder="请输入常用语。"
-          />
         </div>
       </van-popup>
     </div>
@@ -217,16 +99,11 @@ export default {
     return {
       popups: {
         commonText: false, // 常用语底部弹窗
-        expression: false, // 表情弹框
-        addCommon: false, // 添加常用语
-        manageCommon: true, // 管理常用语
-        editCommon: false // 编辑常用语
+        expression: false // 表情弹框
       },
       msg: "", // 待发送消息
       chatWith: {}, // 聊天对象
-      commonList: [], // 常用列表
-      addCommonText: "", // 添加的常用语
-      editItem: {} // 编辑中的常用语
+      commonList: [] // 常用列表
     };
   },
   beforeCreate() {},
@@ -286,104 +163,10 @@ export default {
       this.msg = text;
       this.openPopup("commonText", false);
     },
-    // 添加常用语
-    addText: function() {
-      let that = this;
-      that.addCommonText = that.addCommonText.trim();
-      if (that.addCommonText.trim) {
-        that.$axios
-          .post(that.$api.remarkAdd, { content: that.addCommonText })
-          .then(res => {
-            that.openPopup("addCommon", false);
-            Toast.success("添加成功");
-          });
-      } else {
-        Toast({
-          message: "常用语不能为空"
-        });
-      }
-    },
-    // 取消添加常用语
-    cancelAddCommon: function() {
-      let that = this;
-      function beforeClose(action, done) {
-        if (action === "confirm") {
-          done();
-          that.openPopup("addCommon", false);
-          that.addCommonText = "";
-        } else {
-          done();
-        }
-      }
-      that.addCommonText = that.addCommonText.trim();
-      if (that.addCommonText) {
-        Dialog.confirm({
-          title: "温馨提示",
-          message: "内容尚未保存，确定放弃？",
-          beforeClose
-        });
-      } else {
-        that.openPopup("addCommon", false);
-        that.addCommonText = "";
-      }
-    },
-    openEditCommon: function(item) {
-      let that = this;
-      for (let keys in item) {
-        that.$set(that.editItem, keys, item[keys]);
-      }
-      this.openPopup("editCommon", true);
-    },
-    // 取消编辑常用语
-    cancelEditCommon: function() {
-      let that = this;
-      function beforeClose(action, done) {
-        if (action === "confirm") {
-          done();
-          that.openPopup("manageCommon", true);
-        } else {
-          done();
-        }
-      }
-      Dialog.confirm({
-        title: "温馨提示",
-        message: "内容尚未保存，确定放弃？",
-        beforeClose
-      });
-    },
-    // 编辑常用语
-    editCommon: function() {
-      let that = this;
-      that.$axios
-        .post(that.$api.remarkEdit, {
-          wf_docUnid: that.editItem.wf_docUnid,
-          content: that.editItem.content
-        })
-        .then(res => {
-          that.getCommonList();
-          that.openPopup("manageCommon", true);
-        });
-    },
-    // 删除常用语
-    delCommon: function(item) {
-      let that = this;
-      function beforeClose(action, done) {
-        if (action === "confirm") {
-          that.$axios
-            .post(that.$api.remarkDelete, { wf_docUnid: item.wf_docUnid })
-            .then(res => {
-              that.getCommonList();
-              done();
-            });
-        } else {
-          done();
-        }
-      }
-
-      Dialog.confirm({
-        title: "温馨提示",
-        message: "您确定要删除此常用语吗？",
-        beforeClose
+    turnCommonWord: function(type) {
+      this.$router.push({
+        path: "/commonwords",
+        query: { type: type }
       });
     }
   }
@@ -456,6 +239,10 @@ export default {
   padding: 0px 1rem 0px 1rem;
   background-color: #ffffff;
 }
+.commonList_panel {
+  max-height: 150px;
+  overflow-y: scroll;
+}
 .commonText_label {
   box-sizing: border-box;
   padding: 15px 0px;
@@ -502,85 +289,6 @@ export default {
   box-sizing: border-box;
   padding: 0px 0px 0px 0.3125rem;
 }
-.addCommon_popup,
-.manageCommon_popup,
-.editCommon_popup {
-  width: 100%;
-  height: 100vh;
-  top: 0px;
-  transform: none;
-}
-.addCommon_panel,
-.manageCommon_panel,
-.editCommon_panel {
-  width: 100%;
-  height: 100%;
-}
-.manageCommon_panel {
-  overflow: hidden;
-}
-.commonList_panel {
-  overflow-y: scroll;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 0px 1rem 120px 1rem;
-}
-.commonItem_label {
-  box-sizing: border-box;
-  padding: 15px 0px;
-  font-size: 0.875rem;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #666666;
-}
-.commonItemBtn_panel {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 0.75rem;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #999999;
-  box-sizing: border-box;
-  padding: 0px 0px 10px 0px;
-  border-bottom: 1px solid #eeeeee;
-}
-.commonItem_btn {
-  box-sizing: border-box;
-  padding-left: 1.25rem;
-}
-.common_emptyList {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.875rem;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #999999;
-  padding: 30px 0px;
-  box-sizing: border-box;
-}
-.popupBottomBtn_panel {
-  position: fixed;
-  width: 100%;
-  bottom: 0px;
-  box-sizing: border-box;
-  padding: 20px 1rem;
-  background-color: #ffffff;
-}
-.bottomBtn_addCommonText {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 36px;
-  background-color: #0090d8;
-  border-radius: 2px;
-  font-size: 1rem;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #ffffff;
-}
 </style>
 <style>
 .chatroom_container .van-nav-bar {
@@ -599,9 +307,5 @@ export default {
 }
 .bottom_bar .van-field__control {
   line-height: 30px;
-}
-.addCommon_popup .van-nav-bar__text,
-.editCommon_popup .van-nav-bar__text {
-  color: #ffffff;
 }
 </style>
