@@ -8,7 +8,14 @@
       :border="false"
       left-arrow
       @click-left="onClickLeft"
-    />
+    >
+      <template #right v-if="titleText == '消息'">
+        <i
+          class="iconItem icon_liaotianjilutubiao icon_record"
+          @click="chatRecord"
+        ></i>
+      </template>
+    </van-nav-bar>
   </div>
 </template>
 
@@ -18,6 +25,7 @@ export default {
   // 接受父组件的值
   props: {
     titleText: String, //在这里对传过来的进行接收
+    rightIcon: Boolean,
     required: true
   },
   data() {
@@ -34,12 +42,23 @@ export default {
   methods: {
     onClickLeft: function() {
       console.log("ClickLeft");
+    },
+    chatRecord: function() {
+      this.$router.push({
+        path: "/chatrecordlist"
+      });
     }
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+.icon_record {
+  font-size: 1rem;
+  color: #ffffff;
+}
+</style>
 <style>
 .topBar_container .van-nav-bar {
   background-color: #0090d8;

@@ -67,11 +67,7 @@ export default {
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {
-    this.$nextTick(() => {
-      console.log(this.tabbar.active);
-    });
-  },
+  mounted() {},
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},

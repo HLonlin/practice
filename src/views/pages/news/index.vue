@@ -76,7 +76,7 @@ export default {
       let highlight = document.getElementsByClassName("highlight");
       for (let i = 0, imax = highlight.length; i < imax; i++) {
         let thishtml = highlight[i].innerHTML;
-        console.log(highlight[i].outerHTML);
+        // console.log(highlight[i].outerHTML);
         highlight[i].outerHTML = thishtml;
       }
     },

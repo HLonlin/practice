@@ -40,6 +40,9 @@ export default {
         case "contactList":
           this.$emit("searchContactList", this.searchValue);
           break;
+        case "chatRecordList":
+          this.$emit("searchchatRecord", this.searchValue);
+          break;
       }
     }
   }
