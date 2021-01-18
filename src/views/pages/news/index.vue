@@ -1,17 +1,34 @@
 <template>
   <div class="container">
     <div class="message_panel">
-      <div class="message_box" v-for="(item, i) in msgList" :key="i">
-        <div class="message_headImg"></div>
+      <div
+        class="message_box"
+        v-for="(item, i) in msgList"
+        :key="i"
+        @click="linkTo(item)"
+      >
+        <van-badge :content="item.unreadNum ? item.unreadNum : ''" max="99">
+          <div class="message_headImg">
+            <img
+              class="message_logo"
+              :src="
+                item.logo
+                  ? item.logo
+                  : require('../../../assets/images/default.png')
+              "
+            />
+          </div>
+        </van-badge>
+
         <div class="message_Item">
           <div class="message_label">
-            <div class="message_name">梁颖仪</div>
-            <div class="message_date">12月16日</div>
+            <div class="message_name">{{ item.username }}</div>
+            <div class="message_date">{{ item.time }}</div>
           </div>
-          <div class="message_text">通知大家明天带上实验手册</div>
+          <div class="message_text">{{ item.info }}</div>
         </div>
       </div>
-      <div class="noMessage_box" v-if="msgList == 0">
+      <div class="noMessage_box" v-if="msgList.length == 0">
         暂无新的消息
       </div>
     </div>
@@ -34,7 +51,14 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.getMsgList();
+    let that = this;
+    clearInterval(timer);
+    let timer = setInterval(function() {
+      let msgList = that.$store.state.news.msgList;
+      if (msgList) {
+        that.msgList = msgList;
+      }
+    }, 1000);
   },
   beforeMount() {},
   mounted() {},
@@ -43,48 +67,15 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    openSearch: function() {
-      this.openPopup("chatRecord", true);
-      let searchInput = document.getElementsByTagName("input");
-      setTimeout(function() {
-        searchInput[1].focus();
-      }, 100);
-    },
-    search: function(searchValue) {
-      this.highlight(searchValue);
-    },
-    // 添加高亮
-    highlight: function(searchValue) {
-      this.clearHighlight(); //先清空一下上次高亮显示的内容；
-      let searchText = searchValue.trim(); //获取你输入的关键字；
-      if (searchText.length <= 0) return;
-      var regExp = new RegExp(searchText, "g"); //创建正则表达式，g表示全局的，如果不用g，则查找到第一个就不会继续向下查找了；
-      let record_panel = document.getElementsByClassName("record_panel")[0];
-      for (let i = 0, imax = record_panel.children.length; i < imax; i++) {
-        var html = record_panel.children[i].innerHTML;
-        var newHtml = html.replace(
-          regExp,
-          "<span class='highlight' style='color:#0090d8;'>" +
-            searchText +
-            "</span>"
-        ); //将找到的关键字替换，加上highlight属性；
-        record_panel.children[i].innerHTML = newHtml;
-      }
-    },
-    // 清空高亮
-    clearHighlight: function() {
-      let highlight = document.getElementsByClassName("highlight");
-      for (let i = 0, imax = highlight.length; i < imax; i++) {
-        let thishtml = highlight[i].innerHTML;
-        // console.log(highlight[i].outerHTML);
-        highlight[i].outerHTML = thishtml;
-      }
-    },
-    // 加载消息列表
-    getMsgList: function() {
-      let that = this;
-      that.$axios.post(that.$api.msgList, {}).then(res => {
-        that.msgList = res.data;
+    linkTo: function(item) {
+      let chatWith = {
+        username: item.username,
+        logo: item.logo,
+        userid: item.comefrom
+      };
+      this.$router.push({
+        path: "/chatroom",
+        query: { chatWith: JSON.stringify(chatWith) }
       });
     }
   }
@@ -115,6 +106,9 @@ export default {
   padding: 10px 0px;
   box-sizing: border-box;
 }
+.message_box:last-child {
+  border: none;
+}
 .noMessage_box {
   box-sizing: border-box;
   padding: 20px 0px;
@@ -131,6 +125,13 @@ export default {
   height: 2.875rem;
   border-radius: 50%;
   background-color: #eeeeee;
+  overflow: hidden;
+}
+
+.message_logo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
 }
 .message_Item {
   width: 100%;
@@ -200,5 +201,10 @@ export default {
 .container .search_panel:last-child .search_container .van-search {
   padding: 10px 1rem 15px 1rem;
   background-color: #f6f6f6 !important;
+}
+.message_box .van-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

@@ -23,7 +23,7 @@ const API = {
     // ------------------------消息---------------------------------
     msgList: '/api/practice/student/xiaoxi/xiaoxiList', // 消息列表
     msgDetail: '/api/practice/student/xiaoxi/xiaoxiDetail', // 消息详情
-    readMsg: '/openapi/api/practice/student/xiaoxi/markRead', // 标记消息为已读
+    readMsg: '/api/practice/student/xiaoxi/markRead', // 标记消息为已读
     sendMsg_student: '/api/practice/student/xiaoxi/sendXiaoxi', // 学生发送消息
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 老师发送消息
     searchMsg: '/api/practice/student/xiaoxi/historyList', // 条件查询历史消息列表

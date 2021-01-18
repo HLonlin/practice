@@ -250,6 +250,7 @@ export default {
           }
           that.$nextTick(() => {
             that.reSetMsgListH();
+            that.readMsg();
           });
         });
     },
@@ -271,6 +272,14 @@ export default {
         path: "/commonwords",
         query: { type: type }
       });
+    },
+    readMsg: function() {
+      let that = this;
+      that.$axios
+        .post(that.$api.readMsg, { comefrom: that.chatWith.userid })
+        .then(res => {
+          console.log(res);
+        });
     }
   }
 };

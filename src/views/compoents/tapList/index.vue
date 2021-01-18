@@ -12,8 +12,7 @@
         v-for="(item, i) in tabbar.list"
         :key="i"
         :to="item.routerTo"
-        :dot="item.dot"
-        :badge="item.badge"
+        :badge="item.badge ? item.badge : ''"
         @click="ontap(i)"
       >
         <span>{{ item.text }}</span>
@@ -39,24 +38,20 @@ export default {
           {
             text: "签到",
             routerTo: "/signin",
-            icon: "icon_biaoqianlanqiandaotubiao",
-            dot: false
+            icon: "icon_biaoqianlanqiandaotubiao"
           },
           {
             text: "消息",
             routerTo: "/news",
             icon: "icon_xiaoxitubiao",
-            dot: false,
-            badge: "99+",
-            right_icon: "icon_liaotianjilutubiao"
+            badge: ""
           },
           {
             text: "公告",
             routerTo: "/notice",
-            icon: "icon_gonggaotubiao",
-            dot: false
+            icon: "icon_gonggaotubiao"
           },
-          { text: "我", routerTo: "/mine", icon: "icon_wotubiao", dot: false }
+          { text: "我", routerTo: "/mine", icon: "icon_wotubiao" }
         ],
         active: 0,
         activeColor: "#0090d8",
@@ -65,7 +60,13 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    let that = this;
+    clearInterval(timer);
+    let timer = setInterval(function() {
+      that.getMsgList();
+    }, 1000);
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -77,6 +78,34 @@ export default {
       // tap是在父组件on监听的方法
       // i是需要传的值
       this.$emit("tap", this.tabbar.list[this.tabbar.active].text);
+    },
+    // 加载消息列表
+    getMsgList: function() {
+      let that = this;
+      let badge = 0;
+      that.$axios.post(that.$api.msgList, {}).then(res => {
+        let data = res.data;
+        for (let i = 0, imax = data.length; i < imax; i++) {
+          badge = badge + data[i].unreadNum;
+          if (badge != that.tabbar.list[1].badge) {
+            that.tabbar.list[1].badge = badge;
+          }
+          let month =
+            (new Date(res.data[i].wf_Created).getMonth() + 1 < 10
+              ? "0" + (new Date(res.data[i].wf_Created).getMonth() + 1)
+              : new Date(res.data[i].wf_Created).getMonth() + 1) + "月";
+          let dates =
+            (new Date(res.data[i].wf_Created).getDate() < 10
+              ? "0" + new Date(res.data[i].wf_Created).getDate()
+              : new Date(res.data[i].wf_Created).getDate()) + "日 ";
+          let time = month + dates;
+          data[i]["time"] = time;
+        }
+        that.$store.commit("news/addState", {
+          key: "msgList",
+          val: data
+        });
+      });
     }
   }
 };
