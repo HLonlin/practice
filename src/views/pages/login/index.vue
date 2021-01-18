@@ -122,21 +122,23 @@ export default {
           passwd: that.passwd
         })
         .then(res => {
-          this.$toast.clear();
-          this.$tool.setLocal("token", res.data.tokenid);
-          this.$tool.setLocal("userData", res.data);
           if (res.status !== 200) {
             return;
           }
+          this.$toast.clear();
+          this.$tool.setLocal("token", res.data.tokenid);
+          this.$tool.setLocal("userData", res.data);
           if (that.usertype == "1") {
+            //班主任、系部入口
             that.entSelectShow = true;
             that.entSelect_banzhurenBtn = res.data.banzurenPermission;
             that.entSelect_xibuBtn = res.data.xibuPermission;
             that.userHead = res.data.logo;
             that.userName = res.data.nickname;
           } else {
-            let url = this.$route.query.redirect || "/";
-            that.$router.replace(url);
+            // 学生
+            // let url = this.$route.query.redirect || "/";
+            that.$router.replace("/");
           }
         });
     },
