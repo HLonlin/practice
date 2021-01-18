@@ -15,32 +15,6 @@
         暂无新的消息
       </div>
     </div>
-    <div class="chatRecordPanel" v-show="popups.chatRecord">
-      <van-nav-bar
-        title="消息记录"
-        :fixed="true"
-        :placeholder="true"
-        :safe-area-inset-top="true"
-        :border="false"
-        left-arrow
-        @click-left="rebackChatPanel"
-      />
-      <div class="search_panel">
-        <search sourceOf="news" class="searchInput" @search="search"></search>
-      </div>
-      <div class="record_panel">
-        <div class="message_box">
-          <div class="message_headImg"></div>
-          <div class="message_Item">
-            <div class="message_label">
-              <div class="message_name">江老师</div>
-              <div class="message_date">2020-12-16 10:40</div>
-            </div>
-            <div class="message_text">3条聊天记录</div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -48,12 +22,8 @@
 /**
  * 聊天列表页
  */
-import search from "../../compoents/search";
 export default {
   name: "news",
-  components: {
-    search
-  },
   data() {
     return {
       popups: {
@@ -73,15 +43,6 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    rebackChatPanel: function() {
-      this.popups.chatRecord = false;
-    },
-    openPopup: function(target, val) {
-      for (let key in this.popups) {
-        this.popups[key] = false;
-      }
-      this.popups[target] = val;
-    },
     openSearch: function() {
       this.openPopup("chatRecord", true);
       let searchInput = document.getElementsByTagName("input");
@@ -123,7 +84,6 @@ export default {
     getMsgList: function() {
       let that = this;
       that.$axios.post(that.$api.msgList, {}).then(res => {
-        console.log(res);
         that.msgList = res.data;
       });
     }

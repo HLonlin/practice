@@ -26,6 +26,7 @@ export default {
   },
   beforeCreate() {},
   created() {
+    this.toptitle = this.$router.currentRoute.meta.title;
     // this.updateCorner();
   },
   beforeMount() {},

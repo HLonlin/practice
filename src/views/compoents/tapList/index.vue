@@ -30,7 +30,6 @@ export default {
   name: "tapList",
   // 接受父组件的值
   props: {
-    noticeReadAll: Boolean,
     required: true
   },
   data() {
@@ -48,7 +47,8 @@ export default {
             routerTo: "/news",
             icon: "icon_xiaoxitubiao",
             dot: false,
-            badge: "99+"
+            badge: "99+",
+            right_icon: "icon_liaotianjilutubiao"
           },
           {
             text: "公告",
@@ -67,7 +67,11 @@ export default {
   beforeCreate() {},
   created() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    this.$nextTick(() => {
+      console.log(this.tabbar.active);
+    });
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
@@ -77,14 +81,6 @@ export default {
       // tap是在父组件on监听的方法
       // i是需要传的值
       this.$emit("tap", this.tabbar.list[this.tabbar.active].text);
-    }
-  },
-  watch: {
-    noticeReadAll: {
-      handler(val, oldVal) {
-        this.tabbar.list[2].dot = val;
-      },
-      deep: true //true 深度监听
     }
   }
 };

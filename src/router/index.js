@@ -20,7 +20,7 @@ export const constantRouter = [{
                     import ('@/views/pages/signin'),
                 hidden: true,
                 meta: {
-                    login_require: true,
+                    title: '签到'
                 },
             },
             {
@@ -29,7 +29,7 @@ export const constantRouter = [{
                     import ('@/views/pages/news'),
                 hidden: true,
                 meta: {
-                    login_require: true,
+                    title: '消息'
                 },
             },
             {
@@ -38,7 +38,7 @@ export const constantRouter = [{
                     import ('@/views/pages/notice'),
                 hidden: true,
                 meta: {
-                    login_require: true,
+                    title: '公告'
                 },
             },
             {
@@ -47,7 +47,7 @@ export const constantRouter = [{
                     import ('@/views/pages/mine'),
                 hidden: true,
                 meta: {
-                    login_require: true,
+                    title: '我'
                 }
             }
         ]
