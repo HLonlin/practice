@@ -19,7 +19,50 @@
       </van-nav-bar>
     </div>
     <div class="messages_list">
-      akskskda
+      <div
+        v-for="(item, i) in msgDetailList"
+        :key="i"
+        class="msgItem_panel"
+        :class="[
+          {},
+          item.comefromName == chatWith.username
+            ? 'msgItem_left'
+            : 'msgItem_right'
+        ]"
+      >
+        <div class="msgItem_time">{{ item.time }}</div>
+        <div class="msgItem_box">
+          <div
+            class="msgItem_header"
+            v-if="item.comefromName == chatWith.username"
+          >
+            <img
+              class="msgItem_logo"
+              :src="
+                chatWith.logo
+                  ? chatWith.logo
+                  : require('../../../../assets/images/default.png')
+              "
+            />
+          </div>
+          <div class="msgItem_content">
+            {{ item.info }}
+          </div>
+          <div
+            class="msgItem_header"
+            v-if="item.comefromName != chatWith.username"
+          >
+            <img
+              class="msgItem_logo"
+              :src="
+                userData.logo
+                  ? userData.logo
+                  : require('../../../../assets/images/default.png')
+              "
+            />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="bottom_bar">
       <div class="bottom_barLeft">
@@ -96,18 +139,25 @@ export default {
   name: "chatroom",
   data() {
     return {
+      userData: Object,
       popups: {
         commonText: false, // 常用语底部弹窗
         expression: false // 表情弹框
       },
       msg: "", // 待发送消息
       chatWith: {}, // 聊天对象
-      commonList: [] // 常用列表
+      commonList: [], // 常用列表
+      msgDetailList: [] //消息内容列表
     };
   },
   beforeCreate() {},
   created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
     this.chatWith = JSON.parse(this.$route.query.chatWith);
+    this.getMsgDetail();
     this.getCommonList();
   },
   beforeMount() {},
@@ -119,6 +169,15 @@ export default {
   methods: {
     onClickLeft: function() {
       this.$router.go(-1);
+    },
+    reSetMsgListH: function() {
+      let topbar_panel = document.getElementsByClassName("topbar_panel")[0];
+      let messages_list = document.getElementsByClassName("messages_list")[0];
+      let bottom_bar = document.getElementsByClassName("bottom_bar")[0];
+      let winH = window.screen.height;
+      messages_list.style.height =
+        winH - topbar_panel.offsetHeight - bottom_bar.offsetHeight + "px";
+      messages_list.scrollTop = messages_list.scrollHeight;
     },
     sendMsg: function() {
       let that = this;
@@ -135,6 +194,7 @@ export default {
         })
         .then(res => {
           that.msg = "";
+          that.getMsgDetail();
         });
     },
     chatRecord: function() {
@@ -148,6 +208,41 @@ export default {
         this.popups[key] = false;
       }
       this.popups[keys] = val;
+    },
+    getMsgDetail: function() {
+      let that = this;
+      that.$axios
+        .post(that.$api.msgDetail, {
+          comefrom: that.chatWith.userid,
+          username: that.chatWith.username
+        })
+        .then(res => {
+          that.msgDetailList = [];
+          for (let i = 0, imax = res.data.length; i < imax; i++) {
+            that.$set(that.msgDetailList, i, res.data[i]);
+            let month =
+              (new Date(res.data[i].wf_Created).getMonth() + 1 < 10
+                ? "0" + (new Date(res.data[i].wf_Created).getMonth() + 1)
+                : new Date(res.data[i].wf_Created).getMonth() + 1) + "月";
+            let dates =
+              (new Date(res.data[i].wf_Created).getDate() < 10
+                ? "0" + new Date(res.data[i].wf_Created).getDate()
+                : new Date(res.data[i].wf_Created).getDate()) + "日 ";
+            let hours =
+              (new Date(res.data[i].wf_Created).getHours() < 10
+                ? "0" + new Date(res.data[i].wf_Created).getHours()
+                : new Date(res.data[i].wf_Created).getHours()) + ":";
+            let min =
+              new Date(res.data[i].wf_Created).getMinutes() < 10
+                ? "0" + new Date(res.data[i].wf_Created).getMinutes()
+                : new Date(res.data[i].wf_Created).getMinutes();
+            let time = month + dates + hours + min;
+            that.$set(that.msgDetailList[i], "time", time);
+          }
+          that.$nextTick(() => {
+            that.reSetMsgListH();
+          });
+        });
     },
     getCommonList: function() {
       let that = this;
@@ -184,6 +279,86 @@ export default {
   font-size: 1rem;
   color: #ffffff;
 }
+.messages_list {
+  display: block;
+  overflow-y: scroll;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0px 1rem 20px 1rem;
+  background-color: #f6f6f6;
+}
+.msgItem_panel {
+  width: 100%;
+}
+.msgItem_time {
+  display: flex;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
+  box-sizing: border-box;
+  padding: 15px 0px;
+}
+
+.msgItem_box {
+  display: flex;
+  align-items: center;
+}
+.msgItem_right .msgItem_box {
+  justify-content: flex-end;
+}
+.msgItem_header {
+  align-self: start;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.msgItem_logo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.msgItem_content {
+  position: relative;
+  box-sizing: border-box;
+  padding: 10px 0.875rem;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+  border-radius: 4px;
+  max-width: 16rem;
+}
+.msgItem_left .msgItem_content {
+  margin-left: 1rem;
+  background-color: #ffffff;
+}
+.msgItem_right .msgItem_content {
+  margin-right: 1rem;
+  background-color: #0090d8;
+  color: #ffffff;
+}
+.msgItem_left .msgItem_content::before {
+  position: absolute;
+  top: 12.5px;
+  left: -5px;
+  content: "";
+  border-right: 5px solid #ffffff;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+.msgItem_right .msgItem_content::after {
+  position: absolute;
+  top: 12.5px;
+  right: -5px;
+  content: "";
+  border-left: 5px solid #0090d8;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
 .bottom_bar {
   display: flex;
   justify-content: space-between;
