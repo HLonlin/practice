@@ -137,8 +137,13 @@ export default {
             that.userName = res.data.nickname;
           } else {
             // 学生
+<<<<<<< HEAD
             // let url = this.$route.query.redirect || "/";
             that.$router.replace("/");
+=======
+            let url = this.$route.query.redirect || "/";
+            that.$router.replace(url);
+>>>>>>> 30760903296bc2fef21abc687ce44054c5b1998b
           }
         });
     },

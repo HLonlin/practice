@@ -71,7 +71,11 @@ axios.interceptors.response.use(
                     Toast({
                         message: res.data.message
                     });
+<<<<<<< HEAD
                     let redirectUrl = router.currentRoute.fullPath;
+=======
+                    let redirectUrl = router.currentRoute.fullPath
+>>>>>>> 30760903296bc2fef21abc687ce44054c5b1998b
                     router.push({
                         path: '/login',
                         query: {
