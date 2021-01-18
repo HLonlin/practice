@@ -7,6 +7,7 @@ import axios from 'axios';
 import api from "./api.js";
 import { Toast } from 'vant';
 import tool from '@/assets/tools'; //常用工具集
+import router from '../router'
 import Vue from 'vue'
 
 Vue.use(Toast);
@@ -70,6 +71,13 @@ axios.interceptors.response.use(
                     Toast({
                         message: res.data.message
                     });
+                    let redirectUrl = router.currentRoute.fullPath
+                    router.push({
+                        path: '/login',
+                        query: {
+                            redirect: redirectUrl
+                        }
+                    })
                     break;
             }
         }
