@@ -198,7 +198,16 @@ export default {
         });
     },
     chatRecord: function() {
-      console.log("查看历史消息");
+      let that = this;
+      let chatWith = {
+        username: that.chatWith.username,
+        logo: that.chatWith.logo,
+        userid: that.chatWith.userid
+      };
+      that.$router.push({
+        path: "/chatrecord",
+        query: { chatWith: JSON.stringify(chatWith) }
+      });
     },
     getContainer() {
       return document.querySelector(".commonText_panel");

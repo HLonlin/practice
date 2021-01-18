@@ -1,10 +1,7 @@
 <template>
   <div class="container">
-    <div class="search_panel" @click="openSearch">
-      <search sourceOf="news"></search>
-    </div>
     <div class="message_panel">
-      <div class="message_box">
+      <div class="message_box" v-for="(item, i) in msgList" :key="i">
         <div class="message_headImg"></div>
         <div class="message_Item">
           <div class="message_label">
@@ -14,45 +11,8 @@
           <div class="message_text">通知大家明天带上实验手册</div>
         </div>
       </div>
-      <div class="message_box">
-        <div class="message_headImg"></div>
-        <div class="message_Item">
-          <div class="message_label">
-            <div class="message_name">刘主任</div>
-            <div class="message_date">12月15日</div>
-          </div>
-          <div class="message_text">好的</div>
-        </div>
-      </div>
-      <div class="message_box">
-        <div class="message_headImg"></div>
-        <div class="message_Item">
-          <div class="message_label">
-            <div class="message_name">赵老师</div>
-            <div class="message_date">12月14日</div>
-          </div>
-          <div class="message_text">通知大家明天带上练习册</div>
-        </div>
-      </div>
-      <div class="message_box">
-        <div class="message_headImg"></div>
-        <div class="message_Item">
-          <div class="message_label">
-            <div class="message_name">刘老师</div>
-            <div class="message_date">12月14日</div>
-          </div>
-          <div class="message_text">通知大家明天带上实验手册</div>
-        </div>
-      </div>
-      <div class="message_box">
-        <div class="message_headImg"></div>
-        <div class="message_Item">
-          <div class="message_label">
-            <div class="message_name">江老师</div>
-            <div class="message_date">12月8日</div>
-          </div>
-          <div class="message_text">大家交了实验数据吗？</div>
-        </div>
+      <div class="noMessage_box" v-if="msgList == 0">
+        暂无新的消息
       </div>
     </div>
     <div class="chatRecordPanel" v-show="popups.chatRecord">
@@ -164,6 +124,7 @@ export default {
       let that = this;
       that.$axios.post(that.$api.msgList, {}).then(res => {
         console.log(res);
+        that.msgList = res.data;
       });
     }
   }
@@ -193,6 +154,15 @@ export default {
   border-bottom: 1px solid #eeeeee;
   padding: 10px 0px;
   box-sizing: border-box;
+}
+.noMessage_box {
+  box-sizing: border-box;
+  padding: 20px 0px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
 }
 .message_headImg {
   display: inline-block;

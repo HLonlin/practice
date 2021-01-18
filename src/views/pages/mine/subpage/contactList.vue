@@ -166,9 +166,14 @@ export default {
       return document.querySelector(".contactList_container");
     },
     sendMsg: function(item) {
+      let chatWith = {
+        username: item.username,
+        logo: item.logo,
+        userid: item.userid
+      };
       this.$router.push({
         path: "/chatroom",
-        query: { chatWith: JSON.stringify(item) }
+        query: { chatWith: JSON.stringify(chatWith) }
       });
     },
     call: function(phonenum) {

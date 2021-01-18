@@ -128,17 +128,22 @@ export default {
           this.$toast.clear();
           this.$tool.setLocal("token", res.data.tokenid);
           this.$tool.setLocal("userData", res.data);
-          if (that.usertype == "1") {
-            //班主任、系部入口
-            that.entSelectShow = true;
-            that.entSelect_banzhurenBtn = res.data.banzurenPermission;
-            that.entSelect_xibuBtn = res.data.xibuPermission;
-            that.userHead = res.data.logo;
-            that.userName = res.data.nickname;
-          } else {
-            // 学生
-            // let url = this.$route.query.redirect || "/";
-            that.$router.replace("/");
+          let token = this.$tool.getLocal("token");
+          if (token) {
+            console.log(token);
+            if (that.usertype == "1") {
+              //班主任、系部入口
+              that.entSelectShow = true;
+              that.entSelect_banzhurenBtn = res.data.banzurenPermission;
+              that.entSelect_xibuBtn = res.data.xibuPermission;
+              that.userHead = res.data.logo;
+              that.userName = res.data.nickname;
+            } else {
+              // 学生
+              // let url = this.$route.query.redirect || "/";
+              console.log("login");
+              this.$router.push({ path: "/" });
+            }
           }
         });
     },

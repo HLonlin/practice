@@ -74,6 +74,22 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '聊天记录列表',
+        name: 'chatrecordlist',
+        path: '/chatrecordlist',
+        component: () =>
+            import ('@/views/pages/news/subpage/chatrecordlist'),
+        hidden: true
+    },
+    {
+        title: '聊天记录',
+        name: 'chatrecord',
+        path: '/chatrecord',
+        component: () =>
+            import ('@/views/pages/news/subpage/chatrecord'),
+        hidden: true
+    },
+    {
         title: '常用语',
         name: 'commonwords',
         path: '/commonwords',

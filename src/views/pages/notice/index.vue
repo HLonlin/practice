@@ -137,7 +137,6 @@ export default {
           ) {
             that.finished = true;
           }
-          // 是否全部已读
         });
     },
     // 下拉刷新
