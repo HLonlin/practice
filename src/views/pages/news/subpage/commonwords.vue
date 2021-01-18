@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import { Toast, Dialog } from "vant";
 export default {
   name: "commonwords",
   data() {
@@ -111,23 +110,31 @@ export default {
         switch (that.type) {
           // 添加面板完成操作
           case 0:
-            if (this.from) {
+            if (that.from) {
               back();
             } else {
-              this.$router.go(-1);
+              that.$router.go(-1);
             }
-            Toast.success("添加成功");
+            that.$toast.success("添加成功");
             break;
           // 编辑面板完成操作
           case 1:
-            that.$axios
-              .post(that.$api.remarkEdit, {
-                wf_docUnid: that.editItem.id,
-                content: that.editItem.text
-              })
-              .then(res => {
-                back();
+            that.editItem.text = that.editItem.text.trim();
+            if (that.editItem.text) {
+              that.$axios
+                .post(that.$api.remarkEdit, {
+                  wf_docUnid: that.editItem.id,
+                  content: that.editItem.text
+                })
+                .then(res => {
+                  back();
+                });
+            } else {
+              that.$toast({
+                message: "常用语不能为空"
               });
+            }
+
             break;
         }
         return;
@@ -137,7 +144,7 @@ export default {
         // 添加面板返回操作
         case 0:
           if (that.addText) {
-            Dialog.confirm({
+            that.$dialog.confirm({
               title: "温馨提示",
               message: "内容尚未保存，确定放弃？",
               beforeClose
@@ -148,7 +155,7 @@ export default {
           break;
         // 编辑面板返回操作
         case 1:
-          Dialog.confirm({
+          that.$dialog.confirm({
             title: "温馨提示",
             message: "内容尚未保存，确定放弃？",
             beforeClose
@@ -188,15 +195,16 @@ export default {
                 }
               });
           } else {
-            Toast({
+            that.$toast({
               message: "常用语不能为空"
             });
           }
           break;
         case "edit":
           that.backToManage("end");
+          break;
         case "del":
-          Dialog.confirm({
+          that.$dialog.confirm({
             title: "温馨提示",
             message: "您确定要删除此常用语吗？",
             beforeClose: (action, done) => {

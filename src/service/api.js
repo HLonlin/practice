@@ -27,6 +27,7 @@ const API = {
     sendMsg_student: '/api/practice/student/xiaoxi/sendXiaoxi', // 学生发送消息
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 老师发送消息
     searchMsg: '/api/practice/student/xiaoxi/historyList', // 条件查询历史消息列表
+    historyMsgList: '/api/practice/student/xiaoxi/historyList', // 条件查询历史消息列表
     historyMsgDetailList: ' /api/practice/student/xiaoxi/historyDetailList', // 分页条件查询历史消息详情列表
     remarkList: '/api/practice/student/xiaoxi/remarkList', // 学员常用语列表
     remarkAdd: '/api/practice/student/xiaoxi/remarkAdd', // 添加学员常用语

@@ -340,11 +340,15 @@ export default {
       if (that.countDown != 0) {
         return;
       }
+      that.$toast.loading({
+        message: "每日一学打开中..."
+      });
       that.$axios
         .post(that.$api.recordLearnEveryDay, {
           wf_docUnid: that.learnContent.wf_docUnid
         })
         .then(res => {
+          this.$toast.clear();
           that.openPopup("learnEveryDay", false);
         });
     },

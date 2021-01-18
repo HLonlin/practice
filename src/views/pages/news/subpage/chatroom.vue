@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import { Toast, Dialog } from "vant";
 export default {
   name: "chatroom",
   data() {
@@ -124,7 +123,7 @@ export default {
     sendMsg: function() {
       let that = this;
       if (that.msg == "") {
-        Toast({
+        that.$toast({
           message: "发送消息不可为空"
         });
         return;
