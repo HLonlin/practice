@@ -64,6 +64,9 @@ export default {
     if (userData) {
       this.userData = userData;
     }
+    if (this.userData.isTeacher) {
+      this.isTeacher();
+    }
     // this.updateMsgList();
   },
   beforeMount() {},
@@ -112,6 +115,13 @@ export default {
       let timer = setInterval(function() {
         that.getMsgList();
       }, 1000);
+    },
+    isTeacher: function() {
+      this.tabbar.list[0] = {
+        text: "统计",
+        routerTo: "/statistics",
+        icon: "icon_tongjitubiao"
+      };
     }
   }
 };

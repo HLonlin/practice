@@ -34,7 +34,9 @@
                       : require('@/assets/images/default.png')
                   "
                 />
-                <div class="contact_name">{{ items.username }}</div>
+                <div class="contact_name">
+                  {{ items.username ? items.username : items.userName }}
+                </div>
               </div>
               <i
                 class="iconItem icon_faxiaoxitubiao icon_sendMsg"
@@ -49,25 +51,44 @@
       <div class="contact_popup">
         <div class="contact_popupLabel">
           <div class="contact_popupTitle">姓名</div>
-          <div class="contact_popupText">{{ contactItem.username }}</div>
+          <div class="contact_popupText">
+            {{
+              contactItem.username ? contactItem.username : contactItem.userName
+            }}
+          </div>
         </div>
-        <div class="contact_popupLabel">
+        <div class="contact_popupLabel" v-show="userData.isTeacher">
+          <div class="contact_popupTitle">班级</div>
+          <div class="contact_popupText">{{ contactItem.banji }}</div>
+        </div>
+        <div class="contact_popupLabel" v-show="!userData.isTeacher">
           <div class="contact_popupTitle">岗位</div>
           <div class="contact_popupText">{{ contactItem.jobTitle }}</div>
         </div>
-        <div class="contact_popupLabel">
+        <div class="contact_popupLabel" v-show="!userData.isTeacher">
           <div class="contact_popupTitle">部门</div>
           <div class="contact_popupText">{{ contactItem.folderName }}</div>
         </div>
         <div class="contact_popupLabel">
           <div class="contact_popupTitle">电话</div>
-          <div class="contact_popupText">{{ contactItem.phonenum }}</div>
+          <div class="contact_popupText">
+            {{
+              contactItem.phonenum ? contactItem.phonenum : contactItem.phone
+            }}
+          </div>
         </div>
         <div class="contact_popupBottomBtn">
           <div class="contact_sendBtn" @click="sendMsg(contactItem)">
             发消息
           </div>
-          <div class="contact_callBtn" @click="call(contactItem.phonenum)">
+          <div
+            class="contact_callBtn"
+            @click="
+              call(
+                contactItem.phonenum ? contactItem.phonenum : contactItem.phone
+              )
+            "
+          >
             <a href="" v-show="false" ref="tels"></a>打电话
           </div>
         </div>
@@ -85,6 +106,7 @@ export default {
   },
   data() {
     return {
+      userData: Object,
       pageNum: 1,
       pageSize: 1000,
       list: [],
@@ -97,6 +119,10 @@ export default {
   },
   beforeCreate() {},
   created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
     this.onSearch();
   },
   beforeMount() {},
@@ -133,15 +159,24 @@ export default {
       }
       let keyword = arguments[0] ? arguments[0] : "";
       that.$axios
-        .post(that.$api.contactList, {
-          searchkeywords: keyword,
-          pageNum: that.pageNum,
-          pageSize: that.pageSize
-        })
+        .post(
+          that.userData.isTeacher
+            ? that.$api.contactList_teacher
+            : that.$api.contactList,
+          {
+            searchkeywords: keyword,
+            pageNum: that.pageNum,
+            pageSize: that.pageSize
+          }
+        )
         .then(res => {
-          let contactList = res.data.contactList;
+          let contactList = res.data;
           for (let i = 0, imax = contactList.length; i < imax; i++) {
-            let pinyingOfName = that.$tool.makePy(contactList[i].username);
+            let pinyingOfName = that.$tool.makePy(
+              contactList[i].username
+                ? contactList[i].username
+                : contactList[i].userName
+            );
             let firstName = pinyingOfName[pinyingOfName.length - 1].slice(0, 1);
             for (let j = 0, jmax = that.indexList.length; j < jmax; j++) {
               if (firstName == that.indexList[j]) {
@@ -167,7 +202,7 @@ export default {
     },
     sendMsg: function(item) {
       let chatWith = {
-        username: item.username,
+        username: item.username ? item.username : item.username,
         logo: item.logo,
         userid: item.userid
       };

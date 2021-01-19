@@ -6,17 +6,34 @@
           <img
             class="info_headImg"
             :src="
-              userData.headImg
-                ? userData.headImg
+              userData.logo
+                ? userData.logo
                 : require('@/assets/images/default.png')
             "
             style="object-fit: cover;"
           />
         </div>
-        <div class="info_name">{{ userData.userName }}</div>
+        <div class="info_name" v-if="userData.isTeacher">
+          {{ userData.name }}
+        </div>
+        <div class="info_name" v-else>{{ userData.userName }}</div>
       </router-link>
     </div>
-    <div class="middle_panel">
+    <div class="middle_panel" v-if="userData.isTeacher">
+      <router-link :to="{ path: 'dailystudy' }" class="cell_panel">
+        <i class="iconItem icon_queqinmingdantubiao icon_left"></i>
+        <div class="middle_title">缺勤名单</div>
+      </router-link>
+      <router-link :to="{ path: 'library' }" class="cell_panel">
+        <i class="iconItem icon_weilianximingdantubiao icon_left"></i>
+        <div class="middle_title">未联系名单</div>
+      </router-link>
+      <router-link :to="{ path: 'mySignin' }" class="cell_panel">
+        <i class="iconItem icon_daishenhemingdantubiao icon_left"></i>
+        <div class="middle_title">待审核名单</div>
+      </router-link>
+    </div>
+    <div class="middle_panel" v-else>
       <router-link :to="{ path: 'monthlylist' }" class="cell_panel">
         <i class="iconItem icon_yuejitubiao icon_left"></i>
         <div class="middle_title">月记</div>
@@ -34,7 +51,17 @@
         <div class="middle_title">我的签到</div>
       </router-link>
     </div>
-    <div class="bottom_panel">
+    <div class="bottom_panel" v-if="userData.isTeacher">
+      <router-link :to="{ path: 'about' }" class="cell_panel">
+        <i class="iconItem icon_yuejitubiao icon_left"></i>
+        <div class="middle_title">班级月记</div>
+      </router-link>
+      <router-link :to="{ path: 'contactList' }" class="cell_panel">
+        <i class="iconItem icon_tongxunlutubiaobeifen icon_left"></i>
+        <div class="middle_title">通讯录</div>
+      </router-link>
+    </div>
+    <div class="bottom_panel" v-else>
       <router-link :to="{ path: 'contactList' }" class="cell_panel">
         <i class="iconItem icon_tongxunlutubiaobeifen icon_left"></i>
         <div class="middle_title">通讯录</div>
@@ -144,7 +171,6 @@ export default {
 }
 .middle_panel {
   width: 100%;
-  height: 188px;
   background-color: #ffffff;
   box-sizing: border-box;
   padding: 0px 1rem;
@@ -152,7 +178,6 @@ export default {
 }
 .bottom_panel {
   width: 100%;
-  height: 94px;
   background-color: #ffffff;
   box-sizing: border-box;
   padding: 0px 1rem;

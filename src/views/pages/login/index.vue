@@ -9,7 +9,7 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <div v-if="!entSelectShow">
+    <div v-if="!islogin">
       <div class="logo_panel">
         <img class="logo" src="../../../assets/images/logo.png" />
       </div>
@@ -57,21 +57,28 @@
     </div>
     <div v-else>
       <div class="login_headImgPanel">
-        <img class="login_headImg" :src="userHead" />
-        <p class="login_userName">{{ userName }}</p>
+        <img
+          class="login_headImg"
+          :src="
+            userData.logo
+              ? userData.logo
+              : require('@/assets/images/default.png')
+          "
+        />
+        <p class="login_userName">{{ userData.username }}</p>
       </div>
       <div class="entSelect_panel">
         <div
           class="entSelect_banzhurenBtn"
-          @click="routerTo('')"
-          v-if="entSelect_banzhurenBtn"
+          @click="routerTo('statistics')"
+          v-show="userData.banzurenPermission"
         >
           班主任入口
         </div>
         <div
           class="entSelect_xibuBtn"
-          @click="routerTo('')"
-          v-if="entSelect_xibuBtn"
+          @click="routerTo('sdept')"
+          v-show="userData.xibuPermission"
         >
           系部入口
         </div>
@@ -88,16 +95,15 @@ export default {
   name: "login",
   data() {
     return {
-      entSelectShow: false,
-      entSelect_banzhurenBtn: false,
-      entSelect_xibuBtn: false,
-      usertype: "2", // 账号类型，必填 1=教师，2=学生
+      userData: Object,
+      islogin: false,
+      usertype: "1", // 账号类型，必填 1=教师，2=学生
+      userid: "lyy",
+      passwd: "0513LyyL"
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：手机号
       // passwd: "gz020slitsXX", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
-      userid: "440105200012210933", // 登录号，必填，教师：oa账号，学生：手机号
-      passwd: "210933", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
-      userName: "",
-      userHead: require("@/assets/images/default.png")
+      // userid: "440105200012210933", // 登录号，必填，教师：oa账号，学生：手机号
+      // passwd: "210933" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
     };
   },
   beforeCreate() {},
@@ -125,30 +131,29 @@ export default {
           if (res.status !== 200) {
             return;
           }
+          that.userData = res.data;
+          if (that.usertype == "1") {
+            that.$axios.post(that.$api.getuserInfo_teacher, {}).then(res => {
+              //班主任、系部入口
+              that.islogin = true;
+              that.userData["isTeacher"] = true;
+              for (let key in res.data) {
+                that.userData[key] = res.data[key];
+              }
+              this.$tool.setLocal("userData", that.userData);
+            });
+          } else {
+            // 学生
+            that.userData["isTeacher"] = false;
+            this.$tool.setLocal("userData", that.userData);
+            this.$router.replace({ path: "/signin" });
+          }
           this.$toast.clear();
           this.$tool.setLocal("token", res.data.tokenid);
-          this.$tool.setLocal("userData", res.data);
-          let token = this.$tool.getLocal("token");
-          if (token) {
-            console.log(token);
-            if (that.usertype == "1") {
-              //班主任、系部入口
-              that.entSelectShow = true;
-              that.entSelect_banzhurenBtn = res.data.banzurenPermission;
-              that.entSelect_xibuBtn = res.data.xibuPermission;
-              that.userHead = res.data.logo;
-              that.userName = res.data.nickname;
-              this.$router.replace({ path: "/statistics" });
-            } else {
-              // 学生
-              // let url = this.$route.query.redirect || "/";
-              this.$router.replace({ path: "/signin" });
-            }
-          }
         });
     },
     routerTo: function(path, params) {
-      this.$router.push({ path: path });
+      this.$router.replace({ path: path });
     }
   }
 };

@@ -9,177 +9,234 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <div class="selfinfo_topPanel">
-      <div class="selfinfo_panel">
-        <div class="selfinfo_label">头像</div>
-        <!-- <img
-          class="selfinfo_headIcon"
-          :src="
-            userData.logo
-              ? userData.logo
-              : require('@/assets/images/default.png')
-          "
-          v-if="!editing"
-        /> -->
-        <van-uploader
-          class="selfinfo_headIcon"
-          v-model="headImg"
-          :max-count="1"
-          :before-read="beforeRead"
-          :after-read="afterRead"
-          preview-size="3.75rem"
-          :deletable="false"
-          :preview-options="{ showIndex: false }"
-          v-if="!editing"
-        >
-        </van-uploader>
-        <van-uploader
-          class="selfinfo_headIcon"
-          v-model="headImg"
-          :max-count="1"
-          :before-read="beforeRead"
-          :after-read="afterRead"
-          preview-size="3.75rem"
-          :preview-options="{ showIndex: false }"
-          accept="image/png,image/jpeg,image/gif"
-          v-else
-        >
-        </van-uploader>
-      </div>
-      <div class="selfinfo_panel ">
-        <van-field v-model="userData.userName" label="姓名" :readonly="true" />
-      </div>
-    </div>
-    <div class="selfinfo_middlePanel">
-      <div class="selfinfo_panel">
-        <div class="selfinfo_label">就业方式</div>
-        <div class="selfinfo_text" v-if="!editing">
-          {{ userData.jiuyefangshi }}
+    <div v-if="userData.isTeacher">
+      <div class="selfinfo_topPanel">
+        <div class="selfinfo_panel">
+          <div class="selfinfo_label">头像</div>
+          <van-uploader
+            class="selfinfo_headIcon"
+            v-model="headImg"
+            :max-count="1"
+            :before-read="beforeRead"
+            :after-read="afterRead"
+            preview-size="3.75rem"
+            :deletable="false"
+            :preview-options="{ showIndex: false }"
+          >
+          </van-uploader>
         </div>
-        <van-radio-group v-model="userData.jiuyefangshi" v-else>
-          <van-radio
-            v-for="(item, i) in jiuyefangshiRadioList"
-            :key="i"
-            :name="item.value"
-            checked-color="#0090d8"
-            >{{ item.text }}
-            <template #icon="props">
-              <i
-                class="iconItem "
-                :class="{
-                  selfinfo_radioActive: props.checked,
-                  icon_radioActive: props.checked,
-                  icon_radio: !props.checked
-                }"
-              ></i>
-            </template>
-          </van-radio>
-        </van-radio-group>
-      </div>
-      <div class="selfinfo_panel">
-        <div class="selfinfo_label">就业状态</div>
-        <div class="selfinfo_text" v-if="!editing">
-          {{ userData.jiuyezhuangtai }}
+        <div class="selfinfo_panel ">
+          <van-field v-model="userData.name" label="姓名" :readonly="true" />
         </div>
-        <van-radio-group v-model="userData.jiuyezhuangtai" v-else>
-          <van-radio
-            v-for="(item, i) in stateRadioList"
-            :key="i"
-            :name="item.value"
-            checked-color="#0090d8"
-            >{{ item.text }}
-            <template #icon="props">
-              <i
-                class="iconItem "
-                :class="{
-                  selfinfo_radioActive: props.checked,
-                  icon_radioActive: props.checked,
-                  icon_radio: !props.checked
-                }"
-              ></i>
-            </template>
-          </van-radio>
-        </van-radio-group>
       </div>
-      <div
-        class="selfinfo_panel"
-        :class="{ selfinfo_area: userData.shixidanwei.length > 16 }"
-      >
-        <van-field
-          v-model="userData.shixidanwei"
-          rows="1"
-          autosize
-          label="实习单位"
-          type="textarea"
-          placeholder="请输入实习单位"
-          :readonly="!editing"
-        />
+      <div class="selfinfo_middlePanel">
+        <div class="selfinfo_panel">
+          <van-field
+            v-model="userData.jobtitle"
+            label="岗位"
+            :readonly="true"
+          />
+        </div>
+        <div class="selfinfo_panel">
+          <van-field
+            v-model="userData.deptname"
+            label="系部"
+            :readonly="true"
+          />
+        </div>
+        <div class="selfinfo_panel">
+          <van-field
+            v-model="userData.deptname"
+            label="专业"
+            :readonly="true"
+          />
+        </div>
+        <div class="selfinfo_panel">
+          <van-field
+            v-model="userData.deptname"
+            label="班级"
+            :readonly="true"
+          />
+        </div>
       </div>
-      <div
-        class="selfinfo_panel"
-        :class="{ selfinfo_area: userData.danweidizhi.length > 16 }"
-      >
-        <van-field
-          v-model="userData.danweidizhi"
-          rows="1"
-          autosize
-          label="单位地址"
-          type="textarea"
-          placeholder="请输入单位地址"
-          :readonly="!editing"
-        />
+      <div class="selfinfo_bottomPanel">
+        <div class="selfinfo_panel" :class="{ selfinfo_color: true }">
+          <van-field
+            v-model="userData.phonenum"
+            label="联系电话"
+            :readonly="true"
+          />
+        </div>
       </div>
     </div>
-    <div class="selfinfo_bottomPanel">
-      <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
-        <van-field
-          v-model="userData.phone"
-          label="联系电话"
-          placeholder="请输入联系电话"
-          :readonly="!editing"
-        />
+    <div v-else>
+      <div class="selfinfo_topPanel">
+        <div class="selfinfo_panel">
+          <div class="selfinfo_label">头像</div>
+          <van-uploader
+            class="selfinfo_headIcon"
+            v-model="headImg"
+            :max-count="1"
+            :before-read="beforeRead"
+            :after-read="afterRead"
+            preview-size="3.75rem"
+            :deletable="false"
+            :preview-options="{ showIndex: false }"
+            v-if="!editing"
+          >
+          </van-uploader>
+          <van-uploader
+            class="selfinfo_headIcon"
+            v-model="headImg"
+            :max-count="1"
+            :before-read="beforeRead"
+            :after-read="afterRead"
+            preview-size="3.75rem"
+            :preview-options="{ showIndex: false }"
+            accept="image/png,image/jpeg,image/gif"
+            v-else
+          >
+          </van-uploader>
+        </div>
+        <div class="selfinfo_panel ">
+          <van-field
+            v-model="userData.userName"
+            label="姓名"
+            :readonly="true"
+          />
+        </div>
       </div>
-      <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
-        <van-field
-          v-model="userData.jjlxr"
-          label="紧急联系电话"
-          placeholder="请输入紧急联系电话"
-          :readonly="!editing"
-        />
+      <div class="selfinfo_middlePanel">
+        <div class="selfinfo_panel">
+          <div class="selfinfo_label">就业方式</div>
+          <div class="selfinfo_text" v-if="!editing">
+            {{ userData.jiuyefangshi }}
+          </div>
+          <van-radio-group v-model="userData.jiuyefangshi" v-else>
+            <van-radio
+              v-for="(item, i) in jiuyefangshiRadioList"
+              :key="i"
+              :name="item.value"
+              checked-color="#0090d8"
+              >{{ item.text }}
+              <template #icon="props">
+                <i
+                  class="iconItem "
+                  :class="{
+                    selfinfo_radioActive: props.checked,
+                    icon_radioActive: props.checked,
+                    icon_radio: !props.checked
+                  }"
+                ></i>
+              </template>
+            </van-radio>
+          </van-radio-group>
+        </div>
+        <div class="selfinfo_panel">
+          <div class="selfinfo_label">就业状态</div>
+          <div class="selfinfo_text" v-if="!editing">
+            {{ userData.jiuyezhuangtai }}
+          </div>
+          <van-radio-group v-model="userData.jiuyezhuangtai" v-else>
+            <van-radio
+              v-for="(item, i) in stateRadioList"
+              :key="i"
+              :name="item.value"
+              checked-color="#0090d8"
+              >{{ item.text }}
+              <template #icon="props">
+                <i
+                  class="iconItem "
+                  :class="{
+                    selfinfo_radioActive: props.checked,
+                    icon_radioActive: props.checked,
+                    icon_radio: !props.checked
+                  }"
+                ></i>
+              </template>
+            </van-radio>
+          </van-radio-group>
+        </div>
+        <div
+          class="selfinfo_panel"
+          :class="{ selfinfo_area: userData.shixidanwei.length > 16 }"
+        >
+          <van-field
+            v-model="userData.shixidanwei"
+            rows="1"
+            autosize
+            label="实习单位"
+            type="textarea"
+            placeholder="请输入实习单位"
+            :readonly="!editing"
+          />
+        </div>
+        <div
+          class="selfinfo_panel"
+          :class="{ selfinfo_area: userData.danweidizhi.length > 16 }"
+        >
+          <van-field
+            v-model="userData.danweidizhi"
+            rows="1"
+            autosize
+            label="单位地址"
+            type="textarea"
+            placeholder="请输入单位地址"
+            :readonly="!editing"
+          />
+        </div>
       </div>
-      <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
-        <van-field
-          v-model="userData.jzdh"
-          label="单位电话"
-          placeholder="请输入单位电话"
-          :readonly="!editing"
-        />
+      <div class="selfinfo_bottomPanel">
+        <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
+          <van-field
+            v-model="userData.phone"
+            label="联系电话"
+            placeholder="请输入联系电话"
+            :readonly="!editing"
+          />
+        </div>
+        <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
+          <van-field
+            v-model="userData.jjlxr"
+            label="紧急联系电话"
+            placeholder="请输入紧急联系电话"
+            :readonly="!editing"
+          />
+        </div>
+        <div class="selfinfo_panel" :class="{ selfinfo_color: !editing }">
+          <van-field
+            v-model="userData.jzdh"
+            label="单位电话"
+            placeholder="请输入单位电话"
+            :readonly="!editing"
+          />
+        </div>
+        <div class="selfinfo_panel">
+          <van-field
+            v-model="userData.qylxr"
+            label="企业联系人"
+            placeholder="请输入企业联系人"
+            :readonly="!editing"
+          />
+        </div>
+        <div class="selfinfo_panel">
+          <van-field
+            v-model="userData.job"
+            label="岗位"
+            placeholder="请输入岗位"
+            :readonly="!editing"
+          />
+        </div>
       </div>
-      <div class="selfinfo_panel">
-        <van-field
-          v-model="userData.qylxr"
-          label="企业联系人"
-          placeholder="请输入企业联系人"
-          :readonly="!editing"
-        />
+      <div class="selfinfo_bottomBtnBox" v-if="!editing">
+        <div class="selfinfo_bottomBtn" @click="onEditing">
+          编辑
+        </div>
       </div>
-      <div class="selfinfo_panel">
-        <van-field
-          v-model="userData.job"
-          label="岗位"
-          placeholder="请输入岗位"
-          :readonly="!editing"
-        />
+      <div class="selfinfo_bottomBtnBox" v-else>
+        <div class="selfinfo_submitBtn" @click="submitChange">提交</div>
+        <div class="selfinfo_cancelBtn" @click="onCancel">取消</div>
       </div>
-    </div>
-    <div class="selfinfo_bottomBtnBox" v-if="!editing">
-      <div class="selfinfo_bottomBtn" @click="onEditing">
-        编辑
-      </div>
-    </div>
-    <div class="selfinfo_bottomBtnBox" v-else>
-      <div class="selfinfo_submitBtn" @click="submitChange">提交</div>
-      <div class="selfinfo_cancelBtn" @click="onCancel">取消</div>
     </div>
   </div>
 </template>
@@ -221,6 +278,7 @@ export default {
   destroyed() {},
   methods: {
     getUserData: function() {
+      let that = this;
       let userData = this.$tool.getLocal("userData");
       if (userData) {
         this.userData = userData;
