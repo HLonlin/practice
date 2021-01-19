@@ -86,7 +86,10 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.type = this.$route.query.type;
+    this.type = Number(this.$route.query.type);
+    if (this.type == 0) {
+      this.from = "add";
+    }
     this.getList();
   },
   beforeMount() {},
@@ -139,7 +142,6 @@ export default {
         }
         return;
       }
-
       switch (that.type) {
         // 添加面板返回操作
         case 0:
@@ -171,10 +173,14 @@ export default {
         }
       }
       function back() {
-        that.type = 2;
-        that.from = "";
-        that.addText = "";
-        that.getList();
+        if (that.from == "add") {
+          that.$router.go(-1);
+        } else {
+          that.type = 2;
+          that.from = "";
+          that.addText = "";
+          that.getList();
+        }
       }
     },
     // 添加常用语
