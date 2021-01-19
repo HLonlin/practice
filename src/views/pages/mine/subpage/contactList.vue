@@ -202,9 +202,9 @@ export default {
     },
     sendMsg: function(item) {
       let chatWith = {
-        username: item.username ? item.username : item.username,
+        username: item.username ? item.username : item.userName,
         logo: item.logo,
-        userid: item.userid
+        userid: item.userid ? item.userid : item.cardid
       };
       this.$router.push({
         path: "/chatroom",

@@ -54,6 +54,11 @@ const API = {
     // --------------------------统计--------------------------
     // --------------------------消息--------------------------
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 老师发送消息
+    msgDetail_teacher: '/api/practice/teacher/xiaoxi/xiaoxiDetail', //教师端消息详情
+    remarkList_teacher: '/api/practice/teacher/xiaoxi/remarkList', // 教师常用语列表
+    remarkAdd_teacher: '/api/practice/teacher/xiaoxi/remarkAdd', // 添加教师常用语
+    remarkEdit_teacher: '/api/practice/teacher/xiaoxi/remarkEdit', // 修改教师常用语
+    remarkDelete_teacher: '/api/practice/teacher/xiaoxi/remarkDelete', // 删除教师常用语
     // --------------------------公告--------------------------
     noticeList_teacher: '/api/practice/teacher/notice/noticelist', //公告列表
     // --------------------------我的--------------------------

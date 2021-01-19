@@ -157,6 +157,7 @@ export default {
       this.userData = userData;
     }
     this.chatWith = JSON.parse(this.$route.query.chatWith);
+    console.log(this.chatWith);
     this.getMsgDetail();
     this.getCommonList();
   },
@@ -188,10 +189,15 @@ export default {
         return;
       }
       that.$axios
-        .post(that.$api.sendMsg_student, {
-          sendto: that.chatWith.userid,
-          info: that.msg
-        })
+        .post(
+          that.userData.isTeacher
+            ? that.$api.sendMsg_teacher
+            : that.$api.sendMsg_student,
+          {
+            sendto: that.chatWith.userid,
+            info: that.msg
+          }
+        )
         .then(res => {
           that.msg = "";
           that.getMsgDetail();
@@ -220,11 +226,25 @@ export default {
     },
     getMsgDetail: function() {
       let that = this;
-      that.$axios
-        .post(that.$api.msgDetail, {
+      let data = {};
+      if (that.userData.isTeacher) {
+        data = {
+          comefrom: that.chatWith.userid,
+          studentname: that.chatWith.username
+        };
+      } else {
+        data = {
           comefrom: that.chatWith.userid,
           username: that.chatWith.username
-        })
+        };
+      }
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.msgDetail_teacher
+            : that.$api.msgDetail,
+          data
+        )
         .then(res => {
           that.msgDetailList = [];
           for (let i = 0, imax = res.data.length; i < imax; i++) {
@@ -256,11 +276,18 @@ export default {
     },
     getCommonList: function() {
       let that = this;
-      that.$axios.post(that.$api.remarkList, {}).then(res => {
-        for (let i = 0, imax = res.data.length; i < imax; i++) {
-          that.$set(that.commonList, i, res.data[i]);
-        }
-      });
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.remarkList_teacher
+            : that.$api.remarkList,
+          {}
+        )
+        .then(res => {
+          for (let i = 0, imax = res.data.length; i < imax; i++) {
+            that.$set(that.commonList, i, res.data[i]);
+          }
+        });
     },
     // 使用常用语
     useCommonText: function(text) {

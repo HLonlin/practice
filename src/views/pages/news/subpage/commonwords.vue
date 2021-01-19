@@ -81,11 +81,16 @@ export default {
       },
       editText: "",
       list: [],
-      from: ""
+      from: "",
+      userData: Object
     };
   },
   beforeCreate() {},
   created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
     this.type = Number(this.$route.query.type);
     if (this.type == 0) {
       this.from = "add";
@@ -125,10 +130,15 @@ export default {
             that.editItem.text = that.editItem.text.trim();
             if (that.editItem.text) {
               that.$axios
-                .post(that.$api.remarkEdit, {
-                  wf_docUnid: that.editItem.id,
-                  content: that.editItem.text
-                })
+                .post(
+                  that.userData.isTeacher
+                    ? that.$api.remarkEdit_teacher
+                    : that.$api.remarkEdit,
+                  {
+                    wf_docUnid: that.editItem.id,
+                    content: that.editItem.text
+                  }
+                )
                 .then(res => {
                   back();
                 });
@@ -192,7 +202,12 @@ export default {
         case "add":
           if (that.addText) {
             that.$axios
-              .post(that.$api.remarkAdd, { content: that.addText })
+              .post(
+                that.userData.isTeacher
+                  ? that.$api.remarkAdd_teacher
+                  : that.$api.remarkAdd,
+                { content: that.addText }
+              )
               .then(res => {
                 if (that.from) {
                   that.backToManage("end");
@@ -217,9 +232,14 @@ export default {
               if (action === "confirm") {
                 done();
                 that.$axios
-                  .post(that.$api.remarkDelete, {
-                    wf_docUnid: that.editItem.id
-                  })
+                  .post(
+                    that.userData.isTeacher
+                      ? that.$api.remarkDelete_teacher
+                      : that.$api.remarkDelete,
+                    {
+                      wf_docUnid: that.editItem.id
+                    }
+                  )
                   .then(res => {
                     that.getList();
                   });
@@ -235,11 +255,18 @@ export default {
       let that = this;
       that.list = [];
       if (that.type != 2) return;
-      that.$axios.post(that.$api.remarkList, {}).then(res => {
-        for (let i = 0, imax = res.data.length; i < imax; i++) {
-          that.$set(that.list, i, res.data[i]);
-        }
-      });
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.remarkList_teacher
+            : that.$api.remarkList,
+          {}
+        )
+        .then(res => {
+          for (let i = 0, imax = res.data.length; i < imax; i++) {
+            that.$set(that.list, i, res.data[i]);
+          }
+        });
     }
   },
   computed: {
