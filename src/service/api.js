@@ -44,6 +44,7 @@ const API = {
     // ------------------------月记----------------------------------
     monthlyList: '/api/practice/student/zhoubao/zhoubaoList', // 月记列表
     monthlyDetail: '/api/practice/student/zhoubao/zhoubaoDetail', // 月记详情
+    commentList: '/api/practice/dept/yuejiIdeaList', // 月记评语列表
     addMonthly: '/api/practice/student/zhoubao/zhoubaoAdd', // 添加月记
     contactList: '/api/practice/student/contact/contactList', // 通讯录
     contactDetail: '/api/practice/student/contact/contactDetail', // 通讯录用户详情

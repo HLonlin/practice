@@ -32,28 +32,19 @@
     </div>
     <div class="monthlydetail_commentPanel">
       <div class="monthlydetail_commentTitle">老师评语</div>
-      <div class="monthlydetail_commentItem">
+      <div
+        class="monthlydetail_commentItem"
+        v-for="(item, i) in commentList"
+        :key="i"
+      >
         <div class="comment_headImg"></div>
         <div class="comment_content">
           <div class="comment_name">梁颖仪</div>
           <div class="comment_text">不错，有学到东西就很好，再接再厉。</div>
         </div>
       </div>
-      <div class="monthlydetail_commentItem">
-        <div class="comment_headImg"></div>
-        <div class="comment_content">
-          <div class="comment_name">刘礼理</div>
-          <div class="comment_text">
-            做得很好，有不懂的地方就需要多学习，可以向公司的前辈们学习，提升自己的技能。
-          </div>
-        </div>
-      </div>
-      <div class="monthlydetail_commentItem">
-        <div class="comment_headImg"></div>
-        <div class="comment_content">
-          <div class="comment_name">赵莹莹</div>
-          <div class="comment_text">有付出就有回报，在实习中好好学习。</div>
-        </div>
+      <div class="monthlydetail_noComment" v-if="commentList.length == 0">
+        暂无评语
       </div>
     </div>
     <van-image-preview
@@ -80,12 +71,14 @@ export default {
         "https://img.yzcdn.cn/vant/apple-5.jpg",
         "https://img.yzcdn.cn/vant/apple-6.jpg"
       ],
-      monthlyDetail: Object
+      monthlyDetail: Object,
+      commentList: []
     };
   },
   beforeCreate() {},
   created() {
     this.getDEtail();
+    this.getComment();
   },
   beforeMount() {},
   mounted() {},
@@ -105,11 +98,22 @@ export default {
           that.monthlyDetail = res.data.noticeJson;
         });
     },
+    // 加载评语
+    getComment: function() {
+      let that = this;
+      that.$axios
+        .post(that.$api.commentList, {
+          wf_docUnid: that.$route.query.wf_docUnid
+        })
+        .then(res => {
+          that.commentList = res.data;
+        });
+    },
     onClickLeft: function() {
-      this.$router.push({
-        path: "/monthlylist"
-      });
-      //   this.$router.go(-1);
+      // this.$router.push({
+      //   path: "/monthlylist"
+      // });
+      this.$router.go(-1);
     },
     previewImg: function(i) {
       let that = this;
@@ -219,6 +223,15 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #555555;
+}
+.monthlydetail_noComment {
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #bbbbbb;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 20px 0px;
 }
 </style>
 <style>
