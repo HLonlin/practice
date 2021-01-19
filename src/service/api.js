@@ -52,8 +52,9 @@ const API = {
     // --------------------------------------------------------------- 教师端 ---------------------------------------------------------------
     // --------------------------统计--------------------------
     // --------------------------消息--------------------------
-    sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 老师发送消息
-    msgDetail_teacher: '/api/practice/teacher/xiaoxi/xiaoxiDetail', //教师端消息详情
+    msgList_teacher: '/api/practice/teacher/xiaoxi/xiaoxiList', // 教师消息列表
+    sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 教师发送消息
+    msgDetail_teacher: '/api/practice/teacher/xiaoxi/xiaoxiDetail', //教师消息详情
     historyMsgList_teacher: '/api/practice/teacher/xiaoxi/historyList', // 历史消息列表
     historyMsgDetailList_teacher: '/api/practice/teacher/xiaoxi/historyDetailList', // 历史消息详情列表
     remarkList_teacher: '/api/practice/teacher/xiaoxi/remarkList', // 教师常用语列表

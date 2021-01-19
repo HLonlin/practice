@@ -85,29 +85,36 @@ export default {
     getMsgList: function() {
       let that = this;
       let badge = 0;
-      that.$axios.post(that.$api.msgList, {}).then(res => {
-        let data = res.data;
-        for (let i = 0, imax = data.length; i < imax; i++) {
-          badge = badge + data[i].unreadNum;
-          if (badge != that.tabbar.list[1].badge) {
-            that.tabbar.list[1].badge = badge;
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.msgList_teacher
+            : that.$api.msgList,
+          {}
+        )
+        .then(res => {
+          let data = res.data;
+          for (let i = 0, imax = data.length; i < imax; i++) {
+            badge = badge + data[i].unreadNum;
+            if (badge != that.tabbar.list[1].badge) {
+              that.tabbar.list[1].badge = badge;
+            }
+            let month =
+              (new Date(res.data[i].wf_Created).getMonth() + 1 < 10
+                ? "0" + (new Date(res.data[i].wf_Created).getMonth() + 1)
+                : new Date(res.data[i].wf_Created).getMonth() + 1) + "月";
+            let dates =
+              (new Date(res.data[i].wf_Created).getDate() < 10
+                ? "0" + new Date(res.data[i].wf_Created).getDate()
+                : new Date(res.data[i].wf_Created).getDate()) + "日 ";
+            let time = month + dates;
+            data[i]["time"] = time;
           }
-          let month =
-            (new Date(res.data[i].wf_Created).getMonth() + 1 < 10
-              ? "0" + (new Date(res.data[i].wf_Created).getMonth() + 1)
-              : new Date(res.data[i].wf_Created).getMonth() + 1) + "月";
-          let dates =
-            (new Date(res.data[i].wf_Created).getDate() < 10
-              ? "0" + new Date(res.data[i].wf_Created).getDate()
-              : new Date(res.data[i].wf_Created).getDate()) + "日 ";
-          let time = month + dates;
-          data[i]["time"] = time;
-        }
-        that.$store.commit("news/addState", {
-          key: "msgList",
-          val: data
+          that.$store.commit("news/addState", {
+            key: "msgList",
+            val: data
+          });
         });
-      });
     },
     updateMsgList: function() {
       let that = this;
