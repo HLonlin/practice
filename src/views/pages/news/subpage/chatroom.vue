@@ -41,7 +41,7 @@
               :src="
                 chatWith.logo
                   ? chatWith.logo
-                  : require('../../../../assets/images/default.png')
+                  : require('@/assets/images/default.png')
               "
             />
           </div>
@@ -57,7 +57,7 @@
               :src="
                 userData.logo
                   ? userData.logo
-                  : require('../../../../assets/images/default.png')
+                  : require('@/assets/images/default.png')
               "
             />
           </div>

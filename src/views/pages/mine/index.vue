@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       userData: Object,
-      headImg: require("../../../assets/images/default.png"),
+      headImg: require("@/assets/images/default.png"),
       userName: ""
     };
   },

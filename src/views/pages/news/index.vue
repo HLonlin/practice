@@ -12,9 +12,7 @@
             <img
               class="message_logo"
               :src="
-                item.logo
-                  ? item.logo
-                  : require('../../../assets/images/default.png')
+                item.logo ? item.logo : require('@/assets/images/default.png')
               "
             />
           </div>

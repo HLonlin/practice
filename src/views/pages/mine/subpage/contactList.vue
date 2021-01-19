@@ -31,7 +31,7 @@
                   :src="
                     items.logo
                       ? items.logo
-                      : '../../../../assets/images/default.png'
+                      : require('@/assets/images/default.png')
                   "
                 />
                 <div class="contact_name">{{ items.username }}</div>

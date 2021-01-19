@@ -97,7 +97,7 @@ export default {
       userid: "440105200012210933", // 登录号，必填，教师：oa账号，学生：手机号
       passwd: "210933", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
       userName: "",
-      userHead: require("../../../assets/images/default.png")
+      userHead: require("@/assets/images/default.png")
     };
   },
   beforeCreate() {},
