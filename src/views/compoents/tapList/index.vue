@@ -28,11 +28,10 @@
 export default {
   name: "tapList",
   // 接受父组件的值
-  props: {
-    required: true
-  },
+  props: {},
   data() {
     return {
+      userData: Object,
       tabbar: {
         list: [
           {
@@ -61,6 +60,11 @@ export default {
   },
   beforeCreate() {},
   created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
+    console.log(userData);
     // this.updateMsgList();
   },
   beforeMount() {},

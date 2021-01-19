@@ -15,6 +15,15 @@ export const constantRouter = [{
             import ( /*webpackChunkName: '包名',*/ '@/views/home'),
         redirect: '/signin',
         children: [{
+                path: 'statistics',
+                component: () =>
+                    import ('@/views/pages/statistics'),
+                hidden: true,
+                meta: {
+                    title: '统计'
+                },
+            },
+            {
                 path: 'signin',
                 component: () =>
                     import ('@/views/pages/signin'),

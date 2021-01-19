@@ -138,11 +138,11 @@ export default {
               that.entSelect_xibuBtn = res.data.xibuPermission;
               that.userHead = res.data.logo;
               that.userName = res.data.nickname;
+              this.$router.replace({ path: "/statistics" });
             } else {
               // 学生
               // let url = this.$route.query.redirect || "/";
-              console.log("login");
-              this.$router.push({ path: "/" });
+              this.$router.replace({ path: "/signin" });
             }
           }
         });

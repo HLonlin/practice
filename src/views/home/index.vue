@@ -1,11 +1,8 @@
 <template>
   <div class="app-wrapper">
     <topBar :titleText="toptitle"></topBar>
-    <router-view
-      class="router_container"
-      v-on:checkAllRead="checkAllRead"
-    ></router-view>
-    <tapList v-on:tap="tap" :noticeReadAll="noticeReadAll"></tapList>
+    <router-view class="router_container"></router-view>
+    <tapList v-on:tap="tap"></tapList>
   </div>
 </template>
 
@@ -20,14 +17,12 @@ export default {
   },
   data() {
     return {
-      toptitle: "实习小匠",
-      noticeReadAll: false
+      toptitle: "实习小匠"
     };
   },
   beforeCreate() {},
   created() {
     this.toptitle = this.$router.currentRoute.meta.title;
-    // this.updateCorner();
   },
   beforeMount() {},
   mounted() {},
@@ -38,27 +33,6 @@ export default {
   methods: {
     tap: function(val) {
       this.toptitle = val;
-    },
-    checkAllRead: function(val) {
-      this.noticeReadAll = val;
-    },
-    updateCorner: function() {
-      var that = this;
-      function commitCornerNum(i) {
-        let num = 0;
-        setInterval(function() {
-          num = num + 1;
-          that.tapList[i].cornerNum = num;
-        }, 200);
-      }
-      for (var i = 0, imax = that.tapList.length; i < imax; i++) {
-        if (
-          that.tapList[i].cornerMarker &&
-          that.tapList[i].cornerNum != "dot"
-        ) {
-          commitCornerNum(i);
-        }
-      }
     }
   }
 };
