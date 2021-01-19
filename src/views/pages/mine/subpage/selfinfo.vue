@@ -12,9 +12,18 @@
     <div class="selfinfo_topPanel">
       <div class="selfinfo_panel">
         <div class="selfinfo_label">头像</div>
+        <!-- <img
+          class="selfinfo_headIcon"
+          :src="
+            userData.logo
+              ? userData.logo
+              : require('@/assets/images/default.png')
+          "
+          v-if="!editing"
+        /> -->
         <van-uploader
           class="selfinfo_headIcon"
-          v-model="userData.logo"
+          v-model="headImg"
           :max-count="1"
           :before-read="beforeRead"
           :after-read="afterRead"
@@ -26,12 +35,13 @@
         </van-uploader>
         <van-uploader
           class="selfinfo_headIcon"
-          v-model="userData.logo"
+          v-model="headImg"
           :max-count="1"
           :before-read="beforeRead"
           :after-read="afterRead"
           preview-size="3.75rem"
           :preview-options="{ showIndex: false }"
+          accept="image/png,image/jpeg,image/gif"
           v-else
         >
         </van-uploader>
@@ -194,7 +204,8 @@ export default {
         "换企业",
         "服兵役",
         "面试体检中"
-      ]
+      ],
+      headImg: [{ url: require("@/assets/images/default.png"), isImage: true }]
     };
   },
   beforeCreate() {},
@@ -213,6 +224,10 @@ export default {
       let userData = this.$tool.getLocal("userData");
       if (userData) {
         this.userData = userData;
+        this.userData.logo = this.userData.logo
+          ? this.userData.logo
+          : require("@/assets/images/default.png");
+        this.headImg[0].url = this.userData.logo;
       }
     },
     onClickLeft: function() {
@@ -226,6 +241,7 @@ export default {
       return true;
     },
     afterRead(file) {
+      let that = this;
       const tempFile = file.file;
       const type = tempFile.type;
       const size = tempFile.size;
@@ -241,6 +257,7 @@ export default {
       setTimeout(() => {
         file.status = "done";
         file.message = "上传成功";
+        console.log(that.headImg);
       }, 1000);
     },
     onEditing: function() {
