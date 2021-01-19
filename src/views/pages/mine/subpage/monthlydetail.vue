@@ -13,13 +13,12 @@
       <div class="monthlydetail_articleTitle">
         {{ monthlyDetail.year }}年{{ monthlyDetail.zhou }}月
       </div>
+      <!-- 月记详情 -->
       <div class="monthlydetail_articleContent">
-        <!-- <p>
-          {{ monthlyDetail.info }}
-        </p> -->
         {{ monthlyDetail.info }}
       </div>
-      <div class="monthlydetail_articlePhoto">
+      <!-- 月记图 -->
+      <div class="monthlydetail_articlePhoto" v-show="false">
         <div
           v-for="(item, i) in imageList"
           :key="i"
@@ -30,6 +29,7 @@
         </div>
       </div>
     </div>
+    <!-- 月记评语 -->
     <div class="monthlydetail_commentPanel">
       <div class="monthlydetail_commentTitle">老师评语</div>
       <div
