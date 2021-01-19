@@ -105,7 +105,6 @@
 </template>
 
 <script>
-import { Toast } from "vant";
 export default {
   name: "addmonthly",
   data() {
@@ -161,13 +160,13 @@ export default {
     // 提交月记
     submitMonthly: function() {
       if (this.monthly.year == "" || this.monthly.zhou == "") {
-        Toast({
+        this.$toast({
           message: "请选择时间"
         });
         return;
       }
       if (this.monthly.info.length <= 150) {
-        Toast({
+        this.$toast({
           message: "月记内容不能少于150字"
         });
         return;

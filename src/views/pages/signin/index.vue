@@ -235,7 +235,6 @@
  * 3KWBZ-6TXWI-M2SGX-5SMDX-GD7N3-IIBMB
  */
 import wx from "weixin-js-sdk"; // 微信sdk
-import { Toast } from "vant";
 export default {
   name: "signin",
   data() {
@@ -341,7 +340,7 @@ export default {
         return;
       }
       that.$toast.loading({
-        message: "每日一学打开中..."
+        message: "每日一学打卡中..."
       });
       that.$axios
         .post(that.$api.recordLearnEveryDay, {
@@ -560,7 +559,7 @@ export default {
         u = navigator.userAgent;
       // if (u.indexOf("MicroMessenger") > -1) {
       // } else {
-      //   Toast({
+      //   that.$toast({
       //     message: "请在微信端进行此操作"
       //   });
       //   return;
@@ -604,7 +603,7 @@ export default {
                 // that.distance()判断离打卡地址的距离
               },
               cancel: function(err) {
-                Toast({
+                that.$toast({
                   message: "位置获取失败！"
                 });
                 console.log(err);
