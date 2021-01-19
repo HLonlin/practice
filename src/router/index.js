@@ -107,6 +107,14 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '新增公告',
+        name: 'addnotice',
+        path: '/addnotice',
+        component: () =>
+            import ('@/views/pages/notice/subpage/addnotice'),
+        hidden: true
+    },
+    {
         title: '公告详情',
         name: 'detailPage',
         path: '/detailPage',

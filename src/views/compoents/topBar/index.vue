@@ -13,12 +13,12 @@
         <i
           v-if="titleText == '公告' && userData.isTeacher"
           class="iconItem icon_tianjiatubiao icon_record"
-          @click="chatRecord"
+          @click="linkTo('/addnotice')"
         ></i>
         <i
           v-if="titleText != '公告'"
           class="iconItem icon_liaotianjilutubiao icon_record"
-          @click="chatRecord"
+          @click="linkTo('/chatrecordlist')"
         ></i>
       </template>
     </van-nav-bar>
@@ -56,9 +56,9 @@ export default {
     onClickLeft: function() {
       console.log("ClickLeft");
     },
-    chatRecord: function() {
+    linkTo: function(path) {
       this.$router.push({
-        path: "/chatrecordlist"
+        path: path
       });
     }
   }
