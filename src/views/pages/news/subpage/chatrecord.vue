@@ -110,15 +110,32 @@ export default {
     },
     getRecord: function() {
       let that = this;
-      that.loading = true;
-      that.$axios
-        .post(that.$api.historyMsgDetailList, {
+      let data = {};
+      if (that.userData.isTeacher) {
+        data = {
+          comefrom: that.chatWith.userid,
+          studentname: that.chatWith.username,
+          searchkeywords: "",
+          pageNum: that.pageNum,
+          pageSize: that.pageSize
+        };
+      } else {
+        data = {
           comefrom: that.chatWith.userid,
           username: that.chatWith.username,
           searchkeywords: "",
           pageNum: that.pageNum,
           pageSize: that.pageSize
-        })
+        };
+      }
+      that.loading = true;
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.historyMsgDetailList_teacher
+            : that.$api.historyMsgDetailList,
+          data
+        )
         .then(res => {
           // 加载状态结束
           that.loading = false;

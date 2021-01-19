@@ -55,11 +55,16 @@ export default {
   },
   data() {
     return {
+      userData: Object,
       list: []
     };
   },
   beforeCreate() {},
   created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
     this.getRecordList();
   },
   beforeMount() {},
@@ -76,7 +81,12 @@ export default {
       let that = this;
       let keywords = arguments[0] ? arguments[0] : "";
       that.$axios
-        .post(that.$api.searchMsg, { searchkeywords: keywords })
+        .post(
+          that.userData.isTeacher
+            ? that.$api.historyMsgList_teacher
+            : that.$api.historyMsgList,
+          { searchkeywords: keywords }
+        )
         .then(res => {
           that.list = res.data;
         });

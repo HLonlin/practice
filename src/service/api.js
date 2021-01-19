@@ -26,7 +26,6 @@ const API = {
     msgDetail: '/api/practice/student/xiaoxi/xiaoxiDetail', // 消息详情
     readMsg: '/api/practice/student/xiaoxi/markRead', // 标记消息为已读
     sendMsg_student: '/api/practice/student/xiaoxi/sendXiaoxi', // 学生发送消息
-    searchMsg: '/api/practice/student/xiaoxi/historyList', // 条件查询历史消息列表
     historyMsgList: '/api/practice/student/xiaoxi/historyList', // 历史消息列表
     historyMsgDetailList: '/api/practice/student/xiaoxi/historyDetailList', // 历史消息详情列表
     remarkList: '/api/practice/student/xiaoxi/remarkList', // 学员常用语列表
@@ -55,6 +54,8 @@ const API = {
     // --------------------------消息--------------------------
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 老师发送消息
     msgDetail_teacher: '/api/practice/teacher/xiaoxi/xiaoxiDetail', //教师端消息详情
+    historyMsgList_teacher: '/api/practice/teacher/xiaoxi/historyList', // 历史消息列表
+    historyMsgDetailList_teacher: '/api/practice/teacher/xiaoxi/historyDetailList', // 历史消息详情列表
     remarkList_teacher: '/api/practice/teacher/xiaoxi/remarkList', // 教师常用语列表
     remarkAdd_teacher: '/api/practice/teacher/xiaoxi/remarkAdd', // 添加教师常用语
     remarkEdit_teacher: '/api/practice/teacher/xiaoxi/remarkEdit', // 修改教师常用语
