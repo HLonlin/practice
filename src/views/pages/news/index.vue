@@ -51,14 +51,7 @@ export default {
   },
   beforeCreate() {},
   created() {
-    let that = this;
-    clearInterval(timer);
-    let timer = setInterval(function() {
-      let msgList = that.$store.state.news.msgList;
-      if (msgList) {
-        that.msgList = msgList;
-      }
-    }, 1000);
+    this.updateMsgList();
   },
   beforeMount() {},
   mounted() {},
@@ -77,6 +70,16 @@ export default {
         path: "/chatroom",
         query: { chatWith: JSON.stringify(chatWith) }
       });
+    },
+    updateMsgList: function() {
+      let that = this;
+      clearInterval(timer);
+      let timer = setInterval(function() {
+        let msgList = that.$store.state.news.msgList;
+        if (msgList) {
+          that.msgList = msgList;
+        }
+      }, 1000);
     }
   }
 };

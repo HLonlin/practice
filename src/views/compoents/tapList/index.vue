@@ -61,11 +61,7 @@ export default {
   },
   beforeCreate() {},
   created() {
-    let that = this;
-    clearInterval(timer);
-    let timer = setInterval(function() {
-      that.getMsgList();
-    }, 1000);
+    // this.updateMsgList();
   },
   beforeMount() {},
   mounted() {},
@@ -106,6 +102,13 @@ export default {
           val: data
         });
       });
+    },
+    updateMsgList: function() {
+      let that = this;
+      clearInterval(timer);
+      let timer = setInterval(function() {
+        that.getMsgList();
+      }, 1000);
     }
   }
 };
