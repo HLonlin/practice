@@ -58,7 +58,8 @@
         />
       </div>
     </div>
-    <div class="monthlyUpload_panel">
+    <!-- 上传图片、视频、附件 -->
+    <div class="monthlyUpload_panel" v-show="false">
       <van-uploader v-model="photoList" class="monthly_upload">
         <div class="photoUploadBtn">
           <i class="iconItem icon_tianjiatupiantubiao icon_upload"></i>
@@ -78,7 +79,7 @@
         </template>
       </van-uploader>
     </div>
-    <div class="attachFile_panel">
+    <div class="attachFile_panel" v-show="false">
       <div class="monthly_title">附件</div>
       <van-uploader v-model="videoList" class="monthly_upload">
         <div class="attachFile_btnPanel">
@@ -91,14 +92,6 @@
           <div class="preview-cover van-ellipsis">{{ file.name }}</div>
         </template>
       </van-uploader>
-
-      <!-- <div class="monthly_title">附件</div>
-      <div class="attachFile_btnPanel">
-        <div class="attachFile_btn">
-          <i class="iconItem icon_tianjiatubiao"></i>
-          <div>上传附件</div>
-        </div>
-      </div> -->
     </div>
     <div class="addmonthly_submitBtn" @click="submitMonthly">提交</div>
   </div>
