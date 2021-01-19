@@ -58,6 +58,7 @@ export default {
   name: "detailPage",
   data() {
     return {
+      userData: Object,
       isLoadeOver: false,
       detail: Object,
       showDetail_notify: false
@@ -65,6 +66,10 @@ export default {
   },
   beforeCreate() {},
   created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
     this.getNoticeDetail();
   },
   beforeMount() {},
@@ -88,9 +93,14 @@ export default {
       });
       let that = this;
       that.$axios
-        .post(that.$api.noticeDetail, {
-          noticeid: that.$route.query.wf_docUnid
-        })
+        .post(
+          that.userData.isTeacher
+            ? that.$api.noticeDetail_teacher
+            : that.$api.noticeDetail,
+          {
+            noticeid: that.$route.query.wf_docUnid
+          }
+        )
         .then(res => {
           toast.clear();
           that.isLoadeOver = true;
@@ -125,9 +135,14 @@ export default {
         });
       function setIsRead() {
         that.$axios
-          .post(that.$api.readNotice, {
-            noticeid: that.$route.query.wf_docUnid
-          })
+          .post(
+            that.userData.isTeacher
+              ? that.$api.readNotice_teacher
+              : that.$api.readNotice,
+            {
+              noticeid: that.$route.query.wf_docUnid
+            }
+          )
           .then(res => {
             that.showDetail_notify = true;
             setTimeout(() => {

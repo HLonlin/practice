@@ -115,11 +115,16 @@ export default {
       let that = this,
         keyword = arguments[0] ? arguments[0] : "";
       that.$axios
-        .post(that.$api.noticeList, {
-          searchkeywords: keyword,
-          pageNum: that.pageIndex,
-          pageSize: arguments[0] ? 1000 : that.pageSize
-        })
+        .post(
+          that.userData.isTeacher
+            ? that.$api.noticeList_teacher
+            : that.$api.noticeList,
+          {
+            searchkeywords: keyword,
+            pageNum: that.pageIndex,
+            pageSize: arguments[0] ? 1000 : that.pageSize
+          }
+        )
         .then(res => {
           that.loading = false;
           that.pageIndex = that.pageIndex + 1;

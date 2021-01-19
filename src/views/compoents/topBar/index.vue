@@ -9,8 +9,14 @@
       left-arrow
       @click-left="onClickLeft"
     >
-      <template #right v-if="titleText == '消息'">
+      <template #right v-if="titleText == '消息' || titleText == '公告'">
         <i
+          v-if="titleText == '公告' && userData.isTeacher"
+          class="iconItem icon_tianjiatubiao icon_record"
+          @click="chatRecord"
+        ></i>
+        <i
+          v-if="titleText != '公告'"
           class="iconItem icon_liaotianjilutubiao icon_record"
           @click="chatRecord"
         ></i>
@@ -29,10 +35,17 @@ export default {
     required: true
   },
   data() {
-    return {};
+    return {
+      userData: Object
+    };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
