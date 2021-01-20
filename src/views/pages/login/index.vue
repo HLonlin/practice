@@ -98,12 +98,12 @@ export default {
       userData: Object,
       islogin: false,
       usertype: "1", // 账号类型，必填 1=教师，2=学生
-      // userid: "lyy",
-      // passwd: "0513LyyL"
+      userid: "lyy",
+      passwd: "0513LyyL"
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：手机号
-      // passwd: "gz020slitsXX", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
-      userid: "440105200012210933", // 登录号，必填，教师：oa账号，学生：手机号
-      passwd: "210933" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      // passwd: "gz020slitsXX" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      // userid: "440105200012210933", // 登录号，必填，教师：oa账号，学生：手机号
+      // passwd: "210933" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
     };
   },
   beforeCreate() {},
