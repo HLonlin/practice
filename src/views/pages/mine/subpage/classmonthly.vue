@@ -1,7 +1,7 @@
 <template>
-  <div class="monthlylist_container">
+  <div class="classmonthly_container">
     <van-nav-bar
-      title="月记"
+      title="班级月记"
       :fixed="true"
       :placeholder="true"
       :safe-area-inset-top="true"
@@ -9,14 +9,14 @@
       left-arrow
       @click-left="onClickLeft"
     >
-      <template #right>
-        <i
-          class="iconItem icon_tianjiatubiao icon_add"
-          @click="addMonthly"
-          v-show="!userData.isTeacher"
-        ></i>
-      </template>
     </van-nav-bar>
+    <div class="monthlylist_topPanel">
+      <div class="monthlylist_yearPanel">
+        <div class="monthlylist_lastYear" @click="pageTurn(false)"></div>
+        <div class="monthlylist_currentYear">{{ currentYearMonth }}</div>
+        <div class="monthlylist_nextYear" @click="pageTurn(true)"></div>
+      </div>
+    </div>
     <div class="monthlylist_listPanel">
       <van-pull-refresh v-model="refreshing" @refresh="dropDownRefresh">
         <van-list
@@ -35,12 +35,9 @@
             class="monthlylist_listItem"
           >
             <div class="monthlylist_listTitle">
-              {{ item.year }}年{{ item.zhou }}月月记
+              {{ item.username }}{{ item.zhou }}月月记
             </div>
             <div class="monthlylist_listLabel">
-              <div class="monthlylist_listAuthor">
-                姓名：{{ item.username }}
-              </div>
               <div class="monthlylist_listDate">{{ item.date }}</div>
             </div>
           </router-link>
@@ -55,11 +52,12 @@
  * 月记列表页
  */
 export default {
-  name: "monthlylist",
+  name: "classmonthly",
   data() {
     return {
       userData: Object,
       monthlyList: [],
+      currentYearMonth: "",
       loading: false, // 加载状态
       finished: false, // 是否已加载全部
       refreshing: false,
@@ -69,6 +67,7 @@ export default {
   },
   beforeCreate() {},
   created() {
+    this.initYearMonth();
     this.getUserData();
   },
   beforeMount() {},
@@ -87,22 +86,47 @@ export default {
         this.userData = userData;
       }
     },
-    // 加载月记列表
+    initYearMonth: function() {
+      let that = this;
+      let currentYearMonth = arguments[0] ? new Date(arguments[0]) : new Date();
+      let month =
+        currentYearMonth.getMonth() + 1 < 10
+          ? "0" + (currentYearMonth.getMonth() + 1) + "月"
+          : currentYearMonth.getMonth() + 1 + "月";
+      that.currentYearMonth = currentYearMonth.getFullYear() + "年" + month;
+    },
+    pageTurn: function(add) {
+      let that = this,
+        dateArr = that.currentYearMonth.replace(/月/, "").split("年");
+      if (add) {
+        dateArr[1] = Number(dateArr[1]) + 1;
+        if (dateArr[1] > 12) {
+          dateArr[1] = "1";
+          dateArr[0] = Number(dateArr[0]) + 1;
+        }
+      } else {
+        dateArr[1] = Number(dateArr[1]) - 1;
+        if (dateArr[1] < 1) {
+          dateArr[1] = "12";
+          dateArr[0] = Number(dateArr[0]) - 1;
+        }
+      }
+      if (dateArr[1] < 10) {
+        dateArr[1] = "0" + dateArr[1];
+      }
+      that.currentYearMonth = dateArr[0] + "年" + dateArr[1] + "月";
+      that.onLoad();
+    },
+    // 加载班级月记列表
     onLoad() {
       let that = this,
-        data = {};
-      if (that.userData.isTeacher) {
-        data = {
-          cardid: "440105200012210933"
-        };
-      }
+        dateArr = that.currentYearMonth.replace(/月/, "").split("年");
       that.$axios
-        .post(
-          that.userData.isTeacher
-            ? that.$api.monthList_teacher
-            : that.$api.monthlyList,
-          data
-        )
+        .post(that.$api.classMonthList_teacher, {
+          banji: that.userData.banji,
+          year: dateArr[0],
+          month: dateArr[1]
+        })
         .then(res => {
           that.loading = false;
           that.pageIndex = that.pageIndex + 1;
@@ -130,13 +154,6 @@ export default {
       }
       // 重新加载数据
       this.onLoad();
-    },
-    // 添加月记
-    addMonthly: function() {
-      let that = this;
-      this.$router.push({
-        path: "/addmonthly"
-      });
     }
   }
 };
@@ -144,7 +161,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.monthlylist_container {
+.classmonthly_container {
   height: 100vh;
   background-color: #f6f6f6;
   box-sizing: border-box;
@@ -225,17 +242,17 @@ export default {
 }
 </style>
 <style>
-.monthlylist_container .van-nav-bar {
+.classmonthly_container .van-nav-bar {
   background-color: #0090d8;
 }
-.monthlylist_container .van-nav-bar__placeholder,
-.monthlylist_container .van-nav-bar__content {
+.classmonthly_container .van-nav-bar__placeholder,
+.classmonthly_container .van-nav-bar__content {
   height: 44px !important;
 }
-.monthlylist_container .van-nav-bar .van-icon {
+.classmonthly_container .van-nav-bar .van-icon {
   color: #ffffff;
 }
-.monthlylist_container .van-nav-bar__title {
+.classmonthly_container .van-nav-bar__title {
   font-size: 1.125rem;
   color: #ffffff;
 }

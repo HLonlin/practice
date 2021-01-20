@@ -131,6 +131,14 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '班级月记列表',
+        name: 'classmonthly',
+        path: '/classmonthly',
+        component: () =>
+            import ('@/views/pages/mine/subpage/classmonthly'),
+        hidden: true
+    },
+    {
         title: '月记列表',
         name: 'monthlylist',
         path: '/monthlylist',
