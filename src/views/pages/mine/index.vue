@@ -52,7 +52,7 @@
       </router-link>
     </div>
     <div class="bottom_panel" v-if="userData.isTeacher">
-      <router-link :to="{ path: 'about' }" class="cell_panel">
+      <router-link :to="{ path: 'monthlylist' }" class="cell_panel">
         <i class="iconItem icon_yuejitubiao icon_left"></i>
         <div class="middle_title">班级月记</div>
       </router-link>

@@ -45,18 +45,10 @@
           />
         </div>
         <div class="selfinfo_panel">
-          <van-field
-            v-model="userData.deptname"
-            label="专业"
-            :readonly="true"
-          />
+          <van-field v-model="userData.zhuanye" label="专业" :readonly="true" />
         </div>
         <div class="selfinfo_panel">
-          <van-field
-            v-model="userData.deptname"
-            label="班级"
-            :readonly="true"
-          />
+          <van-field v-model="userData.banji" label="班级" :readonly="true" />
         </div>
       </div>
       <div class="selfinfo_bottomPanel">

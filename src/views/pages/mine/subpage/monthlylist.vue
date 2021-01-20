@@ -10,9 +10,20 @@
       @click-left="onClickLeft"
     >
       <template #right>
-        <i class="iconItem icon_tianjiatubiao icon_add" @click="addMonthly"></i>
+        <i
+          class="iconItem icon_tianjiatubiao icon_add"
+          @click="addMonthly"
+          v-show="!userData.isTeacher"
+        ></i>
       </template>
     </van-nav-bar>
+    <div class="monthlylist_topPanel" v-show="userData.isTeacher">
+      <div class="monthlylist_yearPanel">
+        <div class="monthlylist_lastYear" @click="pageTurn(false)"></div>
+        <div class="monthlylist_currentYear">{{ currentYearMonth }}</div>
+        <div class="monthlylist_nextYear" @click="pageTurn(true)"></div>
+      </div>
+    </div>
     <div class="monthlylist_listPanel">
       <van-pull-refresh v-model="refreshing" @refresh="dropDownRefresh">
         <van-list
@@ -54,8 +65,10 @@ export default {
   name: "monthlylist",
   data() {
     return {
+      userData: Object,
       monthlyList: [],
       currentYear: new Date().getFullYear(),
+      currentYearMonth: "",
       loading: false, // 加载状态
       finished: false, // 是否已加载全部
       refreshing: false,
@@ -64,7 +77,10 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.initYearMonth();
+    this.getUserData();
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -78,35 +94,92 @@ export default {
       });
       //   this.$router.go(-1);
     },
-    lastYear: function() {
-      this.currentYear -= 1;
-      if (this.currentYear <= new Date().getFullYear() - 10) {
-        this.currentYear = new Date().getFullYear() - 10;
+    getUserData: function() {
+      let userData = this.$tool.getLocal("userData");
+      if (userData) {
+        this.userData = userData;
       }
     },
-    nextYear: function() {
-      this.currentYear += 1;
-      if (this.currentYear >= new Date().getFullYear() + 10) {
-        this.currentYear = new Date().getFullYear() + 10;
+    initYearMonth: function() {
+      let that = this;
+      let currentYearMonth = arguments[0] ? new Date(arguments[0]) : new Date();
+      let month =
+        currentYearMonth.getMonth() + 1 < 10
+          ? "0" + (currentYearMonth.getMonth() + 1) + "月"
+          : currentYearMonth.getMonth() + 1 + "月";
+      that.currentYearMonth = currentYearMonth.getFullYear() + "年" + month;
+    },
+    pageTurn: function(add) {
+      let that = this,
+        dateArr = that.currentYearMonth.replace(/月/, "").split("年");
+      if (add) {
+        dateArr[1] = Number(dateArr[1]) + 1;
+        if (dateArr[1] > 12) {
+          dateArr[1] = "1";
+          dateArr[0] = Number(dateArr[0]) + 1;
+        }
+      } else {
+        dateArr[1] = Number(dateArr[1]) - 1;
+        if (dateArr[1] < 1) {
+          dateArr[1] = "12";
+          dateArr[0] = Number(dateArr[0]) - 1;
+        }
       }
+      if (dateArr[1] < 10) {
+        dateArr[1] = "0" + dateArr[1];
+      }
+      that.currentYearMonth = dateArr[0] + "年" + dateArr[1] + "月";
+      that.$axios
+        .post(that.$api.monthList_teacher, {
+          banji: that.userData.banji,
+          year: dateArr[0],
+          month: dateArr[1]
+        })
+        .then(res => {
+          that.loading = false;
+          that.pageIndex = that.pageIndex + 1;
+          let monthlyList = res.data;
+          for (let i = 0, imax = monthlyList.length; i < imax; i++) {
+            monthlyList[i].date = that.$tool.getFullDate(
+              monthlyList[i].wf_Created
+            );
+            that.monthlyList.push(monthlyList[i]);
+          }
+          that.finished = true;
+        });
     },
     // 加载月记列表
     onLoad() {
       let that = this,
-        keyword = arguments[0] ? arguments[0] : "";
-      that.$axios.post(that.$api.monthlyList, {}).then(res => {
-        that.loading = false;
-        that.pageIndex = that.pageIndex + 1;
-        let monthlyList = res.data;
-        for (let i = 0, imax = monthlyList.length; i < imax; i++) {
-          monthlyList[i].date = that.$tool.getFullDate(
-            monthlyList[i].wf_Created
-          );
-          that.monthlyList.push(monthlyList[i]);
-        }
-        that.finished = true;
-        // 是否全部已读
-      });
+        keyword = arguments[0] ? arguments[0] : "",
+        dateArr = that.currentYearMonth.replace(/月/, "").split("年"),
+        data = {};
+      if (that.userData.isTeacher) {
+        data = {
+          banji: that.userData.banji,
+          year: dateArr[0],
+          month: dateArr[1]
+        };
+      }
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.monthList_teacher
+            : that.$api.monthlyList,
+          data
+        )
+        .then(res => {
+          that.loading = false;
+          that.pageIndex = that.pageIndex + 1;
+          let monthlyList = res.data;
+          for (let i = 0, imax = monthlyList.length; i < imax; i++) {
+            monthlyList[i].date = that.$tool.getFullDate(
+              monthlyList[i].wf_Created
+            );
+            that.monthlyList.push(monthlyList[i]);
+          }
+          that.finished = true;
+        });
     },
     // 下拉刷新
     dropDownRefresh() {
@@ -161,7 +234,7 @@ export default {
   width: 10.625rem;
   font-size: 0.9375rem;
   font-family: PingFangSC-Medium, PingFang SC;
-  font-weight: 500;
+  font-weight: bold;
   color: #323233;
   text-align: center;
 }

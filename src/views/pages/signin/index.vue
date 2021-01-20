@@ -356,7 +356,6 @@ export default {
       let that = this;
       let today = new Date(new Date(new Date().toLocaleDateString()).getTime());
       let currentYearMonth = arguments[0] ? new Date(arguments[0]) : new Date();
-      // : new Date("2020-12");
       let month =
         currentYearMonth.getMonth() + 1 < 10
           ? "0" + (currentYearMonth.getMonth() + 1) + "月"

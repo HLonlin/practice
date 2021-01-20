@@ -187,7 +187,7 @@ export default {
           that.expiryTime.dates
       };
       that.$axios.post(that.$api.addNotice, data).then(res => {
-        console.log(res);
+        that.$router.go(-1);
       });
     }
   }

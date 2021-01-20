@@ -66,6 +66,7 @@ const API = {
     noticeDetail_teacher: '/api/practice/teacher/notice/noticeDetail', // 公告详情
     readNotice_teacher: '/api/practice/teacher/notice/readNotice', // 阅读公告（设置为已读）
     addNotice: '/api/practice/teacher/notice/addNotice', // 新增公告
+    monthList_teacher: '/api/practice/teacher/getYueJiList', // 班级月记列表
     // --------------------------我的--------------------------
     getuserInfo_teacher: '/api/practice/teacher/getUserInfo', // 获取教师个人信息
     contactList_teacher: '/api/practice/teacher/getContactsList', // 获取通讯录列表
