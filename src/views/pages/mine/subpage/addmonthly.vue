@@ -9,6 +9,7 @@
       left-arrow
       @click-left="onClickLeft"
     />
+    <!-- 设计原样式 -->
     <!-- <div class="monthlyDate_panel">
       <div class="monthly_title">月记时间</div>
       <div class="monthly_date">
@@ -33,16 +34,6 @@
         />
       </div>
     </div>
-    <!-- <van-datetime-picker
-      v-model="currentDate"
-      type="year-month"
-      title="月记时间"
-      :min-date="minDate"
-      :max-date="maxDate"
-      :formatter="timeFormatter"
-      :show-toolbar="false"
-      :visible-item-count="1"
-    /> -->
     <div class="monthlyContent_panel">
       <div class="monthly_title">月记内容</div>
       <div class="monthly_content">
@@ -54,7 +45,6 @@
           placeholder="月记内容不能少于150字"
           :formatter="formatter"
           format-trigger="onBlur"
-          ref="timePick"
         />
       </div>
     </div>

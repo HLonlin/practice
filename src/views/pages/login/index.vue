@@ -98,12 +98,12 @@ export default {
       userData: Object,
       islogin: false,
       usertype: "1", // 账号类型，必填 1=教师，2=学生
-      userid: "lyy",
-      passwd: "0513LyyL"
+      // userid: "lyy",
+      // passwd: "0513LyyL"
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：手机号
       // passwd: "gz020slitsXX", // 登录密码，必填，教师：oa密码，学生：身份证号后6位
-      // userid: "440105200012210933", // 登录号，必填，教师：oa账号，学生：手机号
-      // passwd: "210933" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      userid: "440105200012210933", // 登录号，必填，教师：oa账号，学生：手机号
+      passwd: "210933" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
     };
   },
   beforeCreate() {},
@@ -128,10 +128,10 @@ export default {
           passwd: that.passwd
         })
         .then(res => {
-          if (res.status !== 200) {
-            return;
-          }
           that.userData = res.data;
+          this.$axios.defaults.headers.common["Access-Token"] =
+            res.data.tokenid;
+          this.$tool.setLocal("token", res.data.tokenid);
           if (that.usertype == "1") {
             that.$axios.post(that.$api.getuserInfo_teacher, {}).then(res => {
               //班主任、系部入口
@@ -146,10 +146,9 @@ export default {
             // 学生
             that.userData["isTeacher"] = false;
             this.$tool.setLocal("userData", that.userData);
-            this.$router.replace({ path: "/signin" });
+            this.$router.push({ path: "/signin" });
           }
           this.$toast.clear();
-          this.$tool.setLocal("token", res.data.tokenid);
         });
     },
     routerTo: function(path, params) {

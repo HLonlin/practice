@@ -62,11 +62,6 @@ axios.interceptors.response.use(
             switch (res.data.status) {
                 case 200:
                     return Promise.resolve(res.data);
-                case 400:
-                    Toast({
-                        message: res.data.message
-                    });
-                    break;
                 case 410:
                     Toast({
                         message: res.data.message
@@ -74,7 +69,12 @@ axios.interceptors.response.use(
                     router.push({
                         path: '/login',
                     })
-                    break;
+                    throw res.data;
+                default:
+                    Toast({
+                        message: res.data.message
+                    });
+                    throw res.data;
             }
         }
         return res;
