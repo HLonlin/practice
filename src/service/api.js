@@ -53,6 +53,7 @@ const API = {
     // --------------------------统计--------------------------
     tongjiList: '/api/practice/teacher/tongji/tongjiList', // 教师端统计列表
     allCountXibu: '/api/practice/dept/allCountXibu', // 统计所有系部实习率及签到率
+    zhoubaoideaAdd: '/api/practice/teacher/tongji/zhoubaoideaAdd', // 教师端增加月记点评
     // --------------------------消息--------------------------
     msgList_teacher: '/api/practice/teacher/xiaoxi/xiaoxiList', // 教师消息列表
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 教师发送消息

@@ -30,7 +30,7 @@
       </div>
     </div>
     <!-- 月记评语 -->
-    <div class="monthlydetail_commentPanel">
+    <div class="monthlydetail_commentPanel" v-if="!userData.isTeacher">
       <div class="monthlydetail_commentTitle">老师评语</div>
       <div
         class="monthlydetail_commentItem"
@@ -47,6 +47,19 @@
         暂无评语
       </div>
     </div>
+    <div class="monthlydetail_commentPanel" v-else>
+      <div class="monthlydetail_commentTitle">月记点评</div>
+      <div class="monthlyComment_panel">
+        <van-field
+          class="monthlyComment_item"
+          v-model="message"
+          :autosize="{ maxHeight: 150, minHeight: 150 }"
+          type="textarea"
+          placeholder="请输入您对该学生的月记评语。"
+        />
+      </div>
+      <div class="commentSubmit_btn" @click="addComment">提交</div>
+    </div>
     <van-image-preview
       v-model="show"
       :images="imageList"
@@ -61,6 +74,7 @@ export default {
   name: "monthlydetail",
   data() {
     return {
+      userData: Object,
       show: false,
       index: 0,
       imageList: [
@@ -72,11 +86,13 @@ export default {
         "https://img.yzcdn.cn/vant/apple-6.jpg"
       ],
       monthlyDetail: Object,
-      commentList: []
+      commentList: [],
+      message: ""
     };
   },
   beforeCreate() {},
   created() {
+    this.getUserData();
     this.getDEtail();
     this.getComment();
   },
@@ -87,6 +103,12 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getUserData: function() {
+      let userData = this.$tool.getLocal("userData");
+      if (userData) {
+        this.userData = userData;
+      }
+    },
     // 加载详情
     getDEtail: function() {
       let that = this;
@@ -110,15 +132,31 @@ export default {
         });
     },
     onClickLeft: function() {
-      // this.$router.push({
-      //   path: "/monthlylist"
-      // });
       this.$router.go(-1);
     },
     previewImg: function(i) {
       let that = this;
       this.show = true;
       this.index = i;
+    },
+    addComment: function() {
+      if (this.message) {
+        let that = this;
+        that.$axios
+          .post(that.$api.zhoubaoideaAdd, {
+            zhoubaoid: that.$route.query.wf_docUnid,
+            info: that.message
+          })
+          .then(res => {
+            that.$toast({
+              message: "提交成功"
+            });
+          });
+      } else {
+        this.$toast({
+          message: "月记评语不能为空"
+        });
+      }
     }
   }
 };
@@ -128,14 +166,14 @@ export default {
 <style scoped>
 .monthlydetail_container {
   height: 100vh;
-  background-color: #f6f6f6;
+  background-color: #ffffff;
 }
 .monthlydetail_articlePanel {
   width: 100%;
   box-sizing: border-box;
-  padding: 0px 1rem;
+  padding: 0px 1rem 20px 1rem;
   background-color: #ffffff;
-  margin-bottom: 10px;
+  border-bottom: 10px #f6f6f6 solid;
 }
 .monthlydetail_articleTitle {
   font-size: 1rem;
@@ -184,7 +222,7 @@ export default {
 .monthlydetail_commentTitle {
   font-size: 1rem;
   font-family: PingFangSC-Medium, PingFang SC;
-  font-weight: 500;
+  font-weight: bold;
   color: #333333;
   text-align: center;
   box-sizing: border-box;
@@ -232,6 +270,26 @@ export default {
   text-align: center;
   box-sizing: border-box;
   padding: 20px 0px;
+}
+.monthlyComment_panel {
+  box-sizing: border-box;
+  padding: 15px 0px;
+}
+.monthlyComment_item {
+  border: 1px solid #eeeeee;
+}
+.commentSubmit_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 36px;
+  background-color: #0090d8;
+  border-radius: 2px;
+  font-size: 1rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ffffff;
 }
 </style>
 <style>
