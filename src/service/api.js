@@ -78,7 +78,7 @@ const API = {
     absenteeismList: '/api/practice/teacher/absenteeismList', // 缺勤名单
     auditDetails: '/api/practice/teacher/auditDetails', // 待审核信息详情
     submitAudit: '/api/practice/teacher/submitAudit', // 审核学生信息
-    getUserByCardId: '/practice/teacher/getUserByCardId', // 根据身份证查找学生信息
+    getUserByCardId: '/api/practice/teacher/getUserByCardId', // 根据身份证查找学生信息
     getCountNum: '/api/practice/teacher/getCountNum', // 获取我的统计数
 
 }

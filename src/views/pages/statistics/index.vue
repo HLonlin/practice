@@ -85,7 +85,10 @@ export default {
     linkTo: function(item) {
       this.$router.push({
         path: "/studentInfo",
-        query: { cardid: JSON.stringify(item.cardid) }
+        query: {
+          cardid: JSON.stringify(item.cardid),
+          isFrom: JSON.stringify("statistics")
+        }
       });
     }
   }

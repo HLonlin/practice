@@ -93,7 +93,7 @@ export default {
         data = {};
       if (that.userData.isTeacher) {
         data = {
-          cardid: "440105200012210933"
+          cardid: that.$route.query.cardid
         };
       }
       that.$axios

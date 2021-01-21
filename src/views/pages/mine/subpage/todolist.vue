@@ -142,7 +142,10 @@ export default {
         case "absenteeism":
           this.$router.push({
             path: "/studentInfo",
-            query: { cardid: JSON.stringify(item.cardid) }
+            query: {
+              cardid: JSON.stringify(item.cardid),
+              isFrom: JSON.stringify("todolist")
+            }
           });
           break;
         case "noContact":
