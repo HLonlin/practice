@@ -160,10 +160,9 @@ export default {
           });
           break;
         case "audit":
-          console.log(item);
           this.$router.push({
             path: "/auditstudent",
-            query: { chatWith: JSON.stringify(chatWith) }
+            query: { wf_docunid: JSON.stringify(item.wf_docunid) }
           });
           break;
       }
