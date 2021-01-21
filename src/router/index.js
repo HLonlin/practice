@@ -131,6 +131,14 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '审核学生信息',
+        name: 'auditstudent',
+        path: '/auditstudent',
+        component: () =>
+            import ('@/views/pages/mine/subpage/auditstudent'),
+        hidden: true
+    },
+    {
         title: '个人信息',
         name: 'selfinfo',
         path: '/selfinfo',
