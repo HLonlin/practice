@@ -20,18 +20,34 @@
       </router-link>
     </div>
     <div class="middle_panel" v-if="userData.isTeacher">
-      <router-link :to="{ path: 'dailystudy' }" class="cell_panel">
+      <div class="cell_panel" @click="linkTo('absenteeism')">
         <i class="iconItem icon_queqinmingdantubiao icon_left"></i>
-        <div class="middle_title">缺勤名单</div>
-      </router-link>
-      <router-link :to="{ path: 'library' }" class="cell_panel">
+        <div class="middle_title">
+          缺勤名单<span v-show="absenteeismNum != 0"
+            >(<span style="color:#0090d8;">{{ absenteeismNum }}</span
+            >)</span
+          >
+        </div>
+      </div>
+      <div class="cell_panel" @click="linkTo('noContact')">
         <i class="iconItem icon_weilianximingdantubiao icon_left"></i>
-        <div class="middle_title">未联系名单</div>
-      </router-link>
-      <router-link :to="{ path: 'mySignin' }" class="cell_panel">
+        <div class="middle_title">
+          未联系名单<span v-show="noContactNum != 0"
+            >(<span style="color:#0090d8;">{{ noContactNum }}</span
+            >)</span
+          >
+        </div>
+      </div>
+      <div class="cell_panel" @click="linkTo('audit')">
         <i class="iconItem icon_daishenhemingdantubiao icon_left"></i>
-        <div class="middle_title">待审核名单</div>
-      </router-link>
+        <div class="middle_title">
+          待审核名单
+          <span v-show="auditNum != 0"
+            >(<span style="color:#0090d8;">{{ auditNum }}</span
+            >)</span
+          >
+        </div>
+      </div>
     </div>
     <div class="middle_panel" v-else>
       <router-link :to="{ path: 'monthlylist' }" class="cell_panel">
@@ -84,12 +100,18 @@ export default {
     return {
       userData: Object,
       headImg: require("@/assets/images/default.png"),
-      userName: ""
+      userName: "",
+      auditNum: 0,
+      absenteeismNum: 0,
+      noContactNum: 0
     };
   },
   beforeCreate() {},
   created() {
     this.getUserData();
+    this.getAuditList();
+    this.getNoContactList();
+    this.getAbsenteeismList();
   },
   beforeMount() {},
   mounted() {
@@ -110,6 +132,36 @@ export default {
       if (userData) {
         this.userData = userData;
       }
+    },
+    // 获取缺勤数
+    getAbsenteeismList: function() {
+      if (this.userData.isTeacher) {
+        let that = this;
+        that.$axios.post(that.$api.absenteeismList, {}).then(res => {
+          that.absenteeismNum = res.data.length;
+        });
+      }
+    },
+    // 获取未联系数
+    getNoContactList: function() {
+      if (this.userData.isTeacher) {
+        let that = this;
+        that.$axios.post(that.$api.noContactList, {}).then(res => {
+          that.noContactNum = res.data.length;
+        });
+      }
+    },
+    // 获取待审核数
+    getAuditList: function() {
+      if (this.userData.isTeacher) {
+        let that = this;
+        that.$axios.post(that.$api.auditList, {}).then(res => {
+          that.auditNum = res.data.length;
+        });
+      }
+    },
+    linkTo: function(type) {
+      this.$router.push({ path: "/todoList", query: { type: type } });
     }
   }
 };

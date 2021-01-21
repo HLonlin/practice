@@ -131,6 +131,14 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '待处理名单',
+        name: 'todolist',
+        path: '/todolist',
+        component: () =>
+            import ('@/views/pages/mine/subpage/todolist'),
+        hidden: true
+    },
+    {
         title: '班级月记列表',
         name: 'classmonthly',
         path: '/classmonthly',
