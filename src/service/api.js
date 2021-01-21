@@ -51,6 +51,8 @@ const API = {
     // --------------------------------------------------------------- 系部端 ---------------------------------------------------------------
     // --------------------------------------------------------------- 教师端 ---------------------------------------------------------------
     // --------------------------统计--------------------------
+    tongjiList: '/api/practice/teacher/tongji/tongjiList', // 教师端统计列表
+    allCountXibu: '/api/practice/dept/allCountXibu', // 统计所有系部实习率及签到率
     // --------------------------消息--------------------------
     msgList_teacher: '/api/practice/teacher/xiaoxi/xiaoxiList', // 教师消息列表
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 教师发送消息
@@ -77,6 +79,7 @@ const API = {
     auditDetails: '/api/practice/teacher/auditDetails', // 待审核信息详情
     submitAudit: '/api/practice/teacher/submitAudit', // 审核学生信息
     getUserByCardId: '/practice/teacher/getUserByCardId', // 根据身份证查找学生信息
+    getCountNum: '/api/practice/teacher/getCountNum', // 获取我的统计数
 
 }
 export default API

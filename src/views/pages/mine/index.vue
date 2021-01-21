@@ -109,9 +109,7 @@ export default {
   beforeCreate() {},
   created() {
     this.getUserData();
-    this.getAuditList();
-    this.getNoContactList();
-    this.getAbsenteeismList();
+    this.getCountNum();
   },
   beforeMount() {},
   mounted() {
@@ -133,30 +131,14 @@ export default {
         this.userData = userData;
       }
     },
-    // 获取缺勤数
-    getAbsenteeismList: function() {
+    // 获取统计数
+    getCountNum: function() {
       if (this.userData.isTeacher) {
         let that = this;
-        that.$axios.post(that.$api.absenteeismList, {}).then(res => {
-          that.absenteeismNum = res.data.length;
-        });
-      }
-    },
-    // 获取未联系数
-    getNoContactList: function() {
-      if (this.userData.isTeacher) {
-        let that = this;
-        that.$axios.post(that.$api.noContactList, {}).then(res => {
-          that.noContactNum = res.data.length;
-        });
-      }
-    },
-    // 获取待审核数
-    getAuditList: function() {
-      if (this.userData.isTeacher) {
-        let that = this;
-        that.$axios.post(that.$api.auditList, {}).then(res => {
-          that.auditNum = res.data.length;
+        that.$axios.post(that.$api.getCountNum, {}).then(res => {
+          that.absenteeismNum = res.data.absenteeismCount;
+          that.noContactNum = res.data.noContactCount;
+          that.auditNum = res.data.auditCount;
         });
       }
     },

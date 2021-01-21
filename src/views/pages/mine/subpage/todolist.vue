@@ -11,12 +11,42 @@
         @click-left="onClickLeft"
       />
     </div>
-    <div class="list_panel">
+    <div class="list_panel" v-show="type == 'absenteeism'">
+      <div
+        class="listItem_panel"
+        v-for="(item, i) in topList"
+        :key="i"
+        @click="linkTo(item)"
+        :class="{ isToday: item.isToday }"
+      >
+        <div class="headImg_panel">
+          <img
+            class="headImg_logo"
+            :src="
+              item.logo ? item.logo : require('@/assets/images/default.png')
+            "
+          />
+        </div>
+        <div class="label_panel">
+          <div class="label_title">{{ item.username }}</div>
+          <div class="label_signin">
+            <span>最近签到：{{ item.lastTime }}</span>
+            <span>缺勤次数：{{ item.noSignNum }}</span>
+          </div>
+          <div class="label_phone">
+            电话:
+            <span style="color:#0090d8;">{{ item.phone }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list_panel topList_panel">
       <div
         class="listItem_panel"
         v-for="(item, i) in list"
         :key="i"
         @click="linkTo(item)"
+        :class="{ isToday: item.isToday }"
       >
         <div class="headImg_panel">
           <img
@@ -60,7 +90,8 @@ export default {
         noContact: "未联系名单",
         audit: "待审核名单"
       },
-      list: []
+      list: [],
+      topList: []
     };
   },
   beforeCreate() {},
@@ -84,13 +115,13 @@ export default {
       switch (that.type) {
         case "absenteeism":
           that.$axios.post(that.$api.absenteeismList, {}).then(res => {
-            that.list = res.data;
             for (let i = 0, imax = res.data.length; i < imax; i++) {
-              that.$set(
-                that.list[i],
-                "lastTime",
-                res.data[i].lastSignDate.split(" ")[0]
-              );
+              res.data[i]["lastTime"] = res.data[i].lastSignDate.split(" ")[0];
+              if (res.data[i].isToday) {
+                that.topList.push(res.data[i]);
+              } else {
+                that.list.push(res.data[i]);
+              }
             }
           });
           break;
@@ -109,6 +140,10 @@ export default {
     linkTo: function(item) {
       switch (this.type) {
         case "absenteeism":
+          this.$router.push({
+            path: "/studentInfo",
+            query: { cardid: JSON.stringify(item.cardid) }
+          });
           break;
         case "noContact":
           let chatWith = {
@@ -122,6 +157,7 @@ export default {
           });
           break;
         case "audit":
+          console.log(item);
           break;
       }
     }
@@ -135,6 +171,9 @@ export default {
   box-sizing: border-box;
   padding: 0px 1rem 20px 1rem;
 }
+.topList_panel {
+  padding: 0px 1rem 0px 1rem;
+}
 .listItem_panel {
   position: relative;
   display: flex;
@@ -142,6 +181,17 @@ export default {
   box-sizing: border-box;
   padding: 12px 0px;
   border-bottom: 1px solid #eeeeee;
+}
+.isToday::before {
+  position: absolute;
+  content: "当天缺勤";
+  top: 12px;
+  right: 1rem;
+  box-sizing: border-box;
+  padding: 2px 4px;
+  background-color: red;
+  border-radius: 4px;
+  color: #ffffff;
 }
 .listItem_panel::after {
   position: absolute;
