@@ -51,7 +51,10 @@
           {{ evaluateText }}
         </div>
         <div class="evaluate_popupBottomBtn">
-          <router-link class="evaluate_leftBtn" :to="{ path: 'evaluateList' }">
+          <router-link
+            class="evaluate_leftBtn"
+            :to="{ path: '/todoList', query: { type: 'evaluate' } }"
+          >
             去评定
           </router-link>
           <div class="evaluate_rightBtn" @click="popups.evaluate = false">

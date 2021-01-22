@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "19534693",
+      "name": "学生评价",
+      "font_class": "xueshengpingjia",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
       "icon_id": "19140608",
       "name": "radio",
       "font_class": "radio",

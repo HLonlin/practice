@@ -2,7 +2,7 @@
   <div class="evaluateList_container">
     <div class="topbar_panel">
       <van-nav-bar
-        title="学生月度操行评定"
+        title="学生评价"
         :fixed="true"
         :placeholder="true"
         :safe-area-inset-top="true"
@@ -18,25 +18,11 @@
         :key="i"
         @click="linkTo(item)"
       >
-        <div class="headImg_panel">
-          <img
-            class="headImg_logo"
-            :src="
-              item.logo ? item.logo : require('@/assets/images/default.png')
-            "
-          />
-        </div>
         <div class="label_panel">
-          <div class="evaluateStatus">
-            {{ item.status }}
-          </div>
-          <div class="label_title">{{ item.username }}</div>
+          <div class="label_title">学生{{ i + 1 }}</div>
           <div class="label_signin">
-            <span>学号：{{ item.cardid }}</span>
-          </div>
-          <div class="label_phone">
-            电话:
-            <span style="color:#0090d8;">{{ item.phone }}</span>
+            <span>评价总分：{{ item.fraction ? item.fraction : "100" }}分</span
+            ><span>评价时间：{{ item.time ? item.time : "2020-01-18" }}</span>
           </div>
         </div>
       </div>
@@ -68,21 +54,13 @@ export default {
     },
     getEvaluateList: function() {
       let that = this;
-      let date = new Date();
-      let month =
-        date.getMonth() + 1 < 10
-          ? "0" + date.getMonth() + 1
-          : date.getMonth() + 1;
-      that.$axios
-        .post(that.$api.getEvaluateList, {
-          year: date.getFullYear(),
-          month: month
-        })
-        .then(res => {
-          that.list = res.data;
-        });
+      that.$axios.post(that.$api.banZhuRenPingJiaList, {}).then(res => {
+        that.list = res.data;
+      });
     },
     linkTo: function(item) {
+      console.log(item);
+      return;
       this.$router.push({
         path: "/evaluateStudent",
         query: {

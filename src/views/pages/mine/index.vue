@@ -48,6 +48,16 @@
           >
         </div>
       </div>
+      <div class="cell_panel" @click="linkTo('evaluate')">
+        <i class="iconItem icon_daishenhemingdantubiao icon_left"></i>
+        <div class="middle_title">
+          学生月度操行评定
+          <span v-show="behaviorCount != 0"
+            >(<span style="color:#0090d8;">{{ behaviorCount }}</span
+            >)</span
+          >
+        </div>
+      </div>
     </div>
     <div class="middle_panel" v-else>
       <router-link :to="{ path: 'monthlylist' }" class="cell_panel">
@@ -71,6 +81,10 @@
       <router-link :to="{ path: 'classmonthly' }" class="cell_panel">
         <i class="iconItem icon_yuejitubiao icon_left"></i>
         <div class="middle_title">班级月记</div>
+      </router-link>
+      <router-link :to="{ path: 'evaluateList' }" class="cell_panel">
+        <i class="iconItem icon_xueshengpingjia icon_left"></i>
+        <div class="middle_title">学生评价</div>
       </router-link>
       <router-link :to="{ path: 'contactList' }" class="cell_panel">
         <i class="iconItem icon_tongxunlutubiaobeifen icon_left"></i>
@@ -103,7 +117,8 @@ export default {
       userName: "",
       auditNum: 0,
       absenteeismNum: 0,
-      noContactNum: 0
+      noContactNum: 0,
+      behaviorCount: 0
     };
   },
   beforeCreate() {},
@@ -139,6 +154,7 @@ export default {
           that.absenteeismNum = res.data.absenteeismCount;
           that.noContactNum = res.data.noContactCount;
           that.auditNum = res.data.auditCount;
+          that.behaviorCount = res.data.behaviorCount;
         });
       }
     },

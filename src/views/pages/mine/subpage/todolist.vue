@@ -52,6 +52,9 @@
         @click="linkTo(item)"
         :class="{ isToday: item.isToday }"
       >
+        <div class="evaluateStatus" v-show="type == 'evaluate'">
+          {{ item.status }}
+        </div>
         <div class="headImg_panel">
           <img
             class="headImg_logo"
@@ -72,6 +75,9 @@
           <div class="label_signin" v-show="type == 'audit'">
             <span>学号：{{ item.cardid }}</span>
             <span>签到次数：{{ item.qiandaocishu }}</span>
+          </div>
+          <div class="label_signin" v-show="type == 'evaluate'">
+            <span>学号：{{ item.cardid }}</span>
           </div>
           <div class="label_phone">
             电话:
@@ -95,7 +101,8 @@ export default {
       title: {
         absenteeism: "缺勤名单",
         noContact: "未联系名单",
-        audit: "待审核名单"
+        audit: "待审核名单",
+        evaluate: "学生月度操行评定"
       },
       list: [],
       topList: [],
@@ -148,6 +155,21 @@ export default {
             that.list = res.data;
           });
           break;
+        case "evaluate":
+          let date = new Date();
+          let month =
+            date.getMonth() + 1 < 10
+              ? "0" + date.getMonth() + 1
+              : date.getMonth() + 1;
+          that.$axios
+            .post(that.$api.getEvaluateList, {
+              year: date.getFullYear(),
+              month: month
+            })
+            .then(res => {
+              that.list = res.data;
+            });
+          break;
       }
     },
     linkTo: function(item) {
@@ -176,6 +198,16 @@ export default {
           this.$router.push({
             path: "/auditstudent",
             query: { wf_docunid: JSON.stringify(item.wf_docunid) }
+          });
+          break;
+        case "evaluate":
+          this.$router.push({
+            path: "/evaluateStudent",
+            query: {
+              cardid: JSON.stringify(item.cardid),
+              logo: JSON.stringify(item.logo),
+              name: JSON.stringify(item.username)
+            }
           });
           break;
       }
@@ -209,6 +241,16 @@ export default {
   box-sizing: border-box;
   padding: 12px 0px;
   border-bottom: 1px solid #eeeeee;
+}
+.evaluateStatus {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  font-size: 0.625rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
 }
 .isToday::before {
   position: absolute;
