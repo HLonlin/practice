@@ -86,7 +86,9 @@ export default {
       this.$router.push({
         path: "/evaluateStudent",
         query: {
-          cardid: JSON.stringify(item.cardid)
+          cardid: JSON.stringify(item.cardid),
+          logo: JSON.stringify(item.logo),
+          name: JSON.stringify(item.username)
         }
       });
     }
