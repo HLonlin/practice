@@ -98,6 +98,8 @@ export default {
       userData: Object,
       islogin: false,
       usertype: "1", // 账号类型，必填 1=教师，2=学生
+      // userid: "",
+      // passwd: ""
       userid: "lyy",
       passwd: "0513LyyL"
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：身份证号

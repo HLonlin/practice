@@ -35,7 +35,7 @@
             class="monthlylist_listItem"
           >
             <div class="monthlylist_listTitle">
-              {{ item.username }}{{ item.zhou }}月月记
+              {{ item.userName }}{{ item.zhou }}月月记
             </div>
             <div class="monthlylist_listLabel">
               <div class="monthlylist_listDate">{{ item.date }}</div>
