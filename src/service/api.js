@@ -63,6 +63,7 @@ const API = {
     zhoubaoideaAdd: '/api/practice/teacher/tongji/zhoubaoideaAdd', // 教师端增加月记点评
     monthQiandaoList_teacher: '/api/practice/teacher/tongji/monthQiandaoList', // 教师端学生每月签到列表
     getConductEvaluationMsg: '/api/practice/teacher/getConductEvaluationMsg', // 获取月度操行评定提示信息
+    getEvaluateList: '/api/practice/teacher/conductEvaluationList', // 学生月度操行评定列表
     // --------------------------消息--------------------------
     msgList_teacher: '/api/practice/teacher/xiaoxi/xiaoxiList', // 教师消息列表
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 教师发送消息
