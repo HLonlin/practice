@@ -75,6 +75,34 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '系部列表',
+        path: '/sdept',
+        component: () =>
+            import ('@/views/pages/sdept'),
+        hidden: true
+    },
+    {
+        title: '专业列表',
+        path: '/majorList',
+        component: () =>
+            import ('@/views/pages/sdept/subpage/majorList'),
+        hidden: true
+    },
+    {
+        title: '班级列表',
+        path: '/classList',
+        component: () =>
+            import ('@/views/pages/sdept/subpage/classList'),
+        hidden: true
+    },
+    {
+        title: '学生列表',
+        path: '/studentList',
+        component: () =>
+            import ('@/views/pages/sdept/subpage/studentList'),
+        hidden: true
+    },
+    {
         title: '学生信息',
         name: 'studentInfo',
         path: '/studentInfo',

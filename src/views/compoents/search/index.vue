@@ -43,6 +43,9 @@ export default {
         case "chatRecordList":
           this.$emit("searchchatRecord", this.searchValue);
           break;
+        case "sdept":
+          this.$emit("searchSdept", this.searchValue);
+          break;
       }
     }
   }

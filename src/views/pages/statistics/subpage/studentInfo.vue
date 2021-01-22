@@ -170,7 +170,10 @@
         />
       </div>
     </div>
-    <div class="handel_panel">
+    <div
+      class="handel_panel"
+      :class="{ handel_panelBottom: isFrom == 'studentList' }"
+    >
       <van-cell
         title="月记"
         is-link
@@ -194,21 +197,23 @@
         </template>
       </van-cell>
     </div>
-    <div class="selfinfo_bottomBtnpanel" v-if="!editing">
-      <div
-        class="selfinfo_bottomBtn"
-        @click="onEditing"
-        v-if="isFrom == 'statistics'"
-      >
-        编辑
+    <div v-if="isFrom != 'studentList'">
+      <div class="selfinfo_bottomBtnpanel" v-if="!editing">
+        <div
+          class="selfinfo_bottomBtn"
+          @click="onEditing"
+          v-if="isFrom == 'statistics'"
+        >
+          编辑
+        </div>
+        <div class="selfinfo_bottomBtn" @click="sendMsg">
+          发消息
+        </div>
       </div>
-      <div class="selfinfo_bottomBtn" @click="sendMsg">
-        发消息
+      <div class="selfinfo_bottomBtnBox" v-else>
+        <div class="selfinfo_submitBtn" @click="submitChange">提交</div>
+        <div class="selfinfo_cancelBtn" @click="onCancel">取消</div>
       </div>
-    </div>
-    <div class="selfinfo_bottomBtnBox" v-else>
-      <div class="selfinfo_submitBtn" @click="submitChange">提交</div>
-      <div class="selfinfo_cancelBtn" @click="onCancel">取消</div>
     </div>
   </div>
 </template>
@@ -332,7 +337,7 @@ export default {
     getUserByCardId() {
       let that = this;
       that.$axios
-        .post(that.$api.getUserByCardId, {
+        .post(that.$api.getUserByCardId_teacher, {
           cardid: JSON.parse(that.$route.query.cardid)
         })
         .then(res => {
@@ -424,6 +429,9 @@ export default {
   color: #0090d8;
   display: flex;
   align-self: center;
+}
+.handel_panelBottom {
+  border-bottom: 20px solid #f6f6f6;
 }
 .handel_item {
   padding: 10px 1rem;

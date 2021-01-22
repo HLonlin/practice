@@ -48,11 +48,18 @@ const API = {
     contactDetail: '/api/practice/student/contact/contactDetail', // 通讯录用户详情
     about: '/api/practice/dic/guanyu', // 移动端关于菜单配置
     // --------------------------------------------------------------- 系部端 ---------------------------------------------------------------
-    // commentList: '/api/practice/dept/yuejiIdeaList', // 月记评语列表
+    allCountXibu: '/api/practice/dept/allCountXibu', // 统计所有系部实习率及签到率
+    countXibu: '/api/practice/dept/countXibu', // 根据系部统计实习率及签到率
+    countZhuanye: '/api/practice/dept/countZhuanye', // 根据专业统计实习率及签到率
+    getUserListByBanji: '/api/practice/dept/getUserListByBanji', // 根据班级统计学生信息
+    getUserByCardId_dept: '/api/practice/dept/getUserByCardId', // 根据身份证查找学生信息
+    getYueJiByCardId: '/api/practice/dept/getYueJiByCardId', // 根据学生身份证查询月记列表
+    getYueJiDetailById: '/api/practice/dept/getYueJiDetailById', // 根据月记id查询详情
+    yuejiIdeaList: '/api/practice/dept/yuejiIdeaList', // 月记评语列表
+    monthQiandaoList: '/api/practice/dept/monthQiandaoList', // 学生每月签到列表
     // --------------------------------------------------------------- 教师端 ---------------------------------------------------------------
     // --------------------------统计--------------------------
     tongjiList: '/api/practice/teacher/tongji/tongjiList', // 教师端统计列表
-    allCountXibu: '/api/practice/dept/allCountXibu', // 统计所有系部实习率及签到率
     zhoubaoideaAdd: '/api/practice/teacher/tongji/zhoubaoideaAdd', // 教师端增加月记点评
     // --------------------------消息--------------------------
     msgList_teacher: '/api/practice/teacher/xiaoxi/xiaoxiList', // 教师消息列表
@@ -79,7 +86,7 @@ const API = {
     absenteeismList: '/api/practice/teacher/absenteeismList', // 缺勤名单
     auditDetails: '/api/practice/teacher/auditDetails', // 待审核信息详情
     submitAudit: '/api/practice/teacher/submitAudit', // 审核学生信息
-    getUserByCardId: '/api/practice/teacher/getUserByCardId', // 根据身份证查找学生信息
+    getUserByCardId_teacher: '/api/practice/teacher/getUserByCardId', // 根据身份证查找学生信息
     getCountNum: '/api/practice/teacher/getCountNum', // 获取我的统计数
 
 }

@@ -54,7 +54,7 @@
         暂无评语
       </div>
     </div>
-    <div class="monthlydetail_commentPanel">
+    <div class="monthlydetail_commentPanel" v-if="identity == 'headmaster'">
       <div class="monthlydetail_commentTitle">月记点评</div>
       <div class="monthlyComment_panel">
         <van-field
@@ -96,7 +96,8 @@ export default {
       ],
       monthlyDetail: Object,
       commentList: [],
-      message: ""
+      message: "",
+      identity: ""
     };
   },
   beforeCreate() {},
@@ -113,8 +114,12 @@ export default {
   methods: {
     getUserData: function() {
       let userData = this.$tool.getLocal("userData");
+      let identity = this.$tool.getLocal("identity");
       if (userData) {
         this.userData = userData;
+      }
+      if (identity) {
+        this.identity = identity;
       }
     },
     // 加载详情

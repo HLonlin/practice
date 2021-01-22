@@ -146,12 +146,18 @@ export default {
             // 学生
             that.userData["isTeacher"] = false;
             this.$tool.setLocal("userData", that.userData);
+            this.$tool.setLocal("identity", "student");
             this.$router.push({ path: "/signin" });
           }
           this.$toast.clear();
         });
     },
     routerTo: function(path, params) {
+      if (path == "sdept") {
+        this.$tool.setLocal("identity", "sdept");
+      } else {
+        this.$tool.setLocal("identity", "headmaster");
+      }
       this.$router.replace({ path: path });
     }
   }
