@@ -45,6 +45,21 @@
         </div>
       </div>
     </div>
+    <van-popup v-model="popups.evaluate" :get-container="getContainer">
+      <div class="evaluate_popup">
+        <div class="evaluate_popupLabel">
+          {{ evaluateText }}
+        </div>
+        <div class="evaluate_popupBottomBtn">
+          <router-link class="evaluate_leftBtn" :to="{ path: 'evaluateList' }">
+            去评定
+          </router-link>
+          <div class="evaluate_rightBtn" @click="popups.evaluate = false">
+            知道了，稍后处理
+          </div>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -53,9 +68,13 @@ export default {
   name: "statistics",
   data() {
     return {
+      popups: {
+        evaluate: false
+      },
       userData: Object,
       list: [],
-      employRate: ""
+      employRate: "",
+      evaluateText: ""
     };
   },
   beforeCreate() {},
@@ -65,6 +84,7 @@ export default {
       this.userData = userData;
     }
     this.getUserListByBanji();
+    this.getConductEvaluationMsg();
   },
   beforeMount() {},
   mounted() {},
@@ -81,6 +101,28 @@ export default {
 
         that.employRate = res.data.employRate;
       });
+    },
+    getConductEvaluationMsg: function() {
+      let that = this;
+      let date = new Date();
+      let month =
+        date.getMonth() + 1 < 10
+          ? "0" + date.getMonth() + 1
+          : date.getMonth() + 1;
+      that.$axios
+        .post(that.$api.getConductEvaluationMsg, {
+          year: date.getFullYear(),
+          month: month
+        })
+        .then(res => {
+          if (res.data) {
+            that.evaluateText = res.data;
+            that.popups.evaluate = true;
+          }
+        });
+    },
+    getContainer() {
+      return document.querySelector(".statistics_container");
     },
     linkTo: function(item) {
       this.$router.push({
@@ -196,5 +238,57 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #666666;
+}
+.evaluate_popup {
+  width: 18.125rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 30px 1.25rem;
+}
+.evaluate_popupLabel {
+  font-size: 1rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+}
+.evaluate_popupBottomBtn {
+  box-sizing: border-box;
+  padding: 20px 0px 0px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.evaluate_leftBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 30px;
+  background-color: #0090d8;
+  border-radius: 2px;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ffffff;
+}
+.evaluate_rightBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 132px;
+  height: 30px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: 1px solid #bbbbbb;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
+}
+</style>
+<style>
+.statistics_container .van-popup {
+  background-color: transparent;
 }
 </style>

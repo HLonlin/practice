@@ -100,7 +100,6 @@ export default {
           month: YearMonthStr
         })
         .then(res => {
-          console.log(res);
           let data = res.data;
           that.signinList = [];
           for (

@@ -118,6 +118,14 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '学生操行评定列表',
+        name: 'evaluateList',
+        path: '/evaluateList',
+        component: () =>
+            import ('@/views/pages/statistics/subpage/evaluateList'),
+        hidden: true
+    },
+    {
         title: '聊天室',
         name: 'chatroom',
         path: '/chatroom',
