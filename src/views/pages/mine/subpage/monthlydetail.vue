@@ -30,24 +30,31 @@
       </div>
     </div>
     <!-- 月记评语 -->
-    <div class="monthlydetail_commentPanel" v-if="!userData.isTeacher">
+    <div class="monthlydetail_commentPanel">
       <div class="monthlydetail_commentTitle">老师评语</div>
       <div
         class="monthlydetail_commentItem"
         v-for="(item, i) in commentList"
         :key="i"
       >
-        <div class="comment_headImg"></div>
+        <div class="comment_headImg">
+          <img
+            class="comment_logo"
+            :src="
+              item.logo ? item.logo : require('@/assets/images/default.png')
+            "
+          />
+        </div>
         <div class="comment_content">
-          <div class="comment_name">梁颖仪</div>
-          <div class="comment_text">不错，有学到东西就很好，再接再厉。</div>
+          <div class="comment_name">{{ item.username }}</div>
+          <div class="comment_text">{{ item.info }}</div>
         </div>
       </div>
       <div class="monthlydetail_noComment" v-if="commentList.length == 0">
         暂无评语
       </div>
     </div>
-    <div class="monthlydetail_commentPanel" v-else>
+    <div class="monthlydetail_commentPanel">
       <div class="monthlydetail_commentTitle">月记点评</div>
       <div class="monthlyComment_panel">
         <van-field
@@ -58,7 +65,9 @@
           placeholder="请输入您对该学生的月记评语。"
         />
       </div>
-      <div class="commentSubmit_btn" @click="addComment">提交</div>
+      <div class="commentSubmit_panel">
+        <div class="commentSubmit_btn" @click="addComment">提交</div>
+      </div>
     </div>
     <van-image-preview
       v-model="show"
@@ -94,7 +103,6 @@ export default {
   created() {
     this.getUserData();
     this.getDEtail();
-    this.getComment();
   },
   beforeMount() {},
   mounted() {},
@@ -117,18 +125,8 @@ export default {
           wf_docUnid: that.$route.query.wf_docUnid
         })
         .then(res => {
+          that.commentList = res.data.ideaList;
           that.monthlyDetail = res.data.noticeJson;
-        });
-    },
-    // 加载评语
-    getComment: function() {
-      let that = this;
-      that.$axios
-        .post(that.$api.commentList, {
-          wf_docUnid: that.$route.query.wf_docUnid
-        })
-        .then(res => {
-          that.commentList = res.data;
         });
     },
     onClickLeft: function() {
@@ -140,6 +138,7 @@ export default {
       this.index = i;
     },
     addComment: function() {
+      this.message = this.$tool.trim(this.message);
       if (this.message) {
         let that = this;
         that.$axios
@@ -151,6 +150,8 @@ export default {
             that.$toast({
               message: "提交成功"
             });
+            that.message = "";
+            that.getDEtail();
           });
       } else {
         this.$toast({
@@ -244,6 +245,12 @@ export default {
   height: 2.25rem;
   border-radius: 50%;
   background-color: #eeeeee;
+  overflow: hidden;
+}
+.comment_logo {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
 }
 .comment_content {
   box-sizing: border-box;
@@ -277,6 +284,10 @@ export default {
 }
 .monthlyComment_item {
   border: 1px solid #eeeeee;
+}
+.commentSubmit_panel {
+  box-sizing: border-box;
+  padding: 0px 0px 30px 0px;
 }
 .commentSubmit_btn {
   display: flex;

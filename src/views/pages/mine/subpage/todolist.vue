@@ -11,7 +11,11 @@
         @click-left="onClickLeft"
       />
     </div>
-    <div class="list_panel" v-show="type == 'absenteeism'">
+    <div
+      class="list_panel topList_panel"
+      v-show="type == 'absenteeism'"
+      v-if="!noMore"
+    >
       <div
         class="listItem_panel"
         v-for="(item, i) in topList"
@@ -40,7 +44,7 @@
         </div>
       </div>
     </div>
-    <div class="list_panel topList_panel">
+    <div class="list_panel" v-if="!noMore">
       <div
         class="listItem_panel"
         v-for="(item, i) in list"
@@ -76,6 +80,9 @@
         </div>
       </div>
     </div>
+    <div class="noMore_panel" v-else>
+      没有更多了
+    </div>
   </div>
 </template>
 
@@ -91,7 +98,8 @@ export default {
         audit: "待审核名单"
       },
       list: [],
-      topList: []
+      topList: [],
+      noMore: false
     };
   },
   beforeCreate() {},
@@ -117,6 +125,9 @@ export default {
           that.$axios.post(that.$api.absenteeismList, {}).then(res => {
             for (let i = 0, imax = res.data.length; i < imax; i++) {
               res.data[i]["lastTime"] = res.data[i].lastSignDate.split(" ")[0];
+              res.data.length == 0
+                ? (that.noMore = true)
+                : (that.noMore = false);
               if (res.data[i].isToday) {
                 that.topList.push(res.data[i]);
               } else {
@@ -127,11 +138,13 @@ export default {
           break;
         case "noContact":
           that.$axios.post(that.$api.noContactList, {}).then(res => {
+            res.data.length == 0 ? (that.noMore = true) : (that.noMore = false);
             that.list = res.data;
           });
           break;
         case "audit":
           that.$axios.post(that.$api.auditList, {}).then(res => {
+            res.data.length == 0 ? (that.noMore = true) : (that.noMore = false);
             that.list = res.data;
           });
           break;
@@ -180,6 +193,15 @@ export default {
 .topList_panel {
   padding: 0px 1rem 0px 1rem;
 }
+.noMore_panel {
+  box-sizing: border-box;
+  padding: 20px 0px;
+  text-align: center;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #bbbbbb;
+}
 .listItem_panel {
   position: relative;
   display: flex;
@@ -190,14 +212,17 @@ export default {
 }
 .isToday::before {
   position: absolute;
-  content: "当天缺勤";
-  top: 12px;
+  content: "";
+  top: 50%;
   right: 1rem;
-  box-sizing: border-box;
-  padding: 2px 4px;
-  background-color: red;
-  border-radius: 4px;
+  transform: translateY(-50%);
   color: #ffffff;
+  width: 3.125rem;
+  height: 3.125rem;
+  border-radius: 50%;
+  background: url("../../../../../static/images/todayLose.png") no-repeat center
+    center;
+  background-size: cover;
 }
 .listItem_panel::after {
   position: absolute;

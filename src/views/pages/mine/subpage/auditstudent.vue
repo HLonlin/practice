@@ -165,10 +165,12 @@ export default {
       let that = this;
       that.$axios
         .post(that.$api.submitAudit, {
+          wf_docUnid: JSON.parse(that.$route.query.wf_docunid),
           status: type
         })
         .then(res => {
-          console.log(res);
+          that.$toast.success("审核已完成");
+          that.$router.go(-1);
         });
     }
   }
