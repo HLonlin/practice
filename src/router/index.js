@@ -75,6 +75,13 @@ export const constantRouter = [{
         hidden: true
     },
     {
+        title: '每月签到',
+        path: '/signinDetail',
+        component: () =>
+            import ('@/views/pages/signin/subpage/signinDetail'),
+        hidden: true,
+    },
+    {
         title: '系部列表',
         path: '/sdept',
         component: () =>

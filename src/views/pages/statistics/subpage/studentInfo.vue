@@ -188,7 +188,7 @@
         title="查看签到详情"
         is-link
         class="handel_item"
-        @click="linkTo()"
+        @click="linkTo('/signinDetail')"
       >
         <template #icon>
           <i
@@ -349,6 +349,11 @@ export default {
     },
     linkTo: function(path) {
       if (path == "/monthlylist") {
+        this.$router.push({
+          path: path,
+          query: { cardid: this.studentInfo.cardid }
+        });
+      } else {
         this.$router.push({
           path: path,
           query: { cardid: this.studentInfo.cardid }
