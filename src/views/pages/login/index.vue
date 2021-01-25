@@ -6,8 +6,6 @@
       :placeholder="true"
       :safe-area-inset-top="true"
       :border="false"
-      left-arrow
-      @click-left="onClickLeft"
     />
     <div v-if="!islogin">
       <div class="logo_panel">
@@ -36,7 +34,7 @@
             <i class="iconItem icon_denglu-zhanghaotubiao loginIcon"></i>
             <van-field
               v-model="userid"
-              :placeholder="usertype == '1' ? '请输入账号' : '请输入手机号码'"
+              :placeholder="usertype == '1' ? '请输入账号' : '请输入身份证号码'"
               class="login_input"
             />
           </div>
@@ -98,14 +96,14 @@ export default {
       userData: Object,
       islogin: false,
       usertype: "1", // 账号类型，必填 1=教师，2=学生
-      // userid: "",
-      // passwd: ""
+      userid: "",
+      passwd: ""
       // userid: "lyy",
       // passwd: "0513LyyL"
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：身份证号
       // passwd: "gz020slitsXX" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
-      userid: "440181200004075715", // 登录号，必填，教师：oa账号，学生：身份证号
-      passwd: "075715" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
+      // userid: "440181200004075715", // 登录号，必填，教师：oa账号，学生：身份证号
+      // passwd: "075715" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
     };
   },
   beforeCreate() {},
