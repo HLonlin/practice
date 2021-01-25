@@ -37,12 +37,17 @@
         <div class="detail_content">
           {{ detail.info }}
         </div>
-        <div class="detail_enclosure" v-show="detail.type == 'enclosure'">
+        <div
+          class="detail_enclosure"
+          v-for="(item, i) in detail.filename"
+          :key="i"
+        >
           <p>附件：</p>
-          <p class="detail_enclosureName">2020实习企业招聘信息一览表</p>
-        </div>
-        <div class="detail_outLink" v-show="detail.type == 'outLink'">
-          https://new.qq.com/rain/a/20201203a0hjnt00
+          <p class="detail_enclosureName">
+            <a class="detail_enclosureName" :href="detail.fileurl[i]">{{
+              item
+            }}</a>
+          </p>
         </div>
       </div>
     </div>
@@ -124,11 +129,13 @@ export default {
               : "0" + date.getSeconds();
           that.detail.date = that.$tool.getFullDate(res.data.wf_Created);
           that.detail.readTime = that.$tool.getFullDate(res.data.readTime);
+          that.detail.filename = that.detail.filename.split(",");
+          that.detail.fileurl = that.detail.fileurl.split(",");
           let detail_content = document.getElementsByClassName(
             "detail_content"
           )[0];
           detail_content.innerHTML = res.data.info;
-          detail_content.children[0].style.display = "none";
+          // detail_content.children[0].style.display = "none";
           setIsRead();
         });
       function setIsRead() {
@@ -216,7 +223,6 @@ export default {
   font-weight: 400;
   color: #555555;
   line-height: 26px;
-  text-indent: 2em;
   box-sizing: border-box;
   padding-bottom: 10px;
   letter-spacing: -0.3px;
