@@ -178,7 +178,7 @@ export default {
         info: that.noticeInfo,
         filename: "",
         fileurl: "",
-        zhiding: that.istop.toString(),
+        zhiding: that.istop ? 1 : 0,
         expiredTime:
           that.expiryTime.year +
           "-" +
