@@ -170,20 +170,26 @@ export default {
           }
         )
         .then(res => {
-          let contactList = res.data;
+          let contactList = that.userData.isTeacher
+            ? res.data
+            : res.data.contactList;
+          console.log(contactList);
           for (let i = 0, imax = contactList.length; i < imax; i++) {
+            console.log(i);
             let pinyingOfName = that.$tool.makePy(
               contactList[i].username
                 ? contactList[i].username
                 : contactList[i].userName
             );
             let firstName = pinyingOfName[pinyingOfName.length - 1].slice(0, 1);
+            console.log(firstName);
             for (let j = 0, jmax = that.indexList.length; j < jmax; j++) {
               if (firstName == that.indexList[j]) {
                 that.$set(that.list[j], that.list[j].length, contactList[i]);
               }
             }
           }
+          console.log(that.list);
           // 数据全部加载完成
           if (that.list.length >= res.data.totalRecord) {
             that.finished = true;
