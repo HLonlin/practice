@@ -104,85 +104,12 @@
           <div class="signin_popupContent">
             <van-radio-group v-model="healthStatus">
               <van-radio
+                v-for="(item, i) in healthRadio"
+                :key="i"
                 class="health_radio"
-                name="自觉正常"
+                :name="i == healthRadio.lenght ? otherHealthStatus : item"
                 checked-color="#0090d8"
-                >自觉正常
-                <template #icon="props">
-                  <i
-                    class="iconItem"
-                    :class="{
-                      icon_radioActive: props.checked,
-                      icon_radio: true
-                    }"
-                  ></i>
-                </template>
-              </van-radio>
-              <van-radio
-                class="health_radio"
-                name="发热37.3℃以下"
-                checked-color="#0090d8"
-                >发热37.3℃以下
-                <template #icon="props">
-                  <i
-                    class="iconItem"
-                    :class="{
-                      icon_radioActive: props.checked,
-                      icon_radio: true
-                    }"
-                  ></i>
-                </template>
-              </van-radio>
-              <van-radio
-                class="health_radio"
-                name="发热37.3℃（含）以上"
-                checked-color="#0090d8"
-                >发热37.3℃（含）以上
-                <template #icon="props">
-                  <i
-                    class="iconItem"
-                    :class="{
-                      icon_radioActive: props.checked,
-                      icon_radio: true
-                    }"
-                  ></i>
-                </template>
-              </van-radio>
-              <van-radio
-                class="health_radio"
-                name="干咳"
-                checked-color="#0090d8"
-                >干咳
-                <template #icon="props">
-                  <i
-                    class="iconItem"
-                    :class="{
-                      icon_radioActive: props.checked,
-                      icon_radio: true
-                    }"
-                  ></i>
-                </template>
-              </van-radio>
-              <van-radio
-                class="health_radio"
-                name="乏力"
-                checked-color="#0090d8"
-                >乏力
-                <template #icon="props">
-                  <i
-                    class="iconItem"
-                    :class="{
-                      icon_radioActive: props.checked,
-                      icon_radio: true
-                    }"
-                  ></i>
-                </template>
-              </van-radio>
-              <van-radio
-                class="health_radio"
-                :name="otherHealthStatus"
-                checked-color="#0090d8"
-                >其他症状
+                >{{ item }}
                 <template #icon="props">
                   <i
                     class="iconItem"
@@ -292,14 +219,6 @@ export default {
   updated() {},
   beforeDestroy() {},
   destroyed() {},
-  watch: {
-    otherHealthStatus: {
-      handler(newVal, oldVal) {
-        this.healthRadio[5] = newVal;
-        this.healthStatus = newVal;
-      }
-    }
-  },
   methods: {
     // 今日是否签到
     isSigninTotal: function() {
@@ -349,6 +268,11 @@ export default {
         .then(res => {
           this.$toast.clear();
           that.openPopup("learnEveryDay", false);
+          that.$dialog.alert({
+            message: "每日一学已打卡",
+            theme: "round-button",
+            confirmButtonColor: "#0090d8"
+          });
         });
     },
     // 根据月份获取签到列表
@@ -461,7 +385,8 @@ export default {
       that.$axios.post(that.$api.healthStatus, {}).then(res => {
         let data = res.data;
         for (let i = 0, imax = data.length; i < imax; i++) {
-          that.$set(that.healthRadio, i, data[i].text);
+          that.healthRadio[i] = data[i].text;
+          // that.$set(that.healthRadio, i, data[i].text);
         }
       });
     },
@@ -526,7 +451,7 @@ export default {
         that.healthRadio.getArrayIndex(that.healthStatus) + 1;
       let remark = "";
       if (jiankangStatus == that.healthRadio.length) {
-        remark = that.healthStatus;
+        remark = that.otherHealthStatus;
       }
       that.$axios
         .post(that.$api.signin, {
