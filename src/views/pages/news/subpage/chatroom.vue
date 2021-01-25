@@ -174,7 +174,9 @@ export default {
       let topbar_panel = document.getElementsByClassName("topbar_panel")[0];
       let messages_list = document.getElementsByClassName("messages_list")[0];
       let bottom_bar = document.getElementsByClassName("bottom_bar")[0];
-      let winH = window.screen.height;
+      let winH = document.body.clientHeight;
+      console.log(winH);
+      console.log(winH - topbar_panel.offsetHeight - bottom_bar.offsetHeight);
       messages_list.style.height =
         winH - topbar_panel.offsetHeight - bottom_bar.offsetHeight + "px";
       messages_list.scrollTop = messages_list.scrollHeight;
@@ -267,6 +269,7 @@ export default {
             let time = month + dates + hours + min;
             that.$set(that.msgDetailList[i], "time", time);
           }
+          // 消息滚动到最底部
           that.$nextTick(() => {
             that.reSetMsgListH();
             that.readMsg();
