@@ -295,7 +295,9 @@ export default {
 }
 .entSelect_panel {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
 }
 .entSelect_banzhurenBtn,

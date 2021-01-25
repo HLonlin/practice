@@ -25,11 +25,11 @@
               >健康状况：
               <span
                 :style="{
-                  color: item.jiankangstatus == 6 ? '#FF2A2A' : '#00C110'
+                  color: item.color
                 }"
               >
                 <span v-show="item.jiankangstatus">
-                  {{ item.jiankangstatus == 6 ? "异常" : "健康" }}
+                  {{ item.jiankangstatus }}
                 </span>
               </span>
             </span>
@@ -44,6 +44,7 @@
           </div>
         </div>
       </div>
+      <div class="noMore" v-if="list.lenght == 0">没有更多了</div>
     </div>
     <van-popup v-model="popups.evaluate" :get-container="getContainer">
       <div class="evaluate_popup">
@@ -101,6 +102,24 @@ export default {
       let that = this;
       that.$axios.post(that.$api.tongjiList, {}).then(res => {
         that.list = res.data.userList;
+        console.log(that.list.length);
+        for (let i = 0, imax = that.list.length; i < imax; i++) {
+          switch (that.list[i].jiankangstatus) {
+            case 6:
+              that.list[i].jiankangstatus = "异常";
+              that.list[i].color = "#FF2A2A";
+              break;
+            case "":
+              that.list[i].jiankangstatus = "未上报";
+              that.list[i].color = "#999999";
+              break;
+            default:
+              that.list[i].jiankangstatus = "健康";
+              that.list[i].color = "#00C110";
+              break;
+          }
+          console.log(i, that.list[i].jiankangstatus);
+        }
 
         that.employRate = res.data.employRate;
       });
