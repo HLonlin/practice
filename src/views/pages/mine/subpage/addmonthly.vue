@@ -46,6 +46,7 @@
           :formatter="formatter"
           format-trigger="onBlur"
         />
+        <div class="monthly_fontNum">字数：{{ monthly.info.length }}</div>
       </div>
     </div>
     <!-- 上传图片、视频、附件 -->
@@ -222,6 +223,18 @@ export default {
   padding: 0px 0px 0px 10px;
   margin-left: 0.9375rem;
   border: 1px solid #eeeeee;
+}
+.monthly_content {
+  position: relative;
+}
+.monthly_fontNum {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  font-size: 0.75rem;
+  color: #999999;
+  box-sizing: border-box;
+  padding: 2px 0.5rem;
 }
 .monthlyUpload_panel {
   display: flex;

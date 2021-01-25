@@ -102,7 +102,6 @@ export default {
       let that = this;
       that.$axios.post(that.$api.tongjiList, {}).then(res => {
         that.list = res.data.userList;
-        console.log(that.list.length);
         for (let i = 0, imax = that.list.length; i < imax; i++) {
           switch (that.list[i].jiankangstatus) {
             case 6:
@@ -118,7 +117,6 @@ export default {
               that.list[i].color = "#00C110";
               break;
           }
-          console.log(i, that.list[i].jiankangstatus);
         }
 
         that.employRate = res.data.employRate;
