@@ -556,13 +556,13 @@ export default {
     relocation() {
       let that = this,
         u = navigator.userAgent;
-      // if (u.indexOf("MicroMessenger") > -1) {
-      // } else {
-      //   that.$toast({
-      //     message: "请在微信端进行此操作"
-      //   });
-      //   return;
-      // }
+      if (u.indexOf("MicroMessenger") > -1) {
+      } else {
+        that.$toast({
+          message: "请在微信端进行此操作"
+        });
+        return;
+      }
       var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Linux") > -1; //g
       var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
       let url = "";
@@ -573,7 +573,7 @@ export default {
         url = location.href.split("#")[0]; //hash后面的部分如果带上ios中config会不对
       }
       that.$axios
-        .get(that.$api.getWechatInvokesign, {
+        .get(that.$api.getWechatInvokeSign, {
           url: url
         })
         .then(response => {
@@ -588,24 +588,35 @@ export default {
             jsApiList: ["getLocation", "openLocation"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           });
           wx.ready(function() {
+            that.$toast({
+              message: "wxReady"
+            });
             wx.getLocation({
-              type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+              type: "gcj02", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
               success: function(res) {
-                var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-                var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-                var speed = res.speed; // 速度，以米/每秒计
-                var accuracy = res.accuracy; // 位置精度
-                that.nowPlace = {
-                  lat: latitude,
-                  lng: longitude
-                };
-                // that.distance()判断离打卡地址的距离
+                that.$toast({
+                  message: "getLocationSuccess"
+                });
+                wx.openLocation({
+                  latitude: res.latitude, // 纬度，浮点数，范围为90 ~ -90
+                  longitude: res.longitude, // 经度，浮点数，范围为180 ~ -180。
+                  scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                  success: function(res) {
+                    that.$toast({
+                      message: "openLocationSuccess"
+                    });
+                  },
+                  fail: function(err) {
+                    that.$toast({
+                      message: "openLocationFail"
+                    });
+                  }
+                });
               },
-              cancel: function(err) {
+              fail: function(err) {
                 that.$toast({
                   message: "位置获取失败！"
                 });
-                console.log(err);
               }
             });
           });
