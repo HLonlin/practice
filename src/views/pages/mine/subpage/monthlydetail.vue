@@ -46,7 +46,10 @@
           />
         </div>
         <div class="comment_content">
-          <div class="comment_name">{{ item.username }}</div>
+          <div class="comment_title">
+            <div class="comment_name">{{ item.username }}</div>
+            <div class="comment_time">{{ item.created }}</div>
+          </div>
           <div class="comment_text">{{ item.info }}</div>
         </div>
       </div>
@@ -262,11 +265,16 @@ export default {
   padding: 0px 0px 0px 0.625rem;
   max-width: 19rem;
 }
-.comment_name {
+.comment_title {
+  display: flex;
   font-size: 0.75rem;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #999999;
+}
+.comment_time {
+  box-sizing: border-box;
+  padding: 0px 0px 0px 1rem;
 }
 .comment_text {
   font-size: 0.9375rem;
