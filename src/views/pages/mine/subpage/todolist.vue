@@ -159,7 +159,7 @@ export default {
           let date = new Date();
           let month =
             date.getMonth() + 1 < 10
-              ? "0" + date.getMonth() + 1
+              ? "0" + (date.getMonth() + 1)
               : date.getMonth() + 1;
           that.$axios
             .post(that.$api.getEvaluateList, {
