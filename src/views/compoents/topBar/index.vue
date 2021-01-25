@@ -6,8 +6,6 @@
       :placeholder="true"
       :safe-area-inset-top="true"
       :border="false"
-      left-arrow
-      @click-left="onClickLeft"
     >
       <template #right v-if="titleText == '消息' || titleText == '公告'">
         <i
@@ -53,9 +51,6 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    onClickLeft: function() {
-      console.log("ClickLeft");
-    },
     linkTo: function(path) {
       this.$router.push({
         path: path
