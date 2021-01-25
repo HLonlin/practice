@@ -134,6 +134,8 @@
           v-model="studentInfo.phone"
           label="联系电话"
           placeholder="请输入联系电话"
+          :formatter="formatter"
+          format-trigger="onBlur"
           :readonly="!editing"
         />
       </div>
@@ -253,6 +255,16 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    formatter: function(value) {
+      if (!/^1[3|4|5|7|8]\d{9}$/.test(value)) {
+        this.$toast({
+          message: "联系电话格式错误，请重新输入"
+        });
+        return "";
+      } else {
+        return value;
+      }
+    },
     onClickLeft: function() {
       this.$router.go(-1);
     },
@@ -283,35 +295,42 @@ export default {
     onEditing: function() {
       let that = this;
       that.editing = true;
-      for (let key in that.info) {
-        that.$set(that.infoOfbeforeEdit, key, that.info[key]);
+      for (let key in that.studentInfo) {
+        that.$set(that.infoOfbeforeEdit, key, that.studentInfo[key]);
       }
     },
     onCancel: function() {
       let that = this;
       that.editing = false;
-      for (let key in that.info) {
-        that.$set(that.info, key, that.infoOfbeforeEdit[key]);
+      for (let key in that.infoOfbeforeEdit) {
+        that.$set(that.studentInfo, key, that.infoOfbeforeEdit[key]);
       }
     },
     submitChange: function() {
       let that = this;
-      that.$axios
-        .post(that.$api.updateInfo_student, {
-          cardid: that.studentInfo.cardid,
-          phone: that.studentInfo.phone,
-          jiuyezhuangtai: that.studentInfo.jiuyezhuangtai,
-          jiuyefangshi: that.studentInfo.jiuyefangshi,
-          shixidanwei: that.studentInfo.shixidanwei,
-          danweidizhi: that.studentInfo.danweidizhi,
-          jjlxr: that.studentInfo.jjlxr,
-          jzdh: that.studentInfo.jzdh,
-          qylxr: that.studentInfo.qylxr,
-          job: that.studentInfo.job
-        })
-        .then(res => {
-          that.editing = false;
-        });
+      let data = {
+        cardid: that.studentInfo.cardid,
+        phone: that.studentInfo.phone,
+        jiuyezhuangtai: that.studentInfo.jiuyezhuangtai,
+        jiuyefangshi: that.studentInfo.jiuyefangshi,
+        shixidanwei: that.studentInfo.shixidanwei,
+        danweidizhi: that.studentInfo.danweidizhi,
+        jjlxr: that.studentInfo.jjlxr,
+        jzdh: that.studentInfo.jzdh,
+        qylxr: that.studentInfo.qylxr,
+        job: that.studentInfo.job
+      };
+      for (let key in data) {
+        if (!data[key]) {
+          that.$toast({
+            message: "您还有未填写的信息,请完成填写"
+          });
+          return;
+        }
+      }
+      that.$axios.post(that.$api.updateInfo_student, data).then(res => {
+        that.editing = false;
+      });
     },
     getRadioOption: function() {
       let that = this;

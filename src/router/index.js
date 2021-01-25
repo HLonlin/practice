@@ -13,7 +13,7 @@ export const constantRouter = [{
         // 通过es提案的import()实现懒加载，指定相同webpackChunkName的组件会被打包到同一js文件中
         component: () =>
             import ( /*webpackChunkName: '包名',*/ '@/views/home'),
-        redirect: '/signin',
+        redirect: '/login',
         children: [{
                 path: 'statistics',
                 component: () =>
