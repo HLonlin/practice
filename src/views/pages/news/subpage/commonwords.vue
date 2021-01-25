@@ -297,6 +297,8 @@ export default {
 .manageList_panel {
   width: 100%;
   overflow-y: scroll;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
 }
 .manageList_panel::-webkit-scrollbar {
   width: 0 !important;

@@ -239,6 +239,11 @@ export default {
   box-sizing: border-box;
   padding: 0px 0px 10px 0px;
   background-color: #f6f6f6;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+.contactList_panel::-webkit-scrollbar {
+  width: 0 !important;
 }
 .contact_item {
   background-color: #ffffff;

@@ -146,7 +146,6 @@ export default {
           that.pageNum = that.pageNum + 1;
           let historyDetailList = res.data.historyDetailList;
           for (let i = 0, imax = historyDetailList.length; i < imax; i++) {
-            console.log(historyDetailList[i].info);
             that.recordList.push(historyDetailList[i]);
             let month =
               (new Date(historyDetailList[i].wf_Created).getMonth() + 1 < 10
@@ -197,6 +196,11 @@ export default {
   box-sizing: border-box;
   padding: 0px 1rem 20px 1rem;
   background-color: #f6f6f6;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+.messages_list::-webkit-scrollbar {
+  width: 0 !important;
 }
 .msgItem_panel {
   width: 100%;

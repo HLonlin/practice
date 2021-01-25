@@ -175,8 +175,6 @@ export default {
       let messages_list = document.getElementsByClassName("messages_list")[0];
       let bottom_bar = document.getElementsByClassName("bottom_bar")[0];
       let winH = document.documentElement.clientHeight;
-      console.log(winH);
-      console.log(winH - topbar_panel.offsetHeight - bottom_bar.offsetHeight);
       messages_list.style.height =
         winH - topbar_panel.offsetHeight - bottom_bar.offsetHeight + "px";
       messages_list.scrollTop = messages_list.scrollHeight;
@@ -329,6 +327,11 @@ export default {
   box-sizing: border-box;
   padding: 0px 1rem 20px 1rem;
   background-color: #f6f6f6;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+.messages_list::-webkit-scrollbar {
+  width: 0 !important;
 }
 .msgItem_panel {
   width: 100%;
@@ -459,6 +462,11 @@ export default {
 .commonList_panel {
   max-height: 150px;
   overflow-y: scroll;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+.commonList_panel::-webkit-scrollbar {
+  width: 0 !important;
 }
 .commonText_label {
   box-sizing: border-box;
