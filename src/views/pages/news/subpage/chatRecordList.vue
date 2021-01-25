@@ -56,7 +56,8 @@ export default {
   data() {
     return {
       userData: Object,
-      list: []
+      list: [],
+      searchkeywords: ""
     };
   },
   beforeCreate() {},
@@ -93,10 +94,12 @@ export default {
     },
     // 搜索聊天记录
     onSearch: function(val) {
+      this.searchkeywords = val;
       this.getRecordList(val);
     },
     linkTo: function(item) {
       let chatWith = {
+        searchkeywords: this.searchkeywords,
         username: item.username,
         logo: item.logo,
         userid: item.comefrom

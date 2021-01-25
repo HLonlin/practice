@@ -115,7 +115,7 @@ export default {
         data = {
           comefrom: that.chatWith.userid,
           studentname: that.chatWith.username,
-          searchkeywords: "",
+          searchkeywords: that.chatWith.searchkeywords,
           pageNum: that.pageNum,
           pageSize: that.pageSize
         };
@@ -123,7 +123,7 @@ export default {
         data = {
           comefrom: that.chatWith.userid,
           username: that.chatWith.username,
-          searchkeywords: "",
+          searchkeywords: that.chatWith.searchkeywords,
           pageNum: that.pageNum,
           pageSize: that.pageSize
         };
@@ -142,6 +142,7 @@ export default {
           that.pageNum = that.pageNum + 1;
           let historyDetailList = res.data.historyDetailList;
           for (let i = 0, imax = historyDetailList.length; i < imax; i++) {
+            console.log(historyDetailList[i].info);
             that.recordList.push(historyDetailList[i]);
             let month =
               (new Date(historyDetailList[i].wf_Created).getMonth() + 1 < 10
