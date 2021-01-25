@@ -20,6 +20,7 @@
         :autosize="{ maxHeight: containerH, minHeight: containerH }"
         type="textarea"
         placeholder="请输入您想要添加的常用语。"
+        maxlength="100"
       />
     </div>
     <div class="popup_edit popup_panel" v-if="type == 1">
@@ -307,6 +308,9 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #666666;
+  white-space: normal;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 .handleBtn_panel {
   display: flex;

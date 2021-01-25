@@ -81,7 +81,7 @@
         />
       </div>
       <div class="sendMsgBtnBox">
-        <i class="iconItem icon_biaoqingtubiao icon_smile"></i>
+        <!-- <i class="iconItem icon_biaoqingtubiao icon_smile"></i> -->
         <div class="sendMsgBtn" @click="sendMsg">发送</div>
       </div>
     </div>
@@ -157,7 +157,6 @@ export default {
       this.userData = userData;
     }
     this.chatWith = JSON.parse(this.$route.query.chatWith);
-    console.log(this.chatWith);
     this.getMsgDetail();
     this.getCommonList();
   },

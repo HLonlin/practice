@@ -67,7 +67,7 @@ export default {
     if (this.userData.isTeacher) {
       this.isTeacher();
     }
-    // this.updateMsgList();
+    this.updateMsgList();
   },
   beforeMount() {},
   mounted() {},

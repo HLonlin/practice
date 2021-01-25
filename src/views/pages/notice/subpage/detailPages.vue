@@ -136,7 +136,9 @@ export default {
           )[0];
           detail_content.innerHTML = res.data.info;
           // detail_content.children[0].style.display = "none";
-          setIsRead();
+          if (!res.data.hasRead) {
+            setIsRead();
+          }
         });
       function setIsRead() {
         that.$axios
