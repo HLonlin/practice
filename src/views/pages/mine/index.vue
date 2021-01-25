@@ -136,7 +136,7 @@ export default {
   destroyed() {},
   methods: {
     resetContainerH: function() {
-      let windowHight = window.screen.height;
+      let windowHight = document.documentElement.clientHeight;
       let container = document.getElementsByClassName("container")[0];
       container.style.height = windowHight - 44 + "px";
     },

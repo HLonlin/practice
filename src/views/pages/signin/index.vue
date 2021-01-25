@@ -411,7 +411,7 @@ export default {
         tapList_container = document.getElementsByClassName(
           "tapList_container"
         )[0];
-      let windowHight = window.screen.height;
+      let windowHight = document.documentElement.clientHeight;
       let calendarContainerHeight =
         windowHight -
         topBar_container.offsetHeight -

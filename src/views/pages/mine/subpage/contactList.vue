@@ -141,7 +141,7 @@ export default {
       )[0];
       let topbar_panel = document.getElementsByClassName("topbar_panel")[0];
       let search_panel = document.getElementsByClassName("search_panel")[0];
-      let windowH = window.screen.height;
+      let windowH = document.documentElement.clientHeight;
       contactList_panel.style.height =
         windowH - topbar_panel.offsetHeight - search_panel.offsetHeight + "px";
     },

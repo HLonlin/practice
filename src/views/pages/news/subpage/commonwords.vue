@@ -272,7 +272,7 @@ export default {
   },
   computed: {
     containerH: function() {
-      return window.screen.height - 80;
+      return document.documentElement.clientHeight - 80;
     },
     listH: function() {
       return this.containerH - 36 + "px";
@@ -297,6 +297,9 @@ export default {
 .manageList_panel {
   width: 100%;
   overflow-y: scroll;
+}
+.manageList_panel::-webkit-scrollbar {
+  width: 0 !important;
 }
 .listItem_panel {
   border-bottom: 1px solid #eeeeee;

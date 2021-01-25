@@ -174,7 +174,7 @@ export default {
       let topbar_panel = document.getElementsByClassName("topbar_panel")[0];
       let messages_list = document.getElementsByClassName("messages_list")[0];
       let bottom_bar = document.getElementsByClassName("bottom_bar")[0];
-      let winH = document.body.clientHeight;
+      let winH = document.documentElement.clientHeight;
       console.log(winH);
       console.log(winH - topbar_panel.offsetHeight - bottom_bar.offsetHeight);
       messages_list.style.height =

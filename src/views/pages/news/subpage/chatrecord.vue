@@ -104,7 +104,7 @@ export default {
     reSetMsgListH: function() {
       let topbar_panel = document.getElementsByClassName("topbar_panel")[0];
       let messages_list = document.getElementsByClassName("messages_list")[0];
-      let winH = window.screen.height;
+      let winH = document.documentElement.clientHeight;
       messages_list.style.height = winH - topbar_panel.offsetHeight + "px";
       messages_list.scrollTop = messages_list.scrollHeight;
     },
@@ -115,7 +115,9 @@ export default {
         data = {
           comefrom: that.chatWith.userid,
           studentname: that.chatWith.username,
-          searchkeywords: that.chatWith.searchkeywords,
+          searchkeywords: that.chatWith.searchkeywords
+            ? that.chatWith.searchkeywords
+            : "",
           pageNum: that.pageNum,
           pageSize: that.pageSize
         };
@@ -123,7 +125,9 @@ export default {
         data = {
           comefrom: that.chatWith.userid,
           username: that.chatWith.username,
-          searchkeywords: that.chatWith.searchkeywords,
+          searchkeywords: that.chatWith.searchkeywords
+            ? that.chatWith.searchkeywords
+            : "",
           pageNum: that.pageNum,
           pageSize: that.pageSize
         };
