@@ -61,18 +61,12 @@
       </div>
       <div class="noticeDate_panel">
         <div class="notice_title">过期时间</div>
-        <div class="notice_date">
-          <van-datetime-picker
-            class="date_pickTime"
-            v-model="currentDate"
-            type="date"
-            :formatter="timeFormatter"
-            :show-toolbar="false"
-            @change="timeChange"
-            :visible-item-count="1"
-            :item-height="34"
-          />
-        </div>
+        <input
+          type="text"
+          id="date_pickTime"
+          v-model="expiryDate"
+          class="date_pickTime"
+        />
       </div>
       <div class="bottomBtn_panel" @click="addNotice">
         发布
@@ -86,10 +80,12 @@ export default {
   name: "addnotice",
   data() {
     return {
+      laydate: window.laydate,
       noticeTitle: "",
       noticeInfo: "",
       annexList: [],
       istop: false,
+      expiryDate: "",
       expiryTime: {
         year: "",
         month: "",
@@ -103,12 +99,41 @@ export default {
     this.initExpiryTime();
   },
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    this.initLayDate();
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    initLayDate: function() {
+      let that = this;
+      let today = that.$tool.getDateObj(new Date());
+      that.expiryDate =
+        today.year +
+        (today.month < 10 ? "-0" + today.month : "-" + today.month) +
+        "-" +
+        today.date;
+      that.laydate.render({
+        elem: "#date_pickTime",
+        theme: "#0090d8",
+        btns: ["now", "confirm"],
+        min: 0,
+        position: "abolute",
+        ready: function(date) {
+          that.expiryTime.year = date.year;
+          that.expiryTime.month = date.month;
+          that.expiryTime.dates = date.date;
+        },
+        change: function(value, date, endDate) {
+          that.expiryDate = value;
+          that.expiryTime.year = date.year;
+          that.expiryTime.month = date.month;
+          that.expiryTime.dates = date.date;
+        }
+      });
+    },
     onClickLeft: function() {
       let that = this;
       if (!this.noticeInfo && !this.noticeTitle) {
@@ -268,9 +293,14 @@ export default {
   color: #ffffff;
 }
 .date_pickTime {
-  padding: 0px 0px 0px 10px;
+  width: 7.5rem;
+  height: 24px;
   margin-left: 0.9375rem;
   border: 1px solid #eeeeee;
+  text-align: center;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
 }
 </style>
 <style>

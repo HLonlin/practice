@@ -81,7 +81,6 @@ export default {
       laydate: window.laydate,
       date: "",
       monthly: {
-        data: "",
         year: new Date().getFullYear(),
         zhou: "",
         info: "",
@@ -111,6 +110,10 @@ export default {
   methods: {
     initLayDate: function() {
       let that = this;
+      let today = that.$tool.getDateObj(new Date());
+      that.date =
+        today.year +
+        (today.month < 10 ? "-0" + today.month : "-" + today.month);
       that.laydate.render({
         elem: "#date_pickTime",
         type: "month",
@@ -216,7 +219,7 @@ export default {
   border-top: 1px solid #999999;
 }
 .date_pickTime {
-  width: 80px;
+  width: 5rem;
   height: 24px;
   margin-left: 0.9375rem;
   border: 1px solid #eeeeee;

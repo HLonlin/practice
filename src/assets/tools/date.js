@@ -98,6 +98,18 @@ const date = {
         } else {
             return year + '年' + month + '月' + day + '日'
         }
+    },
+    getDateObj: function() {
+        let date = arguments[0] ? new Date(arguments[0]) : new Date();
+        let dateObj = {
+            year: date.getFullYear(),
+            month: date.getMonth() + 1,
+            date: date.getDate(),
+            hour: date.getHours(),
+            minute: date.getMinutes(),
+            second: date.getSeconds()
+        }
+        return dateObj;
     }
 }
 export default date;
