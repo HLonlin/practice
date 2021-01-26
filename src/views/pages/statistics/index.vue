@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="noMore" v-if="list.lenght == 0">没有更多了</div>
+      <div class="noMore_panel" v-if="list.length == 0">没有更多了</div>
     </div>
     <van-popup v-model="popups.evaluate" :get-container="getContainer">
       <div class="evaluate_popup">
@@ -100,22 +100,24 @@ export default {
     // 加载学生列表
     getUserListByBanji: function() {
       let that = this;
-      that.$axios.post(that.$api.tongjiList, {}).then(res => {
-        that.list = res.data.userList;
-        for (let i = 0, imax = that.list.length; i < imax; i++) {
-          switch (that.list[i].jiankangstatus) {
-            case 6:
-              that.list[i].jiankangstatus = "异常";
-              that.list[i].color = "#FF2A2A";
-              break;
-            case "":
-              that.list[i].jiankangstatus = "未上报";
-              that.list[i].color = "#999999";
-              break;
-            default:
-              that.list[i].jiankangstatus = "健康";
-              that.list[i].color = "#00C110";
-              break;
+      that.$axios.post(that.$api.tongjiList).then(res => {
+        if (res.data.userList) {
+          that.list = res.data.userList;
+          for (let i = 0, imax = that.list.length; i < imax; i++) {
+            switch (that.list[i].jiankangstatus) {
+              case 6:
+                that.list[i].jiankangstatus = "异常";
+                that.list[i].color = "#FF2A2A";
+                break;
+              case "":
+                that.list[i].jiankangstatus = "未上报";
+                that.list[i].color = "#999999";
+                break;
+              default:
+                that.list[i].jiankangstatus = "健康";
+                that.list[i].color = "#00C110";
+                break;
+            }
           }
         }
 
@@ -305,6 +307,15 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #999999;
+}
+.noMore_panel {
+  box-sizing: border-box;
+  padding: 20px 0px;
+  text-align: center;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #bbbbbb;
 }
 </style>
 <style>
