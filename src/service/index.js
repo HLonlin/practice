@@ -64,6 +64,7 @@ axios.interceptors.response.use(
                     return Promise.resolve(res.data);
                 case 410:
                     clearInterval(window.timer);
+                    clearInterval(window.getMsgDetail);
                     Toast({
                         message: res.data.message
                     });

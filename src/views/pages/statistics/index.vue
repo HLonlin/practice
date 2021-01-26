@@ -105,7 +105,11 @@ export default {
           that.list = res.data.userList;
           for (let i = 0, imax = that.list.length; i < imax; i++) {
             switch (that.list[i].jiankangstatus) {
-              case 6:
+              case 2:
+                that.list[i].jiankangstatus = "异常";
+                that.list[i].color = "#FF2A2A";
+                break;
+              case 3:
                 that.list[i].jiankangstatus = "异常";
                 that.list[i].color = "#FF2A2A";
                 break;

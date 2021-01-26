@@ -21,8 +21,8 @@ const API = {
     recordLearnEveryDay: '/api/practice/student/meizhouyixue/record', // 每日一学学习记录打卡
     isLearnToday: '/api/practice/student/meizhouyixue/hasMeizhouyixue', // 判断是否已经学习每日一学
     getDailyStudyByDate: '/api/practice/student/meizhouyixue/dateYixue', // 根据日期获取每日一学内容
-    getUserByCardId: '/api/practice/teacher/getUserByCardId', // 根据身份证查找学生信息
-    getUpdateUserInfoMsg: '/api/practice/student/xiaoxi/getUpdateUserInfoMsg', // 获取学员修改个人信息提示语
+    getUserByCardId: '/api/practice/student/getUserByCardId', // 根据身份证查找学生信息
+    getUpdateUserInfoMsg: '/api/practice/student/getUpdateUserInfoMsg', // 获取学员修改个人信息提示语
     // --------------------------消息--------------------------
     msgList: '/api/practice/student/xiaoxi/xiaoxiList', // 消息列表
     msgDetail: '/api/practice/student/xiaoxi/xiaoxiDetail', // 消息详情

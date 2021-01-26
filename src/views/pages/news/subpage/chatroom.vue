@@ -152,12 +152,17 @@ export default {
   },
   beforeCreate() {},
   created() {
+    let that = this;
     let userData = this.$tool.getLocal("userData");
     if (userData) {
       this.userData = userData;
     }
     this.chatWith = JSON.parse(this.$route.query.chatWith);
     this.getMsgDetail();
+    clearInterval(window.getMsgDetail);
+    window.getMsgDetail = setInterval(function() {
+      that.getMsgDetail();
+    }, 1000);
     this.getCommonList();
   },
   beforeMount() {},
@@ -168,6 +173,7 @@ export default {
   destroyed() {},
   methods: {
     onClickLeft: function() {
+      clearInterval(window.getMsgDetail);
       this.$router.go(-1);
     },
     reSetMsgListH: function() {
@@ -203,6 +209,7 @@ export default {
         });
     },
     chatRecord: function() {
+      clearInterval(window.getMsgDetail);
       let that = this;
       let chatWith = {
         username: that.chatWith.username,
@@ -248,23 +255,15 @@ export default {
           that.msgDetailList = [];
           for (let i = 0, imax = res.data.length; i < imax; i++) {
             that.$set(that.msgDetailList, i, res.data[i]);
-            let month =
-              (new Date(res.data[i].wf_Created).getMonth() + 1 < 10
-                ? "0" + (new Date(res.data[i].wf_Created).getMonth() + 1)
-                : new Date(res.data[i].wf_Created).getMonth() + 1) + "月";
-            let dates =
-              (new Date(res.data[i].wf_Created).getDate() < 10
-                ? "0" + new Date(res.data[i].wf_Created).getDate()
-                : new Date(res.data[i].wf_Created).getDate()) + "日 ";
-            let hours =
-              (new Date(res.data[i].wf_Created).getHours() < 10
-                ? "0" + new Date(res.data[i].wf_Created).getHours()
-                : new Date(res.data[i].wf_Created).getHours()) + ":";
-            let min =
-              new Date(res.data[i].wf_Created).getMinutes() < 10
-                ? "0" + new Date(res.data[i].wf_Created).getMinutes()
-                : new Date(res.data[i].wf_Created).getMinutes();
-            let time = month + dates + hours + min;
+            let dateObj = that.$tool.getDateObj(res.data[i].wf_Created);
+            let time =
+              (dateObj.month < 10 ? "0" + dateObj.month : dateObj.month) +
+              "月" +
+              dateObj.date +
+              "日 " +
+              dateObj.hour +
+              ":" +
+              dateObj.minute;
             that.$set(that.msgDetailList[i], "time", time);
           }
           // 消息滚动到最底部
@@ -295,6 +294,7 @@ export default {
       this.openPopup("commonText", false);
     },
     turnCommonWord: function(type) {
+      clearInterval(window.getMsgDetail);
       this.$router.push({
         path: "/commonwords",
         query: { type: type }
