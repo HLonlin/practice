@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <div class="info_panel">
-      <router-link class="info_panelContainer" :to="{ path: 'selfinfo' }">
+      <router-link
+        class="info_panelContainer"
+        :to="{ path: 'selfinfo', query: { cardid: userData.cardid } }"
+      >
         <div class="info_head">
           <img
             class="info_headImg"

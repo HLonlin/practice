@@ -138,7 +138,7 @@
         </div>
         <div
           class="selfinfo_panel"
-          :class="{ selfinfo_area: userData.shixidanwei.length > 16 }"
+          :class="{ selfinfo_area: (userData.shixidanwei + '').length > 16 }"
         >
           <van-field
             v-model="userData.shixidanwei"
@@ -152,7 +152,7 @@
         </div>
         <div
           class="selfinfo_panel"
-          :class="{ selfinfo_area: userData.danweidizhi.length > 16 }"
+          :class="{ selfinfo_area: (userData.danweidizhi + '').length > 16 }"
         >
           <van-field
             v-model="userData.danweidizhi"
@@ -210,7 +210,11 @@
         </div>
       </div>
       <div class="selfinfo_bottomBtnBox" v-if="!editing">
-        <div class="selfinfo_bottomBtn" @click="onEditing">
+        <div
+          class="selfinfo_bottomBtn"
+          @click="onEditing"
+          :class="{ disableBtn: evaluating }"
+        >
           编辑
         </div>
       </div>
@@ -225,13 +229,14 @@
 <script>
 /**
  * 个人信息页
+ * 你有待审核信息未通过、请在审核结束后重试
  */
 export default {
   name: "selfinfo",
   data() {
     return {
       editing: false,
-      userData: Object,
+      userData: {},
       infoOfbeforeEdit: {},
       jiuyefangshiRadioList: [],
       stateRadioList: [
@@ -243,13 +248,15 @@ export default {
         "服兵役",
         "面试体检中"
       ],
-      headImg: [{ url: require("@/assets/images/default.png"), isImage: true }]
+      headImg: [{ url: require("@/assets/images/default.png"), isImage: true }],
+      evaluating: false
     };
   },
   beforeCreate() {},
   created() {
     this.getUserData();
     this.getRadioOption();
+    this.isUpdateStudentRecord();
   },
   beforeMount() {},
   mounted() {},
@@ -258,6 +265,16 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    isUpdateStudentRecord: function() {
+      let that = this;
+      that.$axios.post(that.$api.isUpdateStudentRecord).then(res => {
+        if (JSON.stringify(res.data) == "{}") {
+          that.evaluating = false;
+        } else {
+          that.evaluating = true;
+        }
+      });
+    },
     formatter: function(value) {
       if (!value && !this.editing) {
         return;
@@ -273,14 +290,16 @@ export default {
     },
     getUserData: function() {
       let that = this;
-      let userData = this.$tool.getLocal("userData");
-      if (userData) {
-        this.userData = userData;
-        this.userData.logo = this.userData.logo
-          ? this.userData.logo
-          : require("@/assets/images/default.png");
-        this.headImg[0].url = this.userData.logo;
-      }
+      that.$axios
+        .post(that.$api.getUserByCardId, { cardid: that.$route.query.cardid })
+        .then(res => {
+          that.userData = res.data;
+          this.userData.logo = this.userData.logo
+            ? this.userData.logo
+            : require("@/assets/images/default.png");
+          this.headImg[0].url = this.userData.logo;
+          that.$tool.setLocal("userData", that.userData);
+        });
     },
     onClickLeft: function() {
       this.$router.go(-1);
@@ -311,9 +330,19 @@ export default {
     },
     onEditing: function() {
       let that = this;
+      if (that.evaluating) {
+        return;
+      }
       that.editing = true;
       for (let key in that.info) {
         that.$set(that.infoOfbeforeEdit, key, that.info[key]);
+      }
+    },
+    onCancel: function() {
+      let that = this;
+      that.editing = false;
+      for (let key in that.info) {
+        that.$set(that.info, key, that.infoOfbeforeEdit[key]);
       }
     },
     submitChange: function() {
@@ -339,23 +368,10 @@ export default {
         }
       }
       that.$axios.post(that.$api.updateInfo_student, data).then(res => {
-        that.$axios
-          .post(that.$api.getUserByCardId, { cardid: that.userData.cardid })
-          .then(res => {
-            that.$toast({
-              message: "修改成功"
-            });
-            console.log(res);
-          });
+        that.getUserData();
+        that.isUpdateStudentRecord();
         that.editing = false;
       });
-    },
-    onCancel: function() {
-      let that = this;
-      that.editing = false;
-      for (let key in that.info) {
-        that.$set(that.info, key, that.infoOfbeforeEdit[key]);
-      }
     },
     getRadioOption: function() {
       let that = this;
@@ -462,6 +478,9 @@ export default {
   color: #ffffff;
   line-height: 36px;
   text-align: center;
+}
+.disableBtn {
+  background-color: #dddddd;
 }
 .selfinfo_submitBtn {
   display: inline-block;

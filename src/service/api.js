@@ -42,6 +42,8 @@ const API = {
     updateInfo_student: '/api/practice/student/profile/updateProfile', // 修改学生个人信息
     jiuyefangshi: '/api/practice/dic/jiuyefangshi', //就业方式数据字典
     jiuyezhuangtai: '/api/practice/dic/jiuyezhuangtai', // 就业状态数据字典
+    isUpdateStudentRecord: '/api/practice/student/isUpdateStudentRecord', // 查询是否存在未审核学生修改记录
+    getBanZhuRenPingJiaMsg: '/api/practice/student/getBanZhuRenPingJiaMsg', // 获取班主任评价提示信息
     // --------------------------月记--------------------------
     monthlyList: '/api/practice/student/zhoubao/zhoubaoList', // 月记列表
     monthlyDetail: '/api/practice/student/zhoubao/zhoubaoDetail', // 月记详情
