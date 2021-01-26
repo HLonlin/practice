@@ -74,19 +74,6 @@
             preview-size="3.75rem"
             :deletable="false"
             :preview-options="{ showIndex: false, closeable: true }"
-            v-if="!editing"
-          >
-          </van-uploader>
-          <van-uploader
-            class="selfinfo_headIcon"
-            v-model="headImg"
-            :max-count="1"
-            :before-read="beforeRead"
-            :after-read="afterRead"
-            preview-size="3.75rem"
-            :preview-options="{ showIndex: false, closeable: true }"
-            accept="image/png,image/jpeg,image/gif"
-            v-else
           >
           </van-uploader>
         </div>
