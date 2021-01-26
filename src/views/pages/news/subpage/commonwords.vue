@@ -30,6 +30,7 @@
         :autosize="{ maxHeight: containerH, minHeight: containerH }"
         type="textarea"
         placeholder="常用语不能为空"
+        maxlength="100"
       />
     </div>
     <div class="popup_manage popup_panel" v-if="type == 2">
