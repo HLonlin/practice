@@ -9,30 +9,15 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <!-- 设计原样式 -->
-    <!-- <div class="monthlyDate_panel">
-      <div class="monthly_title">月记时间</div>
-      <div class="monthly_date">
-        <div class="monthlyDate_pickPanel" @click="pickTime">
-          <div>{{ monthly.data ? monthly.data : "请选择时间" }}</div>
-        </div>
-      </div>
-    </div> -->
     <div class="monthlyDate_panel">
       <div class="monthly_title">月记时间</div>
-      <div class="monthly_date">
-        <van-datetime-picker
-          class="date_pickTime"
-          v-model="currentDate"
-          type="year-month"
-          title="月记时间"
-          :formatter="timeFormatter"
-          :show-toolbar="false"
-          @change="timeChange"
-          :visible-item-count="1"
-          :item-height="34"
-        />
-      </div>
+      <input
+        type="text"
+        id="date_pickTime"
+        v-model="date"
+        class="date_pickTime"
+        placeholder="请选择时间"
+      />
     </div>
     <div class="monthlyContent_panel">
       <div class="monthly_title">月记内容</div>
@@ -93,6 +78,8 @@ export default {
   name: "addmonthly",
   data() {
     return {
+      laydate: window.laydate,
+      date: "",
       monthly: {
         data: "",
         year: new Date().getFullYear(),
@@ -114,25 +101,34 @@ export default {
         : date.getMonth() + 1;
   },
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    this.initLayDate();
+  },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    //  选择时间
-    timeChange: function(picker) {
-      let date = picker.getValues();
-      this.monthly.year = date[0].replace(/年/, "");
-      this.monthly.zhou = date[1].replace(/月/, "");
-    },
-    timeFormatter(type, val) {
-      if (type === "year") {
-        return `${val}年`;
-      } else if (type === "month") {
-        return `${val}月`;
-      }
-      return val;
+    initLayDate: function() {
+      let that = this;
+      that.laydate.render({
+        elem: "#date_pickTime",
+        type: "month",
+        theme: "#0090d8",
+        value: new Date(),
+        btns: ["now", "confirm"],
+        min: 0,
+        position: "abolute",
+        ready: function(date) {
+          that.monthly.year = date.year;
+          that.monthly.zhou = date.month;
+        },
+        change: function(value, date, endDate) {
+          that.date = value;
+          that.monthly.year = date.year;
+          that.monthly.zhou = date.month;
+        }
+      });
     },
     formatter(value) {
       // 去除首尾空格
@@ -220,9 +216,14 @@ export default {
   border-top: 1px solid #999999;
 }
 .date_pickTime {
-  padding: 0px 0px 0px 10px;
+  width: 80px;
+  height: 24px;
   margin-left: 0.9375rem;
   border: 1px solid #eeeeee;
+  text-align: center;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
 }
 .monthly_content {
   position: relative;
