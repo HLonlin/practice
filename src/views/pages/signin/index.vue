@@ -169,6 +169,22 @@
           </div>
         </div>
       </van-popup>
+      <van-popup
+        v-model="popups.evaluateRemind"
+        :get-container="getContainer"
+        @close="evaluateRemindClose"
+      >
+        <div class="signin_popup">
+          <div class="signin_popupContent">
+            <div class="popup_remindText">
+              您还未完成班主任评定，请尽快完成评定。
+            </div>
+            <div class="popupRemindBtn_panel">
+              <div class="popup_remindBtn" @click="routerTo">去评定</div>
+            </div>
+          </div>
+        </div>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -188,7 +204,8 @@ export default {
         signinDetails: false, // 签到详情
         healthStatus: false, // 健康上报
         confirmSignin: false, // 确认签到
-        updateRemind: false // 学生信息更新提醒
+        updateRemind: false, // 学生信息更新提醒
+        evaluateRemind: false // 班主任评定提醒
       },
       currentYearMonth: "",
       firstDay: "",
@@ -238,19 +255,33 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getBanZhuRenPingJiaMsg: function() {
+      let that = this;
+      if (that.$tool.getLocal("evaluateRemindClose")) return;
+      that.$axios.post(that.$api.getBanZhuRenPingJiaMsg).then(res => {
+        if (!res.data) {
+          that.popups.evaluateRemind = true;
+        }
+      });
+    },
     getUpdateUserInfoMsg: function() {
       let that = this;
-      if (that.$tool.getLocal("updateRemindClose")) return;
-      that.$axios
-        .post(that.$api.getUpdateUserInfoMsg, { cardid: that.userData.cardid })
-        .then(res => {
-          that.remindText = res.data;
-          if (!res.data) {
-            return;
-          } else {
-            that.popups.updateRemind = true;
-          }
-        });
+      if (that.$tool.getLocal("updateRemindClose")) {
+        that.getBanZhuRenPingJiaMsg();
+      } else {
+        that.$axios
+          .post(that.$api.getUpdateUserInfoMsg, {
+            cardid: that.userData.cardid
+          })
+          .then(res => {
+            that.remindText = res.data;
+            if (!res.data) {
+              return;
+            } else {
+              that.popups.updateRemind = true;
+            }
+          });
+      }
     },
     // 今日是否签到
     isSigninTotal: function() {
@@ -593,8 +624,18 @@ export default {
         query: { cardid: that.userData.cardid }
       });
     },
+    routerTo: function() {
+      let that = this;
+      that.evaluateRemindClose();
+      this.$router.push({
+        path: "/selfinfo"
+      });
+    },
     updateRemindClose: function() {
       this.$tool.setLocal("updateRemindClose", true);
+    },
+    evaluateRemindClose: function() {
+      this.$tool.setLocal("evaluateRemindClose", true);
     }
   },
   computed: {
