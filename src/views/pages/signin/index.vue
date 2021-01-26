@@ -153,6 +153,18 @@
           <div class="signin_popupBottomBtn" @click="signinTotal">确定</div>
         </div>
       </van-popup>
+      <van-popup v-model="popups.updateRemind" :get-container="getContainer">
+        <div class="signin_popup">
+          <div class="signin_popupContent">
+            <div class="popup_remindText">
+              您的实习信息未更新，请去个人信息页面更新实习信息。
+            </div>
+            <div class="popupRemindBtn_panel">
+              <div class="popup_remindBtn" @click="linkTo">去修改</div>
+            </div>
+          </div>
+        </div>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -171,7 +183,8 @@ export default {
         learnEveryDay: false, // 每日一学
         signinDetails: false, // 签到详情
         healthStatus: false, // 健康上报
-        confirmSignin: false // 确认签到
+        confirmSignin: false, // 确认签到
+        updateRemind: false // 学生信息更新提醒
       },
       currentYearMonth: "",
       firstDay: "",
@@ -220,6 +233,24 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getUpdateUserInfoMsg: function() {
+      let that = this;
+      that.$axios
+        .post(that.$api.getUpdateUserInfoMsg, { cardid: that.userData.cardid })
+        .then(res => {
+          if (!res.data) {
+            return;
+          } else {
+            // that.$dialog.alert({
+            //   message: res.data,
+            //   theme: "round-button",
+            //   confirmButtonColor: "#0090d8"
+            // });
+
+            that.popups.updateRemind = true;
+          }
+        });
+    },
     // 今日是否签到
     isSigninTotal: function() {
       let that = this;
@@ -233,6 +264,8 @@ export default {
       that.$axios.post(that.$api.isLearnToday, {}).then(res => {
         if (!res.data.hasMeizhouyixue) {
           getLearnContent();
+        } else {
+          that.getUpdateUserInfoMsg();
         }
       });
       // 获取每日一学内容
@@ -268,11 +301,16 @@ export default {
         .then(res => {
           this.$toast.clear();
           that.openPopup("learnEveryDay", false);
-          that.$dialog.alert({
-            message: "每日一学已打卡",
-            theme: "round-button",
-            confirmButtonColor: "#0090d8"
-          });
+          that.$$dialog
+            .alert({
+              message: "每日一学已打卡",
+              theme: "round-button",
+              confirmButtonColor: "#0090d8"
+            })
+            .then(() => {
+              that.getUpdateUserInfoMsg();
+              // on close
+            });
         });
     },
     // 根据月份获取签到列表
@@ -546,6 +584,9 @@ export default {
             });
           });
         });
+    },
+    linkTo: function() {
+      this.$router.push({ path: "/selfinfo" });
     }
   },
   computed: {
@@ -838,6 +879,34 @@ export default {
   padding: 0px;
   border-bottom: 1px solid #eeeeee;
   margin-bottom: 20px;
+}
+.popup_remindText {
+  box-sizing: border-box;
+  padding: 28px 1rem 20px 1rem;
+  font-size: 1rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+}
+.popupRemindBtn_panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0px 0px 30px 0px;
+}
+.popup_remindBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 6.25rem;
+  height: 1.875rem;
+  background-color: #0090d8;
+  border-radius: 2px;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ffffff;
 }
 </style>
 <style>

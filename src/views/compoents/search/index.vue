@@ -33,6 +33,7 @@ export default {
   methods: {
     onSearch: function() {
       // console.log("搜索来源：", this.sourceOf, "搜索文本：", this.searchValue);
+      this.searchValue = this.$tool.trim(this.searchValue);
       switch (this.sourceOf) {
         case "notice":
           this.$emit("searchNotice", this.searchValue);

@@ -296,10 +296,7 @@ export default {
       }
     },
     onClickLeft: function() {
-      this.$router.push({
-        path: "/mine"
-      });
-      //   this.$router.go(-1);
+      this.$router.go(-1);
     },
     // 上传前校验格式、大小
     beforeRead(file) {

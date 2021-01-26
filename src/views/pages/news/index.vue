@@ -138,6 +138,7 @@ export default {
   width: 100%;
   box-sizing: border-box;
   padding: 0px 0px 0rem 0.75rem;
+  overflow: hidden;
 }
 
 .message_label {

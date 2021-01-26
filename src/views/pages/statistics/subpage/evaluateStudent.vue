@@ -172,7 +172,7 @@ export default {
           : date.getMonth() + 1;
       that.$axios
         .post(that.$api.addConductEvaluation, {
-          cardid: that.$route.query.cardid,
+          cardid: JSON.parse(that.$route.query.cardid),
           year: date.getFullYear(),
           month: month,
           internshipNum: that.score.internship.score,
