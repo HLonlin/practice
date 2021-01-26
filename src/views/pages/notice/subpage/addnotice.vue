@@ -55,7 +55,7 @@
       </div>
       <div class="noticeIstop_panel">
         <div class="notice_title">置顶公告</div>
-        <div>
+        <div class="notice_istop">
           <van-switch v-model="istop" size="16px" active-color="#0090d8" />
         </div>
       </div>
@@ -208,6 +208,10 @@ export default {
   font-weight: 400;
   color: #333333;
 }
+.notice_istop {
+  box-sizing: border-box;
+  padding: 0px 1rem;
+}
 .noticeDate_panel,
 .attachFile_panel {
   display: flex;
@@ -246,7 +250,6 @@ export default {
 }
 .noticeIstop_panel {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   padding: 1rem 0px;
