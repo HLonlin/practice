@@ -21,6 +21,7 @@ const API = {
     recordLearnEveryDay: '/api/practice/student/meizhouyixue/record', // 每日一学学习记录打卡
     isLearnToday: '/api/practice/student/meizhouyixue/hasMeizhouyixue', // 判断是否已经学习每日一学
     getDailyStudyByDate: '/api/practice/student/meizhouyixue/dateYixue', // 根据日期获取每日一学内容
+    getUserByCardId: '/api/practice/teacher/getUserByCardId', // getUserByCardId
     // --------------------------消息--------------------------
     msgList: '/api/practice/student/xiaoxi/xiaoxiList', // 消息列表
     msgDetail: '/api/practice/student/xiaoxi/xiaoxiDetail', // 消息详情

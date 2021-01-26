@@ -355,6 +355,14 @@ export default {
         }
       }
       that.$axios.post(that.$api.updateInfo_student, data).then(res => {
+        that.$axios
+          .post(that.$api.getUserByCardId, { cardid: that.userData.cardid })
+          .then(res => {
+            that.$toast({
+              message: "修改成功"
+            });
+            console.log(res);
+          });
         that.editing = false;
       });
     },
