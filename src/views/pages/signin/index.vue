@@ -153,11 +153,15 @@
           <div class="signin_popupBottomBtn" @click="signinTotal">确定</div>
         </div>
       </van-popup>
-      <van-popup v-model="popups.updateRemind" :get-container="getContainer">
+      <van-popup
+        v-model="popups.updateRemind"
+        :get-container="getContainer"
+        @close="updateRemindClose"
+      >
         <div class="signin_popup">
           <div class="signin_popupContent">
             <div class="popup_remindText">
-              您的实习信息未更新，请去个人信息页面更新实习信息。
+              {{ remindText }}
             </div>
             <div class="popupRemindBtn_panel">
               <div class="popup_remindBtn" @click="linkTo">去修改</div>
@@ -210,7 +214,8 @@ export default {
       longitude: "23.182055", // 经度
       otherHealthStatus: "", // 其他症状输入框文本
       // 健康上报选项
-      healthRadio: []
+      healthRadio: [],
+      remindText: ""
     };
   },
   beforeCreate() {},
@@ -235,18 +240,14 @@ export default {
   methods: {
     getUpdateUserInfoMsg: function() {
       let that = this;
+      if (that.$tool.getLocal("updateRemindClose")) return;
       that.$axios
         .post(that.$api.getUpdateUserInfoMsg, { cardid: that.userData.cardid })
         .then(res => {
+          that.remindText = res.data;
           if (!res.data) {
             return;
           } else {
-            // that.$dialog.alert({
-            //   message: res.data,
-            //   theme: "round-button",
-            //   confirmButtonColor: "#0090d8"
-            // });
-
             that.popups.updateRemind = true;
           }
         });
@@ -301,7 +302,7 @@ export default {
         .then(res => {
           this.$toast.clear();
           that.openPopup("learnEveryDay", false);
-          that.$$dialog
+          that.$dialog
             .alert({
               message: "每日一学已打卡",
               theme: "round-button",
@@ -309,7 +310,6 @@ export default {
             })
             .then(() => {
               that.getUpdateUserInfoMsg();
-              // on close
             });
         });
     },
@@ -586,7 +586,15 @@ export default {
         });
     },
     linkTo: function() {
-      this.$router.push({ path: "/selfinfo" });
+      let that = this;
+      that.updateRemindClose();
+      this.$router.push({
+        path: "/selfinfo",
+        query: { cardid: that.userData.cardid }
+      });
+    },
+    updateRemindClose: function() {
+      this.$tool.setLocal("updateRemindClose", true);
     }
   },
   computed: {
