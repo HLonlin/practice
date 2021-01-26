@@ -118,8 +118,8 @@ export default {
     },
     updateMsgList: function() {
       let that = this;
-      clearInterval(timer);
-      let timer = setInterval(function() {
+      clearInterval(window.timer);
+      window.timer = setInterval(function() {
         that.getMsgList();
       }, 1000);
     },

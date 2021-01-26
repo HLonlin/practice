@@ -101,6 +101,12 @@
         <div class="middle_title">关于</div>
       </router-link>
     </div>
+    <div class="bottom_panel">
+      <div class="cell_panel" @click="logout">
+        <i class="iconItem icon_wotubiao icon_left"></i>
+        <div class="middle_title">退出</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -135,6 +141,25 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    logout: function() {
+      let that = this;
+      that.$dialog.confirm({
+        title: "温馨提示",
+        message: "您确定要退出登录吗？",
+        beforeClose
+      });
+      function beforeClose(action, done) {
+        if (action === "confirm") {
+          done();
+          that.$axios.post(that.$api.logout).then(res => {
+            clearInterval(window.timer);
+            that.$router.push({ path: "/login" });
+          });
+        } else {
+          done();
+        }
+      }
+    },
     resetContainerH: function() {
       let windowHight = document.documentElement.clientHeight;
       let container = document.getElementsByClassName("container")[0];
