@@ -46,18 +46,19 @@
       </div>
       <div class="noMore_panel" v-if="list.length == 0">没有更多了</div>
     </div>
-    <van-popup v-model="popups.evaluate" :get-container="getContainer">
+    <van-popup
+      v-model="popups.evaluate"
+      :get-container="getContainer"
+      @close="closeEvaluate_popup"
+    >
       <div class="evaluate_popup">
         <div class="evaluate_popupLabel">
           {{ evaluateText }}
         </div>
         <div class="evaluate_popupBottomBtn">
-          <router-link
-            class="evaluate_leftBtn"
-            :to="{ path: '/todoList', query: { type: 'evaluate' } }"
-          >
+          <div class="evaluate_leftBtn" @click="routerTo">
             去评定
-          </router-link>
+          </div>
           <div class="evaluate_rightBtn" @click="popups.evaluate = false">
             知道了，稍后处理
           </div>
@@ -129,6 +130,7 @@ export default {
       });
     },
     getConductEvaluationMsg: function() {
+      if (this.$tool.getLocal("closeEvaluate")) return;
       let that = this;
       let date = new Date();
       let month =
@@ -158,6 +160,16 @@ export default {
           isFrom: JSON.stringify("statistics")
         }
       });
+    },
+    routerTo: function() {
+      this.closeEvaluate_popup();
+      this.$router.push({
+        path: "/todoList",
+        query: { type: "evaluate" }
+      });
+    },
+    closeEvaluate_popup: function() {
+      this.$tool.setLocal("closeEvaluate", true);
     }
   }
 };

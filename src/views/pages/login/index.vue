@@ -141,11 +141,12 @@ export default {
                 that.userData[key] = res.data[key];
               }
               this.$tool.setLocal("userData", that.userData);
+              this.$tool.setLocal("closeEvaluate", false);
             });
           } else {
             // 学生
-            this.$tool.setLocal("updateRemindClose", false);
             that.userData["isTeacher"] = false;
+            this.$tool.setLocal("updateRemindClose", false);
             this.$tool.setLocal("userData", that.userData);
             this.$tool.setLocal("identity", "student");
             this.$router.push({ path: "/signin" });
