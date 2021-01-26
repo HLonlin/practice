@@ -218,10 +218,14 @@ export default {
   border-radius: 50%;
 }
 .label_panel {
+  width: 100%;
   box-sizing: border-box;
-  padding: 0px 0px 0px 0.625rem;
+  padding: 0px 1.5rem 0px 0.625rem;
 }
 .label_title {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
   box-sizing: border-box;
   padding: 0px 0px 0.5rem 0px;
   font-size: 0.875rem;
@@ -241,6 +245,9 @@ export default {
   /* color: #666666; */
 }
 .label_signin {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
   box-sizing: border-box;
   padding: 0px 0px 0.3125rem 0px;
   font-size: 0.75rem;

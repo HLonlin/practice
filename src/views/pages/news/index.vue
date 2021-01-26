@@ -71,6 +71,10 @@ export default {
     },
     updateMsgList: function() {
       let that = this;
+      let msgList = that.$store.state.news.msgList;
+      if (msgList) {
+        that.msgList = msgList;
+      }
       clearInterval(timer);
       let timer = setInterval(function() {
         let msgList = that.$store.state.news.msgList;

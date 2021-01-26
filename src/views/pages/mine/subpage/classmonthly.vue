@@ -35,7 +35,7 @@
             class="monthlylist_listItem"
           >
             <div class="monthlylist_listTitle">
-              {{ item.userName }}{{ item.zhou }}月月记
+              {{ item.username }}{{ item.zhou }}月月记
             </div>
             <div class="monthlylist_listLabel">
               <div class="monthlylist_listDate">{{ item.date }}</div>
@@ -131,6 +131,7 @@ export default {
           that.loading = false;
           that.pageIndex = that.pageIndex + 1;
           let monthlyList = res.data;
+          that.monthlyList = [];
           for (let i = 0, imax = monthlyList.length; i < imax; i++) {
             monthlyList[i].date = that.$tool.getFullDate(
               monthlyList[i].wf_Created
