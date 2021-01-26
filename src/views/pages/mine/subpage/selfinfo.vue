@@ -73,7 +73,7 @@
             :after-read="afterRead"
             preview-size="3.75rem"
             :deletable="false"
-            :preview-options="{ showIndex: false }"
+            :preview-options="{ showIndex: false, closeable: true }"
             v-if="!editing"
           >
           </van-uploader>
@@ -84,7 +84,7 @@
             :before-read="beforeRead"
             :after-read="afterRead"
             preview-size="3.75rem"
-            :preview-options="{ showIndex: false }"
+            :preview-options="{ showIndex: false, closeable: true }"
             accept="image/png,image/jpeg,image/gif"
             v-else
           >
