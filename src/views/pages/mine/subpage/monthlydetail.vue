@@ -129,9 +129,14 @@ export default {
     getDEtail: function() {
       let that = this;
       that.$axios
-        .post(that.$api.monthlyDetail, {
-          wf_docUnid: that.$route.query.wf_docUnid
-        })
+        .post(
+          that.userData.isTeacher
+            ? that.$api.monthlyDetail_teacher
+            : that.$api.monthlyDetail,
+          {
+            wf_docUnid: that.$route.query.wf_docUnid
+          }
+        )
         .then(res => {
           that.commentList = res.data.ideaList;
           that.monthlyDetail = res.data.noticeJson;

@@ -85,6 +85,8 @@ const API = {
     addNotice: '/api/practice/teacher/notice/addNotice', // 新增公告
     classMonthList_teacher: '/api/practice/teacher/getYueJiList', // 班级月记列表
     monthList_teacher: '/api/practice/teacher/tongji/zhoubaoList', // 教师端学生月记列表
+    monthlyDetail_teacher: '/api/practice/teacher/tongji/zhoubaoDetail', // 教师端学生月记详情
+
     // --------------------------我的--------------------------
     getuserInfo_teacher: '/api/practice/teacher/getUserInfo', // 获取教师个人信息
     contactList_teacher: '/api/practice/teacher/getContactsList', // 获取通讯录列表
