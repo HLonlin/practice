@@ -1,7 +1,7 @@
 <template>
   <div class="statistics_container">
     <div class="topbar_panel">
-      <div class="topbar">实习率：{{ employRate }}</div>
+      <div class="topbar">实习率：{{ employRate }}%</div>
     </div>
     <div class="list_panel">
       <div
