@@ -14,9 +14,10 @@
         {{ monthlyDetail.year }}年{{ monthlyDetail.zhou }}月
       </div>
       <!-- 月记详情 -->
-      <div class="monthlydetail_articleContent">
-        {{ monthlyDetail.info }}
-      </div>
+      <div
+        class="monthlydetail_articleContent"
+        v-html="monthlyDetail.info"
+      ></div>
       <!-- 月记图 -->
       <div class="monthlydetail_articlePhoto" v-show="false">
         <div
@@ -50,7 +51,7 @@
             <div class="comment_name">{{ item.username }}</div>
             <div class="comment_time">{{ item.created }}</div>
           </div>
-          <div class="comment_text">{{ item.info }}</div>
+          <div class="comment_text" v-html="item.info"></div>
         </div>
       </div>
       <div class="monthlydetail_noComment" v-if="commentList.length == 0">

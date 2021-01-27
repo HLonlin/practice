@@ -34,20 +34,20 @@
             {{ detail.date }}
           </div>
         </div>
-        <div class="detail_content">
-          {{ detail.info }}
-        </div>
+        <div class="detail_content" v-html="detail.info"></div>
         <div
           class="detail_enclosure"
           v-for="(item, i) in detail.filename"
           :key="i"
         >
-          <p>附件：</p>
-          <p class="detail_enclosureName">
-            <a class="detail_enclosureName" :href="detail.fileurl[i]">{{
-              item
-            }}</a>
-          </p>
+          <div v-if="detail.filename[i] != ''">
+            <p>附件：{{ detail.filename.length }}</p>
+            <p class="detail_enclosureName">
+              <a class="detail_enclosureName" :href="detail.fileurl[i]">{{
+                item
+              }}</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

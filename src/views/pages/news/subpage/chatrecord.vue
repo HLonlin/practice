@@ -45,9 +45,7 @@
               "
             />
           </div>
-          <div class="msgItem_content">
-            {{ item.info }}
-          </div>
+          <div class="msgItem_content" v-html="item.info"></div>
           <div
             class="msgItem_header"
             v-if="item.comefromName != chatWith.username"
