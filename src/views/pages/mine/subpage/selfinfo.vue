@@ -304,15 +304,16 @@ export default {
         return;
       }
       that.editing = true;
-      for (let key in that.info) {
-        that.$set(that.infoOfbeforeEdit, key, that.info[key]);
+      for (let key in that.userData) {
+        that.$set(that.infoOfbeforeEdit, key, that.userData[key]);
       }
     },
     onCancel: function() {
+      console.log(0);
       let that = this;
       that.editing = false;
-      for (let key in that.info) {
-        that.$set(that.info, key, that.infoOfbeforeEdit[key]);
+      for (let key in that.userData) {
+        that.$set(that.userData, key, that.infoOfbeforeEdit[key]);
       }
     },
     submitChange: function() {

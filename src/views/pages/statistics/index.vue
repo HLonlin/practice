@@ -25,11 +25,11 @@
               >健康状况：
               <span
                 :style="{
-                  color: item.color
+                  color: item.jiankangstatus ? '#00C110' : '#FF2A2A'
                 }"
               >
-                <span v-show="item.jiankangstatus">
-                  {{ item.jiankangstatus }}
+                <span>
+                  {{ item.jiankangstatus ? item.jiankangstatus : "未上报" }}
                 </span>
               </span>
             </span>
@@ -104,28 +104,7 @@ export default {
       that.$axios.post(that.$api.tongjiList).then(res => {
         if (res.data.userList) {
           that.list = res.data.userList;
-          for (let i = 0, imax = that.list.length; i < imax; i++) {
-            switch (that.list[i].jiankangstatus) {
-              case 2:
-                that.list[i].jiankangstatus = "异常";
-                that.list[i].color = "#FF2A2A";
-                break;
-              case 3:
-                that.list[i].jiankangstatus = "异常";
-                that.list[i].color = "#FF2A2A";
-                break;
-              case "":
-                that.list[i].jiankangstatus = "未上报";
-                that.list[i].color = "#999999";
-                break;
-              default:
-                that.list[i].jiankangstatus = "健康";
-                that.list[i].color = "#00C110";
-                break;
-            }
-          }
         }
-
         that.employRate = res.data.employRate;
       });
     },
