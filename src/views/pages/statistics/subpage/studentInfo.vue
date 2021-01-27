@@ -290,7 +290,7 @@ export default {
           return;
         }
       }
-      that.$axios.post(that.$api.updateInfo_student, data).then(res => {
+      that.$axios.post(that.$api.studentEdit, data).then(res => {
         that.editing = false;
       });
     },

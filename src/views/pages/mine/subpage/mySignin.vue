@@ -173,7 +173,7 @@ export default {
       if (item.isSignin) {
         let dateStr = that.$tool.getYearMonthDate(item.wf_Created);
         that.$set(that.signinDetail, "dateStr", dateStr);
-        that.$set(that.signinDetail, "company", that.userData.danweidizhi);
+        that.$set(that.signinDetail, "company", item.shixidanwei);
         that.$set(that.signinDetail, "time", item.wf_Created);
         that.$set(that.signinDetail, "address", item.address);
       } else {

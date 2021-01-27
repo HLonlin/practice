@@ -75,6 +75,7 @@ const API = {
     getEvaluate: '/api/practice/teacher/getConductEvaluationDetails', // 查看学生月度操行评定详情
     banZhuRenPingJiaList_teacher: '/api/practice/teacher/banZhuRenPingJiaList', //    班主任评价列表
     findBanZhuRenPingJiaById_teacher: '/api/practice/teacher/findBanZhuRenPingJiaById', // 查询班主任评价详情
+    studentEdit: '/api/practice/teacher/tongji/studentEdit', // 教师端编辑学生信息
     // --------------------------消息--------------------------
     msgList_teacher: '/api/practice/teacher/xiaoxi/xiaoxiList', // 教师消息列表
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 教师发送消息

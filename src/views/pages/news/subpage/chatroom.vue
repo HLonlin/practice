@@ -478,10 +478,11 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #333333;
-  overflow: hidden;
+  word-wrap: break-word;
+  /* overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis; */
 }
 .commonText_bottomPanel {
   position: relative;

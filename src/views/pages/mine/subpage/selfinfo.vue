@@ -287,8 +287,8 @@ export default {
       let userData = this.$tool.getLocal("userData");
       if (userData) {
         this.userData = userData;
+        this.headImg[0].url = this.userData.logo;
       }
-      this.headImg[0].url = this.userData.logo;
       if (!that.userData.isTeacher) {
         console.log(1);
         that.$axios

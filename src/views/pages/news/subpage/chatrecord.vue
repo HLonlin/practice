@@ -146,28 +146,19 @@ export default {
           that.pageNum = that.pageNum + 1;
           let historyDetailList = res.data.historyDetailList;
           for (let i = 0, imax = historyDetailList.length; i < imax; i++) {
+            let dateObj = that.$tool.getDateObj(
+              historyDetailList[i].wf_Created
+            );
+            let time =
+              (dateObj.month < 10 ? "0" + dateObj.month : dateObj.month) +
+              "月" +
+              (dateObj.date < 10 ? "0" + dateObj.date : dateObj.date) +
+              "日 " +
+              dateObj.hour +
+              ":" +
+              dateObj.minute;
+            historyDetailList[i]["time"] = time;
             that.recordList.push(historyDetailList[i]);
-            let month =
-              (new Date(historyDetailList[i].wf_Created).getMonth() + 1 < 10
-                ? "0" +
-                  (new Date(historyDetailList[i].wf_Created).getMonth() + 1)
-                : new Date(historyDetailList[i].wf_Created).getMonth() + 1) +
-              "月";
-            let dates =
-              (new Date(historyDetailList[i].wf_Created).getDate() < 10
-                ? "0" + new Date(historyDetailList[i].wf_Created).getDate()
-                : new Date(historyDetailList[i].wf_Created).getDate()) + "日 ";
-            let hours =
-              (new Date(historyDetailList[i].wf_Created).getHours() < 10
-                ? "0" + new Date(historyDetailList[i].wf_Created).getHours()
-                : new Date(historyDetailList[i].wf_Created).getHours()) + ":";
-            let min =
-              new Date(historyDetailList[i].wf_Created).getMinutes() < 10
-                ? "0" + new Date(historyDetailList[i].wf_Created).getMinutes()
-                : new Date(historyDetailList[i].wf_Created).getMinutes();
-            let time = month + dates + hours + min;
-            // that.$set(that.recordList[i], "time", time);
-            that.recordList[i]["time"] = time;
           }
           // 数据全部加载完成
           if (that.recordList.length >= res.data.totalRecord) {
