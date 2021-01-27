@@ -146,8 +146,8 @@ export default {
           } else {
             // 学生
             that.userData["isTeacher"] = false;
-            this.$tool.setLocal("updateRemindClose", false);
-            that.$tool.setLocal("evaluateRemindClose", false);
+            this.$tool.setLocal("updateRemind", false);
+            that.$tool.setLocal("evaluateRemind", false);
             this.$tool.setLocal("userData", that.userData);
             this.$tool.setLocal("identity", "student");
             this.$router.push({ path: "/signin" });

@@ -156,7 +156,7 @@
       <van-popup
         v-model="popups.updateRemind"
         :get-container="getContainer"
-        @close="updateRemindClose"
+        @close="runRemind"
       >
         <div class="signin_popup">
           <div class="signin_popupContent">
@@ -164,7 +164,12 @@
               {{ remindText }}
             </div>
             <div class="popupRemindBtn_panel">
-              <div class="popup_remindBtn" @click="linkTo">去修改</div>
+              <div
+                class="popup_remindBtn"
+                @click="linkTo('/selfinfo', { cardid: userData.cardid })"
+              >
+                去修改
+              </div>
             </div>
           </div>
         </div>
@@ -172,7 +177,7 @@
       <van-popup
         v-model="popups.evaluateRemind"
         :get-container="getContainer"
-        @close="evaluateRemindClose"
+        @close="runRemind"
       >
         <div class="signin_popup">
           <div class="signin_popupContent">
@@ -180,7 +185,12 @@
               您还未完成班主任评定，请尽快完成评定。
             </div>
             <div class="popupRemindBtn_panel">
-              <div class="popup_remindBtn" @click="routerTo">去评定</div>
+              <div
+                class="popup_remindBtn"
+                @click="linkTo('/selfinfo', { cardid: userData.cardid })"
+              >
+                去评定
+              </div>
             </div>
           </div>
         </div>
@@ -255,54 +265,71 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    getBanZhuRenPingJiaMsg: function() {
+    runRemind: function() {
       let that = this;
-      if (that.$tool.getLocal("evaluateRemindClose")) return;
-      that.$axios.post(that.$api.getBanZhuRenPingJiaMsg).then(res => {
-        if (!res.data) {
-          that.popups.evaluateRemind = true;
-        }
-      });
-    },
-    getUpdateUserInfoMsg: function() {
-      let that = this;
-      if (that.$tool.getLocal("updateRemindClose")) {
-        that.getBanZhuRenPingJiaMsg();
-      } else {
-        that.$axios
-          .post(that.$api.getUpdateUserInfoMsg, {
-            cardid: that.userData.cardid
-          })
-          .then(res => {
-            that.remindText = res.data;
-            if (!res.data) {
-              return;
+      let remindList = [
+        {
+          name: "updateRemind",
+          fn: function() {
+            if (that.$tool.getLocal("updateRemind")) {
+              that.getBanZhuRenPingJiaMsg();
             } else {
-              that.popups.updateRemind = true;
+              that.$axios
+                .post(that.$api.getUpdateUserInfoMsg, {
+                  cardid: that.userData.cardid
+                })
+                .then(res => {
+                  that.remindText = res.data;
+                  if (!res.data) {
+                    return;
+                  } else {
+                    that.popups.updateRemind = true;
+                    that.$tool.setLocal("updateRemind", true);
+                  }
+                });
             }
-          });
+          }
+        },
+        {
+          name: "evaluateRemind",
+          fn: function() {
+            if (that.$tool.getLocal("evaluateRemind")) return;
+            that.$axios.post(that.$api.getBanZhuRenPingJiaMsg).then(res => {
+              if (!res.data) {
+                that.popups.evaluateRemind = true;
+                that.$tool.setLocal("evaluateRemind", true);
+              }
+            });
+          }
+        }
+      ];
+      for (let i = 0, imax = remindList.length; i < imax; i++) {
+        if (!that.$tool.getLocal(remindList[i].name)) {
+          remindList[i].fn();
+          return;
+        }
       }
     },
     // 今日是否签到
     isSigninTotal: function() {
       let that = this;
-      that.$axios.post(that.$api.isSignin, {}).then(res => {
+      that.$axios.post(that.$api.isSignin).then(res => {
         that.is_SigninTotal = res.data.hasQiandao;
       });
     },
     isLearnToday: function() {
       // 是否已经每日一学
       let that = this;
-      that.$axios.post(that.$api.isLearnToday, {}).then(res => {
+      that.$axios.post(that.$api.isLearnToday).then(res => {
         if (!res.data.hasMeizhouyixue) {
           getLearnContent();
         } else {
-          that.getUpdateUserInfoMsg();
+          that.runRemind();
         }
       });
       // 获取每日一学内容
       function getLearnContent() {
-        that.$axios.post(that.$api.getDailyStudy, {}).then(res => {
+        that.$axios.post(that.$api.getDailyStudy).then(res => {
           for (let keys in res.data) {
             that.$set(that.learnContent, keys, res.data[keys]);
           }
@@ -340,7 +367,7 @@ export default {
               confirmButtonColor: "#0090d8"
             })
             .then(() => {
-              that.getUpdateUserInfoMsg();
+              that.runRemind();
             });
         });
     },
@@ -616,26 +643,11 @@ export default {
           });
         });
     },
-    linkTo: function() {
-      let that = this;
-      that.updateRemindClose();
+    linkTo: function(path, query) {
       this.$router.push({
-        path: "/selfinfo",
-        query: { cardid: that.userData.cardid }
+        path: path,
+        query: query
       });
-    },
-    routerTo: function() {
-      let that = this;
-      that.evaluateRemindClose();
-      this.$router.push({
-        path: "/selfinfo"
-      });
-    },
-    updateRemindClose: function() {
-      this.$tool.setLocal("updateRemindClose", true);
-    },
-    evaluateRemindClose: function() {
-      this.$tool.setLocal("evaluateRemindClose", true);
     }
   },
   computed: {
