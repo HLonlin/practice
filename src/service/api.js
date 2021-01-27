@@ -44,6 +44,9 @@ const API = {
     jiuyezhuangtai: '/api/practice/dic/jiuyezhuangtai', // 就业状态数据字典
     isUpdateStudentRecord: '/api/practice/student/isUpdateStudentRecord', // 查询是否存在未审核学生修改记录
     getBanZhuRenPingJiaMsg: '/api/practice/student/getBanZhuRenPingJiaMsg', // 获取班主任评价提示信息
+    addBanZhuRenPingJia: '/api/practice/student/banzhuren/addBanZhuRenPingJia', // 新增班主任评价
+    banZhuRenPingJiaList_student: '/api/practice/student/banZhuRenPingJiaList', // 班主任评价列表
+    findBanZhuRenPingJiaById_student: '/api/practice/student/findBanZhuRenPingJiaById', // 查询班主任评价详情
     // --------------------------月记--------------------------
     monthlyList: '/api/practice/student/zhoubao/zhoubaoList', // 月记列表
     monthlyDetail: '/api/practice/student/zhoubao/zhoubaoDetail', // 月记详情
@@ -70,7 +73,8 @@ const API = {
     getEvaluateList: '/api/practice/teacher/conductEvaluationList', // 学生月度操行评定列表
     addConductEvaluation: '/api/practice/teacher/addConductEvaluation', // 新增学生月度操行评定
     getEvaluate: '/api/practice/teacher/getConductEvaluationDetails', // 查看学生月度操行评定详情
-    banZhuRenPingJiaList: '/api/practice/teacher/banZhuRenPingJiaList', //    班主任评价列表
+    banZhuRenPingJiaList_teacher: '/api/practice/teacher/banZhuRenPingJiaList', //    班主任评价列表
+    findBanZhuRenPingJiaById_teacher: '/api/practice/teacher/findBanZhuRenPingJiaById', // 查询班主任评价详情
     // --------------------------消息--------------------------
     msgList_teacher: '/api/practice/teacher/xiaoxi/xiaoxiList', // 教师消息列表
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 教师发送消息

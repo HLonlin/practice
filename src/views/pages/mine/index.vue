@@ -95,6 +95,10 @@
       </router-link>
     </div>
     <div class="bottom_panel" v-else>
+      <div class="cell_panel" @click="routerTo">
+        <i class="iconItem icon_xueshengpingjia icon_left"></i>
+        <div class="middle_title">班主任评价</div>
+      </div>
       <router-link :to="{ path: 'contactList' }" class="cell_panel">
         <i class="iconItem icon_tongxunlutubiaobeifen icon_left"></i>
         <div class="middle_title">通讯录</div>
@@ -188,6 +192,23 @@ export default {
     },
     linkTo: function(type) {
       this.$router.push({ path: "/todoList", query: { type: type } });
+    },
+    routerTo: function() {
+      let that = this;
+      that.$axios.post(that.$api.getBanZhuRenPingJiaMsg).then(res => {
+        if (res.data) {
+          this.$router.push({
+            path: "/evaluateList"
+          });
+        } else {
+          this.$router.push({
+            path: "/evaluateTeacher",
+            query: {
+              username: that.userData.banzhuren
+            }
+          });
+        }
+      });
     }
   }
 };

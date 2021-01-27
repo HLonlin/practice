@@ -84,7 +84,6 @@
           type="digit"
           input-align="center"
           v-model="score.total.score"
-          @input="inputHandler(score.total.score, 'total')"
           :readonly="true"
         />
         分
@@ -168,7 +167,7 @@ export default {
     addEvaluate: function() {
       let that = this;
       for (let key in that.score) {
-        if (!this.score[key]) {
+        if (!this.score[key].score) {
           switch (key) {
             case "internship":
               that.$toast({
@@ -183,11 +182,6 @@ export default {
             case "observe":
               that.$toast({
                 message: "遵纪守法评分不能为空"
-              });
-              break;
-            case "total":
-              that.$toast({
-                message: "总分不能为空"
               });
               break;
           }
@@ -206,7 +200,9 @@ export default {
           totalNum: that.score.total.score
         })
         .then(res => {
-          that.$toast.success("成功");
+          that.$toast({
+            message: "提交成功"
+          });
           that.$router.go(-1);
         });
     }

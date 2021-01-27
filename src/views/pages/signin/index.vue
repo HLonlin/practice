@@ -187,7 +187,11 @@
             <div class="popupRemindBtn_panel">
               <div
                 class="popup_remindBtn"
-                @click="linkTo('/selfinfo', { cardid: userData.cardid })"
+                @click="
+                  linkTo('/evaluateTeacher', {
+                    username: userData.banzhuren,
+                  })
+                "
               >
                 去评定
               </div>
@@ -646,7 +650,7 @@ export default {
     linkTo: function(path, query) {
       this.$router.push({
         path: path,
-        query: query
+        query: arguments[1] ? query : ""
       });
     }
   },

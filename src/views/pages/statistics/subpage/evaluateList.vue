@@ -2,7 +2,7 @@
   <div class="evaluateList_container">
     <div class="topbar_panel">
       <van-nav-bar
-        title="学生评价"
+        title="评价列表"
         :fixed="true"
         :placeholder="true"
         :safe-area-inset-top="true"
@@ -19,10 +19,12 @@
         @click="linkTo(item)"
       >
         <div class="label_panel">
-          <div class="label_title">学生{{ i + 1 }}</div>
+          <div class="label_title">
+            {{ userData.isTeacher ? "学生" + (i + 1) : item.username }}
+          </div>
           <div class="label_signin">
-            <span>评价总分：{{ item.fraction ? item.fraction : "100" }}分</span
-            ><span>评价时间：{{ item.time ? item.time : "2020-01-18" }}</span>
+            <span>评价总分：{{ item.totalNum ? item.totalNum : "" }}分</span
+            ><span>评价时间：{{ item.year + "-" + item.month }}</span>
           </div>
         </div>
       </div>
@@ -38,11 +40,13 @@ export default {
   name: "evaluateList",
   data() {
     return {
-      list: []
+      list: [],
+      userData: Object
     };
   },
   beforeCreate() {},
   created() {
+    this.getUserData();
     this.getEvaluateList();
   },
   beforeMount() {},
@@ -52,24 +56,38 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getUserData: function() {
+      let userData = this.$tool.getLocal("userData");
+      if (userData) {
+        this.userData = userData;
+      }
+    },
     onClickLeft: function() {
       this.$router.go(-1);
     },
     getEvaluateList: function() {
       let that = this;
-      that.$axios.post(that.$api.banZhuRenPingJiaList, {}).then(res => {
-        that.list = res.data;
-      });
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.banZhuRenPingJiaList_teacher
+            : that.$api.banZhuRenPingJiaList_student
+        )
+        .then(res => {
+          that.list = res.data;
+        });
     },
     linkTo: function(item) {
-      console.log(item);
-      return;
+      let data = {
+        id: item.id,
+        finish: true,
+        from: "teacher"
+      };
       this.$router.push({
-        path: "/evaluateStudent",
+        path: "/evaluateTeacher",
         query: {
-          cardid: JSON.stringify(item.cardid),
-          logo: JSON.stringify(item.logo),
-          name: JSON.stringify(item.username)
+          id: item.id,
+          finish: true
         }
       });
     }
