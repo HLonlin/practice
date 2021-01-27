@@ -17,11 +17,9 @@
             class="selfinfo_headIcon"
             v-model="headImg"
             :max-count="1"
-            :before-read="beforeRead"
-            :after-read="afterRead"
             preview-size="3.75rem"
             :deletable="false"
-            :preview-options="{ showIndex: false }"
+            :preview-options="{ showIndex: false, closeable: true }"
           >
           </van-uploader>
         </div>
@@ -69,8 +67,6 @@
             class="selfinfo_headIcon"
             v-model="headImg"
             :max-count="1"
-            :before-read="beforeRead"
-            :after-read="afterRead"
             preview-size="3.75rem"
             :deletable="false"
             :preview-options="{ showIndex: false, closeable: true }"
@@ -283,7 +279,7 @@ export default {
         this.$toast({
           message: "联系电话格式错误，请重新输入"
         });
-        return "";
+        return value;
       } else {
         return value;
       }
@@ -303,30 +299,6 @@ export default {
     },
     onClickLeft: function() {
       this.$router.go(-1);
-    },
-    // 上传前校验格式、大小
-    beforeRead(file) {
-      return true;
-    },
-    afterRead(file) {
-      let that = this;
-      const tempFile = file.file;
-      const type = tempFile.type;
-      const size = tempFile.size;
-      const newName =
-        new Date().getTime() +
-        tempFile.name.substring(tempFile.name.indexOf("."));
-      let uploadFile = new File([tempFile], newName, { type, size });
-      let formData = new FormData();
-      formData.append("file", uploadFile);
-      file.status = "uploading";
-      file.message = "上传中...";
-
-      setTimeout(() => {
-        file.status = "done";
-        file.message = "上传成功";
-        console.log(that.headImg);
-      }, 1000);
     },
     onEditing: function() {
       let that = this;

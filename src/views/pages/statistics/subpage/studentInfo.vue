@@ -19,24 +19,9 @@
           class="selfinfo_headIcon"
           v-model="headImg"
           :max-count="1"
-          :before-read="beforeRead"
-          :after-read="afterRead"
           preview-size="3.75rem"
           :deletable="false"
-          :preview-options="{ showIndex: false }"
-          v-if="!editing"
-        >
-        </van-uploader>
-        <van-uploader
-          class="selfinfo_headIcon"
-          v-model="headImg"
-          :max-count="1"
-          :before-read="beforeRead"
-          :after-read="afterRead"
-          preview-size="3.75rem"
-          :preview-options="{ showIndex: false }"
-          accept="image/png,image/jpeg,image/gif"
-          v-else
+          :preview-options="{ showIndex: false, closeable: true }"
         >
         </van-uploader>
       </div>
@@ -271,30 +256,6 @@ export default {
     onClickLeft: function() {
       this.$router.go(-1);
     },
-    // 上传前校验格式、大小
-    beforeRead(file) {
-      return true;
-    },
-    afterRead(file) {
-      let that = this;
-      const tempFile = file.file;
-      const type = tempFile.type;
-      const size = tempFile.size;
-      const newName =
-        new Date().getTime() +
-        tempFile.name.substring(tempFile.name.indexOf("."));
-      let uploadFile = new File([tempFile], newName, { type, size });
-      let formData = new FormData();
-      formData.append("file", uploadFile);
-      file.status = "uploading";
-      file.message = "上传中...";
-
-      setTimeout(() => {
-        file.status = "done";
-        file.message = "上传成功";
-        console.log(that.headImg);
-      }, 1000);
-    },
     onEditing: function() {
       let that = this;
       that.editing = true;
@@ -367,6 +328,7 @@ export default {
           for (let keys in data) {
             that.$set(that.studentInfo, keys, data[keys]);
           }
+          this.headImg[0].url = this.studentInfo.logo;
         });
     },
     linkTo: function(path) {

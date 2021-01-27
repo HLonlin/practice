@@ -16,10 +16,9 @@
             style="object-fit: cover;"
           />
         </div>
-        <div class="info_name" v-if="userData.isTeacher">
-          {{ userData.name }}
+        <div class="info_name">
+          {{ userData.isTeacher ? userData.name : userData.userName }}
         </div>
-        <div class="info_name" v-else>{{ userData.userName }}</div>
       </router-link>
     </div>
     <div class="middle_panel" v-if="userData.isTeacher">
