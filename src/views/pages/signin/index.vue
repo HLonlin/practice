@@ -189,7 +189,7 @@
                 class="popup_remindBtn"
                 @click="
                   linkTo('/evaluateTeacher', {
-                    username: userData.banzhuren,
+                    username: userData.banzhuren
                   })
                 "
               >
@@ -484,6 +484,7 @@ export default {
       let that = this;
       that.$axios.post(that.$api.healthStatus, {}).then(res => {
         let data = res.data;
+        that.healthStatus = data[0].text;
         for (let i = 0, imax = data.length; i < imax; i++) {
           that.healthRadio[i] = data[i].text;
           // that.$set(that.healthRadio, i, data[i].text);

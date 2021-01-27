@@ -205,7 +205,7 @@ export default {
         )
         .then(res => {
           that.msg = "";
-          that.getMsgDetail();
+          that.getMsgDetail(true);
         });
     },
     chatRecord: function() {

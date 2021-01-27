@@ -284,16 +284,24 @@ export default {
     },
     getUserData: function() {
       let that = this;
-      that.$axios
-        .post(that.$api.getUserByCardId, { cardid: that.$route.query.cardid })
-        .then(res => {
-          that.userData = res.data;
-          this.userData.logo = this.userData.logo
-            ? this.userData.logo
-            : require("@/assets/images/default.png");
-          this.headImg[0].url = this.userData.logo;
-          that.$tool.setLocal("userData", that.userData);
-        });
+      let userData = this.$tool.getLocal("userData");
+      if (userData) {
+        this.userData = userData;
+      }
+      this.headImg[0].url = this.userData.logo;
+      if (!that.userData.isTeacher) {
+        console.log(1);
+        that.$axios
+          .post(that.$api.getUserByCardId, { cardid: that.$route.query.cardid })
+          .then(res => {
+            that.userData = res.data;
+            this.userData.logo = this.userData.logo
+              ? this.userData.logo
+              : require("@/assets/images/default.png");
+            this.headImg[0].url = this.userData.logo;
+            that.$tool.setLocal("userData", that.userData);
+          });
+      }
     },
     onClickLeft: function() {
       this.$router.go(-1);
