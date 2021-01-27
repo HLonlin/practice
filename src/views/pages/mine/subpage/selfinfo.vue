@@ -279,10 +279,8 @@ export default {
         this.$toast({
           message: "联系电话格式错误，请重新输入"
         });
-        return value;
-      } else {
-        return value;
       }
+      return value;
     },
     getUserData: function() {
       let that = this;

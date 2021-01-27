@@ -248,10 +248,8 @@ export default {
         this.$toast({
           message: "联系电话格式错误，请重新输入"
         });
-        return "";
-      } else {
-        return value;
       }
+      return value;
     },
     onClickLeft: function() {
       this.$router.go(-1);
