@@ -158,7 +158,7 @@ export default {
       this.userData = userData;
     }
     this.chatWith = JSON.parse(this.$route.query.chatWith);
-    this.getMsgDetail();
+    this.getMsgDetail(true);
     clearInterval(window.getMsgDetail);
     window.getMsgDetail = setInterval(function() {
       that.getMsgDetail();
@@ -230,7 +230,7 @@ export default {
       }
       this.popups[keys] = val;
     },
-    getMsgDetail: function() {
+    getMsgDetail: function(nextTick) {
       let that = this;
       let data = {};
       if (that.userData.isTeacher) {
@@ -266,11 +266,13 @@ export default {
               dateObj.minute;
             that.$set(that.msgDetailList[i], "time", time);
           }
-          // 消息滚动到最底部
-          that.$nextTick(() => {
-            that.reSetMsgListH();
-            that.readMsg();
-          });
+          if (nextTick) {
+            // 消息滚动到最底部
+            that.$nextTick(() => {
+              that.reSetMsgListH();
+              that.readMsg();
+            });
+          }
         });
     },
     getCommonList: function() {
