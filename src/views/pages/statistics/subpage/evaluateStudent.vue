@@ -20,7 +20,7 @@
       </div>
       <div class="topLabel_panel">
         <div class="topName_panel">{{ name }}</div>
-        <div class="topTime_panel">2020年12月</div>
+        <div class="topTime_panel">{{ year }}年{{ month }}月</div>
       </div>
     </div>
     <div class="evaluateScore_panel">
@@ -37,6 +37,7 @@
           input-align="center"
           v-model="score.internship.score"
           @input="inputHandler(score.internship.score, 'internship')"
+          :readonly="finish"
         />
         分
       </div>
@@ -54,6 +55,7 @@
           input-align="center"
           v-model="score.vocation.score"
           @input="inputHandler(score.vocation.score, 'vocation')"
+          :readonly="finish"
         />
         分
       </div>
@@ -70,6 +72,7 @@
           input-align="center"
           v-model="score.observe.score"
           @input="inputHandler(score.observe.score, 'observe')"
+          :readonly="finish"
         />
         分
       </div>
@@ -88,8 +91,10 @@
       </div>
       <div class="score_remark">(操行分不能低于90分，满分100分)</div>
     </div>
-    <div class="evaluateBottom_panel">
-      <div class="evaluateBottom_btn" @click="addEvaluate">提交</div>
+    <div class="evaluateBottom_panel" v-if="!finish">
+      <div class="evaluateBottom_btn" @click="addEvaluate">
+        提交
+      </div>
     </div>
   </div>
 </template>
@@ -101,6 +106,9 @@ export default {
     return {
       name: "",
       logo: "",
+      finish: false,
+      year: "",
+      month: "",
       score: {
         internship: { score: "", max: 70 },
         vocation: { score: "", max: 20 },
@@ -111,8 +119,10 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.logo = JSON.parse(this.$route.query.logo);
-    this.name = JSON.parse(this.$route.query.name);
+    this.logo = JSON.parse(this.$route.query.data).logo;
+    this.name = JSON.parse(this.$route.query.data).name;
+    this.finish = JSON.parse(this.$route.query.data).finish;
+    this.getEvaluate();
   },
   beforeMount() {},
   mounted() {},
@@ -135,6 +145,25 @@ export default {
         Number(that.score.internship.score) +
         Number(that.score.vocation.score) +
         Number(that.score.observe.score);
+    },
+    getEvaluate: function() {
+      if (!this.finish) return;
+      let that = this;
+      let today = that.$tool.getDateObj();
+      that.$axios
+        .post(that.$api.getEvaluate, {
+          cardid: JSON.parse(this.$route.query.data).cardid,
+          year: today.year,
+          month: today.month < 10 ? "0" + today.month : today.month
+        })
+        .then(res => {
+          that.score.internship.score = res.data.internshipNum;
+          that.score.vocation.score = res.data.professionalNum;
+          that.score.observe.score = res.data.abidingNum;
+          that.score.total.score = res.data.totalNum;
+          that.year = res.data.year;
+          that.month = res.data.month;
+        });
     },
     addEvaluate: function() {
       let that = this;
@@ -165,16 +194,12 @@ export default {
           return;
         }
       }
-      let date = new Date();
-      let month =
-        date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1)
-          : date.getMonth() + 1;
+      let today = that.$tool.getDateObj();
       that.$axios
         .post(that.$api.addConductEvaluation, {
-          cardid: JSON.parse(that.$route.query.cardid),
-          year: date.getFullYear(),
-          month: month,
+          cardid: JSON.parse(this.$route.query.data).cardid,
+          year: today.year,
+          month: today.month < 10 ? "0" + today.month : today.month,
           internshipNum: that.score.internship.score,
           professionalNum: that.score.vocation.score,
           abidingNum: that.score.observe.score,

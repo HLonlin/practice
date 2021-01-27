@@ -69,6 +69,7 @@ const API = {
     getConductEvaluationMsg: '/api/practice/teacher/getConductEvaluationMsg', // 获取月度操行评定提示信息
     getEvaluateList: '/api/practice/teacher/conductEvaluationList', // 学生月度操行评定列表
     addConductEvaluation: '/api/practice/teacher/addConductEvaluation', // 新增学生月度操行评定
+    getEvaluate: '/api/practice/teacher/getConductEvaluationDetails', // 查看学生月度操行评定详情
     banZhuRenPingJiaList: '/api/practice/teacher/banZhuRenPingJiaList', //    班主任评价列表
     // --------------------------消息--------------------------
     msgList_teacher: '/api/practice/teacher/xiaoxi/xiaoxiList', // 教师消息列表

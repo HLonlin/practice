@@ -201,13 +201,19 @@ export default {
           });
           break;
         case "evaluate":
+          let data = {
+            cardid: item.cardid,
+            logo: item.logo,
+            name: item.username
+          };
+          if (item.status == "已评定") {
+            data.finish = true;
+          } else {
+            data.finish = false;
+          }
           this.$router.push({
             path: "/evaluateStudent",
-            query: {
-              cardid: JSON.stringify(item.cardid),
-              logo: JSON.stringify(item.logo),
-              name: JSON.stringify(item.username)
-            }
+            query: { data: JSON.stringify(data) }
           });
           break;
       }
