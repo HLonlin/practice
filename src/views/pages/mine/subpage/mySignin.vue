@@ -52,12 +52,12 @@
         {{ signinDetail.dateStr }}
       </div>
       <div class="signinDetail_isSignin" v-if="signinDetail.isSignin">
-        <div class="signinDetail_company signinDetail_container">
+        <!-- <div class="signinDetail_company signinDetail_container">
           <div class="signinDetail_label">实习单位</div>
           <div class="signinDetail_content">
             {{ signinDetail.company }}
           </div>
-        </div>
+        </div> -->
         <div class="signinDetail_time signinDetail_container">
           <div class="signinDetail_label ">签到时间</div>
           <div class="signinDetail_content">
