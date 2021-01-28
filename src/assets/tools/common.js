@@ -35,6 +35,6 @@ const common = {
                 fn.apply(this, arguments);
             }, delay);
         };
-    }
+    },
 };
 export default common;

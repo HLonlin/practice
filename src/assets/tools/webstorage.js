@@ -1,4 +1,4 @@
-export const localStorage = {
+const Storage = {
     setLocal: (key, data) => {
         let dataStr = JSON.stringify(data)
         window.localStorage.setItem(key, dataStr)
@@ -14,10 +14,7 @@ export const localStorage = {
     },
     removeLocal: (key) => {
         window.localStorage.removeItem(key)
-    }
-}
-
-export const sessionStorage = {
+    },
     setSession: (key, data) => {
         let dataStr = JSON.stringify(data)
         if (!dataStr) return false
@@ -36,3 +33,4 @@ export const sessionStorage = {
         window.sessionStorage.removeItem(key)
     }
 }
+export default Storage;

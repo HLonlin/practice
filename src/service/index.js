@@ -6,7 +6,7 @@
 import axios from 'axios';
 import api from "./api.js";
 import { Toast } from 'vant';
-import tool from '@/assets/tools'; //常用工具集
+import Storage from "@/assets/tools/webstorage";
 import router from '../router'
 import Vue from 'vue'
 
@@ -26,7 +26,7 @@ const commonFn = {
 
 // axios 配置
 axios.defaults.timeout = 15000;
-let token = tool.getLocal('token');
+let token = Storage.getLocal('token');
 if (token) {
     axios.defaults.headers.common["Access-Token"] = token;
 }
@@ -36,7 +36,6 @@ axios.defaults.baseURL = api.host;
 axios.interceptors.request.use(
     config => {
         if (config.method === 'post') {
-            // config.data = JSON.stringify(config.data);
             config.data = commonFn.stringify(config.data);
         }
         return config;

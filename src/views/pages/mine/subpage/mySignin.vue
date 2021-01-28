@@ -70,7 +70,7 @@
             {{ signinDetail.address }}
           </div>
         </div>
-        <div class="signinDetail_map">查看坐标地图</div>
+        <div class="signinDetail_map" @click="openMap">查看坐标地图</div>
       </div>
       <div class="signinDetail_noSignin" v-else>
         未签到
@@ -107,6 +107,17 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    openMap: function() {
+      let that = this;
+      that.$tool.addressToLocation(that.signinDetail.address, function(res) {
+        let lat = res.data.result.location.lat,
+          lng = res.data.result.location.lng;
+        that.$tool.openMap(lat, lng, {
+          name: that.signinDetail.address
+          // address: "地址详细说明"
+        });
+      });
+    },
     onClickLeft: function() {
       this.$router.go(-1);
     },
@@ -164,7 +175,6 @@ export default {
     },
     // 获取签到详情
     getSigninDetails: function(item) {
-      console.log(item);
       if (item.dayClass == "future") {
         return;
       }

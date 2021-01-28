@@ -145,9 +145,11 @@
             <div class="popup_ContentItem">
               <div class="popup_itemTitle">
                 签到地址
-                <div class="popup_itemLabel" @click="relocation">重新定位</div>
+                <div class="popup_itemLabel" @click="getCurrentAddress">
+                  重新定位
+                </div>
               </div>
-              <div class="popup_itemText">广东省广州市越秀区小北路22号</div>
+              <div class="popup_itemText">{{ currentAddress }}</div>
             </div>
           </div>
           <div class="signin_popupBottomBtn" @click="signinTotal">确定</div>
@@ -205,7 +207,7 @@
 <script>
 /**
  * 签到页
- * 3KWBZ-6TXWI-M2SGX-5SMDX-GD7N3-IIBMB
+ * apikes:3KWBZ-6TXWI-M2SGX-5SMDX-GD7N3-IIBMB
  */
 import wx from "weixin-js-sdk"; // 微信sdk
 export default {
@@ -240,7 +242,7 @@ export default {
       },
       is_SigninTotal: false, // 今日是否已签到
       healthStatus: "自觉正常", // 健康状态
-      currentAddress: "广东省广州市越秀区小北路22号", // 当前签到地址
+      currentAddress: "", // 当前签到地址
       latitude: "113.345073", // 纬度
       longitude: "23.182055", // 经度
       otherHealthStatus: "", // 其他症状输入框文本
@@ -259,6 +261,7 @@ export default {
     this.isLearnToday();
     this.isSigninTotal();
     this.getHealthStatus();
+    this.getCurrentAddress();
   },
   beforeMount() {},
   mounted() {
@@ -269,6 +272,20 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    // that.$toast({
+    //    duration: 0,
+    //    message: ''
+    // });
+    getCurrentAddress: function() {
+      let that = this;
+      that.$tool.getCurrentAddress(function(data) {
+        that.$tool.locationToAddress(data.latitude, data.longitude, function(
+          res
+        ) {
+          that.currentAddress = res.data.result.address;
+        });
+      });
+    },
     runRemind: function() {
       let that = this;
       let remindList = [
@@ -566,86 +583,6 @@ export default {
           that.openPopup("confirmSignin", false);
           that.isSigninTotal();
           that.getSigninDetailsList();
-        });
-    },
-    // 获取地址
-    getAddress: function() {
-      let geocoder = new qq.maps.Geocoder({
-        complete: function(result) {
-          console.log("成功：" + result.detail.address);
-        }
-      });
-      var coord = new qq.maps.LatLng(39.987816, 116.328327);
-      geocoder.getAddress(coord);
-    },
-    // 重新定位签到地址
-    relocation() {
-      let that = this,
-        u = navigator.userAgent;
-      if (u.indexOf("MicroMessenger") > -1) {
-      } else {
-        that.$toast({
-          message: "请在微信端进行此操作"
-        });
-        return;
-      }
-      var isAndroid = u.indexOf("Android") > -1 || u.indexOf("Linux") > -1; //g
-      var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-      let url = "";
-      if (isAndroid) {
-        url = location.href;
-      }
-      if (isIOS) {
-        url = location.href.split("#")[0]; //hash后面的部分如果带上ios中config会不对
-      }
-      that.$axios
-        .get(that.$api.getWechatInvokeSign, {
-          url: url
-        })
-        .then(response => {
-          let data = response.data;
-          wx.config({
-            beta: true,
-            debug: false,
-            appId: data.appId, // 必填，公众号的唯一标识
-            timestamp: data.timestamp, // 必填，生成签名的时间戳
-            nonceStr: data.nonceStr, // 必填，生成签名的随机串
-            signature: data.signature, // 必填，签名，见附录1
-            jsApiList: ["getLocation", "openLocation"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-          });
-          wx.ready(function() {
-            that.$toast({
-              message: "wxReady"
-            });
-            wx.getLocation({
-              type: "gcj02", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-              success: function(res) {
-                that.$toast({
-                  message: "getLocationSuccess"
-                });
-                wx.openLocation({
-                  latitude: res.latitude, // 纬度，浮点数，范围为90 ~ -90
-                  longitude: res.longitude, // 经度，浮点数，范围为180 ~ -180。
-                  scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
-                  success: function(res) {
-                    that.$toast({
-                      message: "openLocationSuccess"
-                    });
-                  },
-                  fail: function(err) {
-                    that.$toast({
-                      message: "openLocationFail"
-                    });
-                  }
-                });
-              },
-              fail: function(err) {
-                that.$toast({
-                  message: "位置获取失败！"
-                });
-              }
-            });
-          });
         });
     },
     linkTo: function(path, query) {

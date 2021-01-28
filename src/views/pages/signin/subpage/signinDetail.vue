@@ -40,7 +40,7 @@
             ]"
             :key="i"
             :style="{ marginLeft: i == 0 ? firstDay * 14.285 + '%' : 0 }"
-            @click="getSigninDetails(item)"
+            @click="openMap(item)"
           >
             <div class="listItem_text">
               {{ item == i + 1 ? item : i + 1 }}
@@ -154,8 +154,17 @@ export default {
       that.currentYearMonth = dateArr[0] + "年" + dateArr[1] + "月";
       that.getSigninList(dateArr[0] + "-" + dateArr[1]);
     },
-    getSigninDetails: function(item) {
-      console.log(item);
+    openMap: function(item) {
+      let that = this;
+      if (!item.address) return;
+      that.$tool.addressToLocation(item.address, function(res) {
+        let lat = res.data.result.location.lat,
+          lng = res.data.result.location.lng;
+        that.$tool.openMap(lat, lng, {
+          name: item.address
+          // address: "地址详细说明"
+        });
+      });
     }
   }
 };

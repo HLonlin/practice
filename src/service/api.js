@@ -16,7 +16,6 @@ const API = {
     signinList: '/api/practice/student/qiandao/monthQiandaoList', // 根据月份获取学员签到列表
     getSigninDetails: '/api/practice/student/qiandao/dateQiandao', // 根据日期查看签到详情
     healthStatus: '/api/practice/dic/healthStatus', // 健康状态数据字典
-    getWechatInvokeSign: '/api/practice/wechat/getWechatInvokeSign', // 获取微信调用配置
     getDailyStudy: '/api/practice/student/meizhouyixue/context', // 获取每日一学内容
     recordLearnEveryDay: '/api/practice/student/meizhouyixue/record', // 每日一学学习记录打卡
     isLearnToday: '/api/practice/student/meizhouyixue/hasMeizhouyixue', // 判断是否已经学习每日一学
@@ -105,6 +104,12 @@ const API = {
     submitAudit: '/api/practice/teacher/submitAudit', // 审核学生信息
     getUserByCardId_teacher: '/api/practice/teacher/getUserByCardId', // 根据身份证查找学生信息
     getCountNum: '/api/practice/teacher/getCountNum', // 获取我的统计数
+
+    // --------------------------------------------------------------- 微信端 ---------------------------------------------------------------
+    getWechatInvokeSign: '/api/practice/wechat/getWechatInvokeSign', // 获取微信调用配置
+    getWechatAuthURI: '/api/practice/wechat/getWechatAuthURI', // 获取微信公众号授权的URL地址 getWechatAuthURI
+    getAddress: '/api/practice/wechat/getLocationInfo', // 逆地址解析（坐标位置描述)
+    getLocation: '/api/practice/wechat/getLocationCoordinate', // 地址解析（地址转坐标）
 
 }
 export default API
