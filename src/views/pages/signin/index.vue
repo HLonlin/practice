@@ -9,7 +9,7 @@
           {{ is_SigninTotal ? "已签到" : "签到" }}
         </div>
       </div>
-      <div class="signin_position">
+      <div class="signin_position" v-show="currentAddress">
         <i class="iconItem icon_dizhitubiao signin_icon"></i>
         {{ currentAddress }}
       </div>
@@ -261,7 +261,9 @@ export default {
     this.isLearnToday();
     this.isSigninTotal();
     this.getHealthStatus();
-    this.getCurrentAddress();
+    if (this.$tool.isWechat()) {
+      this.getCurrentAddress();
+    }
   },
   beforeMount() {},
   mounted() {
@@ -272,11 +274,13 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    // that.$toast({
-    //    duration: 0,
-    //    message: ''
-    // });
     getCurrentAddress: function() {
+      if (!this.$tool.isWechat()) {
+        this.$toast({
+          message: "请在微信端进行此操作"
+        });
+        return;
+      }
       let that = this;
       that.$tool.getCurrentAddress(function(data) {
         that.$tool.locationToAddress(data.latitude, data.longitude, function(

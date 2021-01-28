@@ -108,6 +108,12 @@ export default {
   destroyed() {},
   methods: {
     openMap: function() {
+      if (!this.$tool.isWechat()) {
+        this.$toast({
+          message: "请在微信端进行此操作"
+        });
+        return;
+      }
       let that = this;
       that.$tool.addressToLocation(that.signinDetail.address, function(res) {
         let lat = res.data.result.location.lat,

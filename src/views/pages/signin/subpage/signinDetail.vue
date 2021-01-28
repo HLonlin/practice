@@ -155,6 +155,12 @@ export default {
       that.getSigninList(dateArr[0] + "-" + dateArr[1]);
     },
     openMap: function(item) {
+      if (!this.$tool.isWechat()) {
+        this.$toast({
+          message: "请在微信端进行此操作"
+        });
+        return;
+      }
       let that = this;
       if (!item.address) return;
       that.$tool.addressToLocation(item.address, function(res) {

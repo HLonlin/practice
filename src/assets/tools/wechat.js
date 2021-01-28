@@ -21,6 +21,7 @@ const wechat = {
     },
     //初始化sdk配置  
     initJssdk: function(callback) {
+        if (!this.isWechat()) return;
         let url = location.href.split('#')[0];
         //服务端进行签名
         axios.post(api.getWechatInvokeSign, { url: url }).then(res => {
