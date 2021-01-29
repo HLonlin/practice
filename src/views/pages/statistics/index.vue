@@ -41,7 +41,7 @@
           </div>
           <div class="label_signin">
             <span>学号：{{ item.cardid }}</span>
-            <span>签到次数：{{ item.qiandaonum }}</span>
+            <span>签到次数：{{ item.qiandaocishu }}</span>
           </div>
           <div class="label_phone">
             电话:
@@ -107,10 +107,10 @@ export default {
     getUserListByBanji: function() {
       let that = this;
       that.$axios.post(that.$api.tongjiList).then(res => {
-        if (res.data.userList) {
-          that.list = res.data.userList;
+        if (res.data.dataList) {
+          that.list = res.data.dataList;
         }
-        that.employRate = res.data.employRate;
+        that.employRate = res.data.shixiNum;
       });
     },
     getConductEvaluationMsg: function() {
