@@ -206,6 +206,7 @@ export default {
   box-sizing: border-box;
   padding-bottom: 10px;
   min-height: 38px;
+  word-wrap: break-word;
 }
 .detail_label {
   width: 100%;
@@ -230,6 +231,7 @@ export default {
   letter-spacing: -0.3px;
   text-align: justify;
   overflow-x: hidden;
+  word-wrap: break-word;
 }
 /* .detail_content p {
   text-indent: 2em;

@@ -290,6 +290,12 @@ export default {
           return;
         }
       }
+      if (!/^1[3|4|5|7|8]\d{9}$/.test(that.studentInfo.phone)) {
+        this.$toast({
+          message: "联系电话格式错误，请重新输入"
+        });
+        return;
+      }
       that.$axios.post(that.$api.studentEdit, data).then(res => {
         that.editing = false;
       });

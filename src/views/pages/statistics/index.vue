@@ -25,7 +25,12 @@
               >健康状况：
               <span
                 :style="{
-                  color: item.jiankangstatus ? '#00C110' : '#FF2A2A'
+                  color:
+                    item.jiankangstatus == '健康'
+                      ? '#00C110'
+                      : item.jiankangstatus == '异常'
+                      ? '#FF2A2A'
+                      : '#666666'
                 }"
               >
                 <span>

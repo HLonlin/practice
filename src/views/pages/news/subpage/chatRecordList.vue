@@ -66,7 +66,10 @@ export default {
     if (userData) {
       this.userData = userData;
     }
-    this.getRecordList();
+    this.searchkeywords = this.$route.query.searchkeywords
+      ? JSON.parse(this.$route.query.searchkeywords)
+      : "";
+    this.getRecordList(this.searchkeywords);
   },
   beforeMount() {},
   mounted() {},
@@ -95,6 +98,10 @@ export default {
     // 搜索聊天记录
     onSearch: function(val) {
       this.searchkeywords = val;
+      this.$router.replace({
+        path: "/chatrecordlist",
+        query: { searchkeywords: JSON.stringify(val) }
+      });
       this.getRecordList(val);
     },
     linkTo: function(item) {

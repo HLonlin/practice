@@ -2,7 +2,7 @@
   <div class="studentList_container">
     <div class="topbar_panel">
       <van-nav-bar
-        :title="banji"
+        :title="!searchkeywords ? banji : '学生列表'"
         :fixed="true"
         :placeholder="true"
         :safe-area-inset-top="true"
@@ -11,7 +11,7 @@
         @click-left="onClickLeft"
       />
     </div>
-    <div class="StatisticsBar_panel">
+    <div class="StatisticsBar_panel" v-if="!searchkeywords">
       <div>班实习率：{{ totalNum }}%</div>
       <div>
         {{ banzhuren }}：<span style="color:#0090d8;">{{ phone }}</span>
@@ -35,8 +35,8 @@
         </div>
         <div class="label_panel">
           <div class="label_title">
-            <span>{{ item.username }}</span>
-            <span
+            <span>{{ item.username ? item.username : item.userName }}</span>
+            <span v-if="!searchkeywords"
               >健康状况：
               <span
                 :style="{
@@ -51,7 +51,7 @@
           </div>
           <div class="label_signin">
             <span>签到次数：{{ item.qiandaocishu }}</span>
-            <span>连续未签：{{ item.noSignNum }}</span>
+            <span v-if="!searchkeywords">连续未签：{{ item.noSignNum }}</span>
           </div>
           <div class="label_phone">
             电话:
@@ -72,6 +72,7 @@ export default {
   data() {
     return {
       banji: "",
+      searchkeywords: "",
       totalNum: "100",
       list: [],
       banzhuren: "",
@@ -80,8 +81,15 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.banji = JSON.parse(this.$route.query.banji);
-    this.getCountClass();
+    this.searchkeywords = this.$route.query.searchkeywords
+      ? JSON.parse(this.$route.query.searchkeywords)
+      : false;
+    if (!this.searchkeywords) {
+      this.banji = JSON.parse(this.$route.query.banji);
+      this.getCountClass(this.banji);
+    } else {
+      this.getstudentList(this.searchkeywords);
+    }
   },
   beforeMount() {},
   mounted() {},
@@ -93,12 +101,19 @@ export default {
     onClickLeft: function() {
       this.$router.go(-1);
     },
-
-    getCountClass: function() {
+    getstudentList: function(searchkeywords) {
+      let that = this;
+      that.$axios
+        .post(that.$api.getUserListByName, { username: searchkeywords })
+        .then(res => {
+          that.list = res.data;
+        });
+    },
+    getCountClass: function(banji) {
       let that = this;
       that.$axios
         .post(that.$api.getUserListByBanji, {
-          banji: that.banji
+          banji: banji
         })
         .then(res => {
           that.phone = res.data.phone;

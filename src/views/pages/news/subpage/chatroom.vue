@@ -378,6 +378,7 @@ export default {
   color: #333333;
   border-radius: 4px;
   max-width: 16rem;
+  word-wrap: break-word;
 }
 .msgItem_left .msgItem_content {
   margin-left: 1rem;

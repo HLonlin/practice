@@ -23,6 +23,8 @@
             placeholder="请输入公告标题。"
             :formatter="formatter"
             format-trigger="onBlur"
+            maxlength="100"
+            show-word-limit
           />
         </div>
       </div>

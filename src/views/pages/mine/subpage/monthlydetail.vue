@@ -210,7 +210,6 @@ export default {
   box-sizing: border-box;
   padding: 10px 0px 0px 0px;
   word-wrap: break-word;
-  word-break: normal;
 }
 .monthlydetail_articlePhoto {
   box-sizing: border-box;

@@ -2,7 +2,7 @@
   <div class="sdept_container">
     <div class="topbar_panel">
       <van-nav-bar
-        title="2021届"
+        :title="year + '届'"
         :fixed="true"
         :placeholder="true"
         :safe-area-inset-top="true"
@@ -53,6 +53,7 @@ export default {
   },
   data() {
     return {
+      year: new Date().getFullYear(),
       totalNum: "100",
       list: []
     };
@@ -69,7 +70,9 @@ export default {
   destroyed() {},
   methods: {
     onClickLeft: function() {
-      console.log("bakc");
+      this.$router.push({
+        path: "/login"
+      });
     },
     getAllCountXibu: function() {
       let that = this;
@@ -79,7 +82,11 @@ export default {
       });
     },
     onSearch: function(searchkeywords) {
-      console.log("searchkeywords:", searchkeywords);
+      let that = this;
+      this.$router.push({
+        path: "/studentList",
+        query: { searchkeywords: JSON.stringify(searchkeywords) }
+      });
     },
     linkTo: function(item) {
       this.$router.push({

@@ -108,12 +108,14 @@
         placeholder="想跟班主任说点什么吗？"
         :formatter="formatter"
         format-trigger="onBlur"
+        maxlength="300"
+        show-word-limit
       />
     </div>
     <div class="evaluateScore_panel" v-else-if="info">
       <div>
         <div class="evaluate_infoTitle">学生评价</div>
-        <div class="evaluate_infoText">{{ info }}</div>
+        <div class="evaluate_infoText" v-html="info"></div>
       </div>
     </div>
     <div class="evaluateBottom_panel" v-if="!finish">
@@ -360,6 +362,7 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #555555;
+  word-wrap: break-word;
 }
 </style>
 <style>
