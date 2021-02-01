@@ -189,7 +189,6 @@ export default {
         that.userData = userData;
         that.userData.chatWith = JSON.parse(that.$route.query.chatWith);
       }
-      let data = {};
       that.$axios
         .post(
           that.userData.isTeacher
@@ -296,9 +295,27 @@ export default {
     },
     chatRecord: function() {
       let that = this;
+      let chatWith = {
+        searchkeywords: "",
+        username: that.chatWith.username
+          ? that.chatWith.username
+          : that.chatWith.userName
+          ? that.chatWith.userName
+          : that.chatWith.name,
+        logo: that.chatWith.logo,
+        userid: that.chatWith.cardid
+          ? that.chatWith.cardid
+          : that.chatWith.loginid,
+        sendto: that.userData.userid
+          ? that.userData.userid
+          : that.userData.cardid,
+        comefrom: that.chatWith.cardid
+          ? that.chatWith.cardid
+          : that.chatWith.loginid
+      };
       that.$router.push({
         path: "/chatrecord",
-        query: { chatWith: that.$route.query.chatWith }
+        query: { chatWith: JSON.stringify(chatWith) }
       });
     },
     getContainer() {
