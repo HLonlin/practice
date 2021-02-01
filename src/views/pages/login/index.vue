@@ -129,19 +129,28 @@ export default {
         })
         .then(res => {
           that.userData = res.data;
-          this.$axios.defaults.headers.common["Access-Token"] =
+          that.$axios.defaults.headers.common["Access-Token"] =
             res.data.tokenid;
-          this.$tool.setLocal("token", res.data.tokenid);
+          that.$tool.setLocal("token", res.data.tokenid);
           if (that.usertype == "1") {
             that.$axios.post(that.$api.getuserInfo_teacher, {}).then(res => {
-              //班主任、系部入口
-              that.islogin = true;
               that.userData["isTeacher"] = true;
               for (let key in res.data) {
                 that.userData[key] = res.data[key];
               }
-              this.$tool.setLocal("userData", that.userData);
-              this.$tool.setLocal("closeEvaluate", false);
+              that.$tool.setLocal("userData", that.userData);
+              that.$tool.setLocal("closeEvaluate", false);
+              //班主任、系部入口
+              if (
+                that.userData.banzurenPermission &&
+                that.userData.xibuPermission
+              ) {
+                that.islogin = true;
+              } else if (that.userData.banzurenPermission) {
+                that.$router.push({ path: "/statistics" });
+              } else if (that.userData.xibuPermission) {
+                that.$router.push({ path: "/sdept" });
+              }
             });
           } else {
             // 学生

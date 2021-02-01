@@ -572,17 +572,13 @@ export default {
       };
       let jiankangStatus =
         that.healthRadio.getArrayIndex(that.healthStatus) + 1;
-      let remark = "";
-      if (jiankangStatus == that.healthRadio.length) {
-        remark = that.otherHealthStatus;
-      }
       that.$axios
         .post(that.$api.signin, {
           latitude: that.latitude, // 纬度
           longitude: that.longitude, // 经度
           address: that.currentAddress, // 打卡地点
           jiankangStatus: jiankangStatus, // 健康状态
-          remark: remark // 其他说明
+          remark: that.otherHealthStatus // 其他说明
         })
         .then(res => {
           that.openPopup("confirmSignin", false);

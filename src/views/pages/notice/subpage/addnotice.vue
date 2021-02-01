@@ -116,7 +116,7 @@ export default {
         today.year +
         (today.month < 10 ? "-0" + today.month : "-" + today.month) +
         "-" +
-        today.date;
+        (today.date < 10 ? "0" + today.date : today.date);
       that.laydate.render({
         elem: "#date_pickTime",
         theme: "#0090d8",
@@ -125,14 +125,16 @@ export default {
         position: "abolute",
         ready: function(date) {
           that.expiryTime.year = date.year;
-          that.expiryTime.month = date.month;
-          that.expiryTime.dates = date.date;
+          that.expiryTime.month =
+            date.month < 10 ? "0" + date.month : date.month;
+          that.expiryTime.dates = date.date < 10 ? "0" + date.date : date.date;
         },
-        change: function(value, date, endDate) {
+        done: function(value, date, endDate) {
           that.expiryDate = value;
           that.expiryTime.year = date.year;
-          that.expiryTime.month = date.month;
-          that.expiryTime.dates = date.date;
+          that.expiryTime.month =
+            date.month < 10 ? "0" + date.month : date.month;
+          that.expiryTime.dates = date.date < 10 ? "0" + date.date : date.date;
         }
       });
     },
@@ -178,13 +180,6 @@ export default {
         return `${val}日`;
       }
       return val;
-    },
-    //  选择时间
-    timeChange: function(picker) {
-      let date = picker.getValues();
-      this.expiryTime.year = date[0].replace(/年/, "");
-      this.expiryTime.month = date[1].replace(/月/, "");
-      this.expiryTime.dates = date[2].replace(/日/, "");
     },
     addNotice: function() {
       let that = this;
