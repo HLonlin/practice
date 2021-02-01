@@ -38,41 +38,13 @@ new Vue({
         },
         template: '<App/>'
     })
-    // router.beforeEach((to, from, next) => {
-    //     if (to.meta.login_require) {
-    //         if (store.state.tokenid) {
-    //             next()
-    //             return;
-    //             axios.get(api.roleList, {
-    //                 headers: { 'Biz-Access-Token': tokenid }
-    //             }).then(res => {
-    //                 if (res.status !== 200) {
-    //                     next({
-    //                         path: '/login',
-    //                         replace: true,
-    //                         query: {
-    //                             redirect: to.path
-    //                         }
-    //                     })
-    //                 }
-    //                 next()
-    //             })
-    //         } else {
-    //             next({
-    //                 path: '/login',
-    //                 replace: true,
-    //                 query: {
-    //                     redirect: to.path
-    //                 }
-    //             })
-    //         }
-    //     } else {
-    //         next()
-    //     }
-    // })
-    // router.beforeResolve((to, from, next) => {
-    //     if (to.meta.title) {
-    //         document.title = to.meta.title
-    //     }
-    //     next()
-    // })
+    // var docEl = document.documentElement,
+    //     isIOS = navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+    //     dpr = isIOS ? Math.min(window.devicePixelRatio, 3) : 1,
+    //     dpr = window.top === window.self ? dpr : 1, //被iframe引用时，禁止缩放
+    //     dpr = 1,
+    //     scale = 1 / dpr;
+    // var metaEl = document.createElement("meta");
+    // metaEl.name = "viewport";
+    // metaEl.content = "initial-scale=" + scale + ",maximum-scale=" + scale + ", minimum-scale=" + scale;
+    // docEl.firstElementChild.appendChild(metaEl);

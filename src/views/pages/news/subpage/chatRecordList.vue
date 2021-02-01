@@ -106,11 +106,14 @@ export default {
       this.getRecordList(val);
     },
     linkTo: function(item) {
+      console.log(item);
       let chatWith = {
         searchkeywords: this.searchkeywords,
         username: item.username,
         logo: item.logo,
-        userid: item.comefrom
+        userid: item.userid,
+        sendto: item.sendto,
+        comefrom: item.comefrom
       };
       this.$router.push({
         path: "/chatrecord",

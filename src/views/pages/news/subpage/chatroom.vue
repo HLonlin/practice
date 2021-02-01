@@ -199,7 +199,7 @@ export default {
             ? that.$api.sendMsg_teacher
             : that.$api.sendMsg_student,
           {
-            sendto: that.chatWith.userid,
+            sendto: that.chatWith.sendto,
             info: that.msg
           }
         )
@@ -214,7 +214,9 @@ export default {
       let chatWith = {
         username: that.chatWith.username,
         logo: that.chatWith.logo,
-        userid: that.chatWith.userid
+        userid: that.chatWith.userid,
+        sendto: that.chatWith.sendto,
+        comefrom: that.chatWith.comefrom
       };
       that.$router.push({
         path: "/chatrecord",
@@ -235,12 +237,13 @@ export default {
       let data = {};
       if (that.userData.isTeacher) {
         data = {
-          comefrom: that.chatWith.userid,
+          comefrom: that.chatWith.comefrom,
           studentname: that.chatWith.username
         };
       } else {
         data = {
-          comefrom: that.chatWith.userid,
+          sendto: that.chatWith.sendto,
+          comefrom: that.chatWith.comefrom,
           username: that.chatWith.username
         };
       }

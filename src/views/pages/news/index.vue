@@ -61,8 +61,10 @@ export default {
     linkTo: function(item) {
       let chatWith = {
         username: item.username,
-        logo: item.logo,
-        userid: item.comefrom
+        userid: item.userid,
+        sendto: item.sendto,
+        comefrom: item.comefrom,
+        logo: item.logo
       };
       this.$router.push({
         path: "/chatroom",

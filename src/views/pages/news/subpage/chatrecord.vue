@@ -111,23 +111,20 @@ export default {
       let data = {};
       if (that.userData.isTeacher) {
         data = {
-          comefrom: that.chatWith.userid,
+          comefrom: that.chatWith.comefrom,
           studentname: that.chatWith.username,
           searchkeywords: that.chatWith.searchkeywords
             ? that.chatWith.searchkeywords
-            : "",
-          pageNum: that.pageNum,
-          pageSize: that.pageSize
+            : ""
         };
       } else {
         data = {
-          comefrom: that.chatWith.userid,
+          sendto: that.chatWith.sendto,
+          comefrom: that.chatWith.comefrom,
           username: that.chatWith.username,
           searchkeywords: that.chatWith.searchkeywords
             ? that.chatWith.searchkeywords
-            : "",
-          pageNum: that.pageNum,
-          pageSize: that.pageSize
+            : ""
         };
       }
       that.loading = true;

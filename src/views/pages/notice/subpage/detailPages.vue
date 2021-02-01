@@ -278,4 +278,12 @@ export default {
   font-size: 1.125rem;
   color: #ffffff;
 }
+
+section {
+  box-sizing: border-box;
+}
+
+section img {
+  width: 100%;
+}
 </style>

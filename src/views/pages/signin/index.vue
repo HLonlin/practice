@@ -291,6 +291,7 @@ export default {
       });
     },
     runRemind: function() {
+      console.log("runremind");
       let that = this;
       let remindList = [
         {
