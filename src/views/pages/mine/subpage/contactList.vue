@@ -203,15 +203,22 @@ export default {
       return document.querySelector(".contactList_container");
     },
     sendMsg: function(item) {
-      let chatWith = {
-        username: item.username ? item.username : item.userName,
-        logo: item.logo,
-        userid: item.userid ? item.userid : item.cardid
+      let data = {
+        chatWith: JSON.stringify(item.userid ? item.userid : item.cardid)
       };
       this.$router.push({
         path: "/chatroom",
-        query: { chatWith: JSON.stringify(chatWith) }
+        query: data
       });
+      // let chatWith = {
+      //   username: item.username ? item.username : item.userName,
+      //   logo: item.logo,
+      //   userid: item.userid ? item.userid : item.cardid
+      // };
+      // this.$router.push({
+      //   path: "/chatroom",
+      //   query: { chatWith: JSON.stringify(chatWith) }
+      // });
     },
     call: function(phonenum) {
       this.$refs.tels.href = "tel://" + phonenum;

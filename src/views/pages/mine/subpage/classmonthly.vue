@@ -34,11 +34,21 @@
             }"
             class="monthlylist_listItem"
           >
-            <div class="monthlylist_listTitle">
-              {{ item.username }}{{ item.zhou }}月月记
+            <div class="headImg_panel">
+              <img
+                class="headImg_logo"
+                :src="
+                  item.logo ? item.logo : require('@/assets/images/default.png')
+                "
+              />
             </div>
-            <div class="monthlylist_listLabel">
-              <div class="monthlylist_listDate">{{ item.date }}</div>
+            <div class="label_panel">
+              <div class="monthlylist_listTitle">
+                {{ item.username }}{{ item.zhou }}月月记
+              </div>
+              <div class="monthlylist_listLabel">
+                <div class="monthlylist_listDate">{{ item.date }}</div>
+              </div>
             </div>
           </router-link>
         </van-list>
@@ -213,7 +223,8 @@ export default {
   background-color: #ffffff;
 }
 .monthlylist_listItem {
-  display: inline-block;
+  display: flex;
+  justify-items: flex-start;
   width: 100%;
   border-bottom: 1px solid #eeeeee;
   box-sizing: border-box;
@@ -221,6 +232,22 @@ export default {
 }
 .monthlylist_listPanel .monthlylist_listItem:last-child {
   border: none;
+}
+.headImg_panel {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.headImg_logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+}
+.label_panel {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0px 1.5rem 0px 0.625rem;
 }
 .monthlylist_listTitle {
   font-size: 0.9375rem;

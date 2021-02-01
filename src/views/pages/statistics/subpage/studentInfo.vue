@@ -210,6 +210,7 @@ export default {
   name: "studentInfo",
   data() {
     return {
+      userData: Object,
       editing: false,
       studentInfo: {},
       infoOfbeforeEdit: {},
@@ -229,6 +230,10 @@ export default {
   },
   beforeCreate() {},
   created() {
+    let userData = this.$tool.getLocal("userData");
+    if (userData) {
+      this.userData = userData;
+    }
     this.isFrom = JSON.parse(this.$route.query.isFrom);
     this.getUserByCardId();
     this.getRadioOption();
@@ -333,6 +338,7 @@ export default {
             that.$set(that.studentInfo, keys, data[keys]);
           }
           this.headImg[0].url = this.studentInfo.logo;
+          console.log(this.studentInfo);
         });
     },
     linkTo: function(path) {
@@ -349,16 +355,12 @@ export default {
       }
     },
     sendMsg: function() {
-      let chatWith = {
-        username: this.studentInfo.userName
-          ? this.studentInfo.userName
-          : this.studentInfo.username,
-        logo: this.studentInfo.logo,
-        userid: this.studentInfo.cardid
+      let data = {
+        chatWith: JSON.stringify(this.studentInfo.cardid)
       };
       this.$router.push({
         path: "/chatroom",
-        query: { chatWith: JSON.stringify(chatWith) }
+        query: data
       });
     }
   }

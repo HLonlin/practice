@@ -158,7 +158,6 @@ export default {
         if (action === "confirm") {
           done();
           that.$axios.post(that.$api.logout).then(res => {
-            clearInterval(window.timer);
             that.$router.push({ path: "/login" });
           });
         } else {

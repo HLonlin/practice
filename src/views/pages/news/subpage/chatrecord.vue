@@ -111,6 +111,7 @@ export default {
       let data = {};
       if (that.userData.isTeacher) {
         data = {
+          sendto: that.chatWith.sendto,
           comefrom: that.chatWith.comefrom,
           studentname: that.chatWith.username,
           searchkeywords: that.chatWith.searchkeywords

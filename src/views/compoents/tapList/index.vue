@@ -54,7 +54,8 @@ export default {
         ],
         active: 0,
         activeColor: "#0090d8",
-        inactiveColor: "#999999"
+        inactiveColor: "#999999",
+        timer: ""
       }
     };
   },
@@ -73,7 +74,9 @@ export default {
   mounted() {},
   beforeUpdate() {},
   updated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    clearInterval(this.timer);
+  },
   destroyed() {},
   methods: {
     ontap(i) {
@@ -118,8 +121,8 @@ export default {
     },
     updateMsgList: function() {
       let that = this;
-      clearInterval(window.timer);
-      window.timer = setInterval(function() {
+      clearInterval(that.timer);
+      that.timer = setInterval(function() {
         that.getMsgList();
       }, 1000);
     },

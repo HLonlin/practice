@@ -33,6 +33,7 @@ const API = {
     remarkAdd: '/api/practice/student/xiaoxi/remarkAdd', // 添加学员常用语
     remarkEdit: '/api/practice/student/xiaoxi/remarkEdit', // 修改学员常用语
     remarkDelete: '/api/practice/student/xiaoxi/remarkDelete', // 删除学员常用语
+    findUserByUserId: '/api/practice/student/findUserByUserId', // 查询老师信息
     // --------------------------公告--------------------------
     noticeList: '/api/practice/student/notice/noticeList', // 公告列表
     noticeDetail: '/api/practice/student/notice/noticeDetail', // 公告详情

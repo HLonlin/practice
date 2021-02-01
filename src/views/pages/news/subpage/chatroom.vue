@@ -2,7 +2,13 @@
   <div class="chatroom_container">
     <div class="topbar_panel">
       <van-nav-bar
-        :title="chatWith.username"
+        :title="
+          chatWith.username
+            ? chatWith.username
+            : chatWith.userName
+            ? chatWith.userName
+            : chatWith.name
+        "
         :fixed="true"
         :placeholder="true"
         :safe-area-inset-top="true"
@@ -25,16 +31,20 @@
         class="msgItem_panel"
         :class="[
           {},
-          item.comefromName == chatWith.username
-            ? 'msgItem_left'
-            : 'msgItem_right'
+          item.comefromName ==
+          (userData.username ? userData.username : userData.userName)
+            ? 'msgItem_right'
+            : 'msgItem_left'
         ]"
       >
         <div class="msgItem_time">{{ item.time }}</div>
         <div class="msgItem_box">
           <div
             class="msgItem_header"
-            v-if="item.comefromName == chatWith.username"
+            v-if="
+              item.comefromName !=
+                (userData.username ? userData.username : userData.userName)
+            "
           >
             <img
               class="msgItem_logo"
@@ -50,7 +60,10 @@
           </div>
           <div
             class="msgItem_header"
-            v-if="item.comefromName != chatWith.username"
+            v-if="
+              item.comefromName ==
+                (userData.username ? userData.username : userData.userName)
+            "
           >
             <img
               class="msgItem_logo"
@@ -147,34 +160,107 @@ export default {
       msg: "", // 待发送消息
       chatWith: {}, // 聊天对象
       commonList: [], // 常用列表
-      msgDetailList: [] //消息内容列表
+      msgDetailList: [], //消息内容列表
+      timer: ""
     };
   },
   beforeCreate() {},
   created() {
     let that = this;
-    let userData = this.$tool.getLocal("userData");
-    if (userData) {
-      this.userData = userData;
-    }
-    this.chatWith = JSON.parse(this.$route.query.chatWith);
-    this.getMsgDetail(true);
-    clearInterval(window.getMsgDetail);
-    window.getMsgDetail = setInterval(function() {
-      that.getMsgDetail();
-    }, 1000);
+    that.init();
     this.getCommonList();
   },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
   updated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    clearInterval(this.timer);
+  },
   destroyed() {},
   methods: {
     onClickLeft: function() {
-      clearInterval(window.getMsgDetail);
       this.$router.go(-1);
+    },
+    init: function() {
+      let that = this;
+      let userData = this.$tool.getLocal("userData");
+      if (userData) {
+        that.userData = userData;
+        that.userData.chatWith = JSON.parse(that.$route.query.chatWith);
+      }
+      let data = {};
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.getUserByCardId_teacher
+            : that.$api.findUserByUserId,
+          that.userData.isTeacher
+            ? {
+                cardid: that.userData.chatWith
+              }
+            : { userid: that.userData.chatWith }
+        )
+        .then(res => {
+          let readata = res.data;
+          for (let keys in readata) {
+            that.$set(that.chatWith, keys, readata[keys]);
+          }
+          that.getMsgDetail(true);
+          clearInterval(that.timer);
+          that.timer = setInterval(function() {
+            that.getMsgDetail(false);
+          }, 1000);
+        });
+    },
+    getMsgDetail: function(nextTick) {
+      let that = this;
+      let data = {};
+      if (that.userData.isTeacher) {
+        data = {
+          sendto: that.userData.chatWith,
+          comefrom: that.userData.userid,
+          studentname: that.chatWith.username
+            ? that.chatWith.username
+            : that.chatWith.userName
+        };
+      } else {
+        data = {
+          sendto: that.userData.chatWith,
+          comefrom: that.userData.cardid,
+          username: that.chatWith.name
+        };
+      }
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.msgDetail_teacher
+            : that.$api.msgDetail,
+          data
+        )
+        .then(res => {
+          that.msgDetailList = [];
+          for (let i = 0, imax = res.data.length; i < imax; i++) {
+            that.$set(that.msgDetailList, i, res.data[i]);
+            let dateObj = that.$tool.getDateObj(res.data[i].wf_Created);
+            let time =
+              (dateObj.month < 10 ? "0" + dateObj.month : dateObj.month) +
+              "月" +
+              (dateObj.date < 10 ? "0" + dateObj.date : dateObj.date) +
+              "日 " +
+              (dateObj.hour < 10 ? "0" + dateObj.hour : dateObj.hour) +
+              ":" +
+              (dateObj.minute < 10 ? "0" + dateObj.minute : dateObj.minute);
+            that.$set(that.msgDetailList[i], "time", time);
+          }
+          if (nextTick) {
+            // 消息滚动到最底部
+            that.$nextTick(() => {
+              that.reSetMsgListH();
+              that.readMsg();
+            });
+          }
+        });
     },
     reSetMsgListH: function() {
       let topbar_panel = document.getElementsByClassName("topbar_panel")[0];
@@ -199,7 +285,7 @@ export default {
             ? that.$api.sendMsg_teacher
             : that.$api.sendMsg_student,
           {
-            sendto: that.chatWith.sendto,
+            sendto: that.userData.chatWith,
             info: that.msg
           }
         )
@@ -209,18 +295,10 @@ export default {
         });
     },
     chatRecord: function() {
-      clearInterval(window.getMsgDetail);
       let that = this;
-      let chatWith = {
-        username: that.chatWith.username,
-        logo: that.chatWith.logo,
-        userid: that.chatWith.userid,
-        sendto: that.chatWith.sendto,
-        comefrom: that.chatWith.comefrom
-      };
       that.$router.push({
         path: "/chatrecord",
-        query: { chatWith: JSON.stringify(chatWith) }
+        query: { chatWith: that.$route.query.chatWith }
       });
     },
     getContainer() {
@@ -231,52 +309,6 @@ export default {
         this.popups[key] = false;
       }
       this.popups[keys] = val;
-    },
-    getMsgDetail: function(nextTick) {
-      let that = this;
-      let data = {};
-      if (that.userData.isTeacher) {
-        data = {
-          comefrom: that.chatWith.comefrom,
-          studentname: that.chatWith.username
-        };
-      } else {
-        data = {
-          sendto: that.chatWith.sendto,
-          comefrom: that.chatWith.comefrom,
-          username: that.chatWith.username
-        };
-      }
-      that.$axios
-        .post(
-          that.userData.isTeacher
-            ? that.$api.msgDetail_teacher
-            : that.$api.msgDetail,
-          data
-        )
-        .then(res => {
-          that.msgDetailList = [];
-          for (let i = 0, imax = res.data.length; i < imax; i++) {
-            that.$set(that.msgDetailList, i, res.data[i]);
-            let dateObj = that.$tool.getDateObj(res.data[i].wf_Created);
-            let time =
-              (dateObj.month < 10 ? "0" + dateObj.month : dateObj.month) +
-              "月" +
-              dateObj.date +
-              "日 " +
-              dateObj.hour +
-              ":" +
-              dateObj.minute;
-            that.$set(that.msgDetailList[i], "time", time);
-          }
-          if (nextTick) {
-            // 消息滚动到最底部
-            that.$nextTick(() => {
-              that.reSetMsgListH();
-              that.readMsg();
-            });
-          }
-        });
     },
     getCommonList: function() {
       let that = this;
@@ -299,7 +331,6 @@ export default {
       this.openPopup("commonText", false);
     },
     turnCommonWord: function(type) {
-      clearInterval(window.getMsgDetail);
       this.$router.push({
         path: "/commonwords",
         query: { type: type }
@@ -307,7 +338,7 @@ export default {
     },
     readMsg: function() {
       let that = this;
-      that.$axios.post(that.$api.readMsg, { comefrom: that.chatWith.userid });
+      that.$axios.post(that.$api.readMsg, { comefrom: that.userData.chatWith });
     }
   }
 };

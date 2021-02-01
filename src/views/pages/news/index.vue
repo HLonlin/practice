@@ -44,7 +44,8 @@ export default {
       popups: {
         chatRecord: false
       },
-      msgList: []
+      msgList: [],
+      timer: ""
     };
   },
   beforeCreate() {},
@@ -55,21 +56,26 @@ export default {
   mounted() {},
   beforeUpdate() {},
   updated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    clearInterval(this.timer);
+  },
   destroyed() {},
   methods: {
     linkTo: function(item) {
-      let chatWith = {
-        username: item.username,
-        userid: item.userid,
-        sendto: item.sendto,
-        comefrom: item.comefrom,
-        logo: item.logo
+      let data = {
+        chatWith: JSON.stringify(item.userid ? item.userid : item.cardid)
       };
       this.$router.push({
         path: "/chatroom",
-        query: { chatWith: JSON.stringify(chatWith) }
+        query: data
       });
+      // let data = {
+      //   chatWith: JSON.stringify(item.userid)
+      // };
+      // this.$router.push({
+      //   path: "/chatroom",
+      //   query: data
+      // });
     },
     updateMsgList: function() {
       let that = this;
@@ -77,8 +83,8 @@ export default {
       if (msgList) {
         that.msgList = msgList;
       }
-      clearInterval(timer);
-      let timer = setInterval(function() {
+      clearInterval(that.timer);
+      that.timer = setInterval(function() {
         let msgList = that.$store.state.news.msgList;
         if (msgList) {
           that.msgList = msgList;
