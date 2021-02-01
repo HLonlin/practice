@@ -290,7 +290,6 @@ export default {
         this.headImg[0].url = this.userData.logo;
       }
       if (!that.userData.isTeacher) {
-        console.log(1);
         that.$axios
           .post(that.$api.getUserByCardId, { cardid: that.$route.query.cardid })
           .then(res => {
@@ -317,7 +316,6 @@ export default {
       }
     },
     onCancel: function() {
-      console.log(0);
       let that = this;
       that.editing = false;
       for (let key in that.userData) {

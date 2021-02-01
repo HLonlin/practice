@@ -106,7 +106,6 @@ export default {
       this.getRecordList(val);
     },
     linkTo: function(item) {
-      console.log(item);
       let chatWith = {
         searchkeywords: this.searchkeywords,
         username: item.username,

@@ -40,11 +40,16 @@
               >健康状况：
               <span
                 :style="{
-                  color: item.jiankangstatus == 6 ? '#FF2A2A' : '#00C110'
+                  color:
+                    item.jiankangstatus == '健康'
+                      ? '#00C110'
+                      : item.jiankangstatus == '异常'
+                      ? '#FF2A2A'
+                      : '#666666'
                 }"
               >
                 <span v-show="item.jiankangstatus">
-                  {{ item.jiankangstatus }}
+                  {{ item.jiankangstatus ? item.jiankangstatus : "未上报" }}
                 </span>
               </span>
             </span>
