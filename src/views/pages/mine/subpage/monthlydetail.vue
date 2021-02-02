@@ -287,6 +287,7 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #555555;
+  word-wrap: break-word;
   white-space: pre-wrap;
 }
 .monthlydetail_noComment {
