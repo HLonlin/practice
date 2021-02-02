@@ -147,9 +147,9 @@ export default {
               ) {
                 that.islogin = true;
               } else if (that.userData.banzurenPermission) {
-                that.$router.push({ path: "/statistics" });
+                that.routerTo("statistics");
               } else if (that.userData.xibuPermission) {
-                that.$router.push({ path: "/sdept" });
+                that.routerTo("sdept");
               }
             });
           } else {

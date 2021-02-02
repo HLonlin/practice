@@ -82,13 +82,6 @@ export const constantRouter = [{
         hidden: true,
     },
     {
-        title: '微信定位',
-        path: '/wxlocation',
-        component: () =>
-            import ('@/views/pages/signin/subpage/wxlocation'),
-        hidden: true,
-    },
-    {
         title: '系部列表',
         path: '/sdept',
         component: () =>
