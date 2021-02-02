@@ -55,9 +55,7 @@
               "
             />
           </div>
-          <div class="msgItem_content">
-            {{ item.info }}
-          </div>
+          <div class="msgItem_content" v-html="item.info"></div>
           <div
             class="msgItem_header"
             v-if="
@@ -116,9 +114,8 @@
               class="commonText_label"
               :title="item.content"
               @click="useCommonText(item.content)"
-            >
-              {{ item.content }}
-            </div>
+              v-html="item.content"
+            ></div>
             <div
               class="commonText_label"
               v-if="commonList.length == 0"
@@ -430,6 +427,7 @@ export default {
   border-radius: 4px;
   max-width: 16rem;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 .msgItem_left .msgItem_content {
   margin-left: 1rem;
@@ -531,10 +529,7 @@ export default {
   font-weight: 400;
   color: #333333;
   word-wrap: break-word;
-  /* overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis; */
+  white-space: pre-wrap;
 }
 .commonText_bottomPanel {
   position: relative;

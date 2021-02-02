@@ -275,7 +275,7 @@ export default {
       if (!value && !this.editing) {
         return;
       }
-      if (!/^1[3|4|5|7|8]\d{9}$/.test(value)) {
+      if (!/^1[3|4|5|7|8|9]\d{9}$/.test(value)) {
         this.$toast({
           message: "联系电话格式错误，请重新输入"
         });

@@ -210,6 +210,7 @@ export default {
   box-sizing: border-box;
   padding: 10px 0px 0px 0px;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 .monthlydetail_articlePhoto {
   box-sizing: border-box;
@@ -286,6 +287,7 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #555555;
+  white-space: pre-wrap;
 }
 .monthlydetail_noComment {
   font-size: 0.875rem;

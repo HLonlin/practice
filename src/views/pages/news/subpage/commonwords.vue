@@ -36,7 +36,7 @@
     <div class="popup_manage popup_panel" v-if="type == 2">
       <div class="manageList_panel" :style="{ height: listH }">
         <div class="listItem_panel" v-for="(item, i) in list" :key="i">
-          <div class="listItem_label">{{ item.content }}</div>
+          <div class="listItem_label" v-html="item.content"></div>
           <div class="handleBtn_panel">
             <div
               class="listItem_handleBtn"
@@ -317,6 +317,7 @@ export default {
   white-space: normal;
   word-break: break-all;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 .handleBtn_panel {
   display: flex;

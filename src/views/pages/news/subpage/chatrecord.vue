@@ -233,6 +233,7 @@ export default {
   border-radius: 4px;
   max-width: 16rem;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 .msgItem_left .msgItem_content {
   margin-left: 1rem;
