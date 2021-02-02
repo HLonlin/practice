@@ -139,7 +139,7 @@ export default {
                 that.userData[key] = res.data[key];
               }
               that.$tool.setLocal("userData", that.userData);
-              that.$tool.setLocal("closeEvaluate", false);
+              that.$tool.setLocal("evaluateRemind_teacher", false);
               //班主任、系部入口
               if (
                 that.userData.banzurenPermission &&

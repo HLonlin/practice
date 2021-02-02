@@ -69,13 +69,6 @@ export default {
         path: "/chatroom",
         query: data
       });
-      // let data = {
-      //   chatWith: JSON.stringify(item.userid)
-      // };
-      // this.$router.push({
-      //   path: "/chatroom",
-      //   query: data
-      // });
     },
     updateMsgList: function() {
       let that = this;

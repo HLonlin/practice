@@ -51,11 +51,7 @@
       </div>
       <div class="noMore_panel" v-if="list.length == 0">没有更多了</div>
     </div>
-    <van-popup
-      v-model="popups.evaluate"
-      :get-container="getContainer"
-      @close="closeEvaluate_popup"
-    >
+    <van-popup v-model="popups.evaluate" :get-container="getContainer">
       <div class="evaluate_popup">
         <div class="evaluate_popupLabel">
           {{ evaluateText }}
@@ -114,7 +110,7 @@ export default {
       });
     },
     getConductEvaluationMsg: function() {
-      if (this.$tool.getLocal("closeEvaluate")) return;
+      if (this.$tool.getLocal("evaluateRemind_teacher")) return;
       let that = this;
       let date = new Date();
       let month =
@@ -130,6 +126,7 @@ export default {
           if (res.data) {
             that.evaluateText = res.data;
             that.popups.evaluate = true;
+            this.$tool.setLocal("evaluateRemind_teacher", true);
           }
         });
     },
@@ -146,14 +143,10 @@ export default {
       });
     },
     routerTo: function() {
-      this.closeEvaluate_popup();
       this.$router.push({
         path: "/todoList",
         query: { type: "evaluate" }
       });
-    },
-    closeEvaluate_popup: function() {
-      this.$tool.setLocal("closeEvaluate", true);
     }
   }
 };

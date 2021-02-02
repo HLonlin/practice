@@ -207,9 +207,7 @@
 <script>
 /**
  * 签到页
- * apikes:3KWBZ-6TXWI-M2SGX-5SMDX-GD7N3-IIBMB
  */
-import wx from "weixin-js-sdk"; // 微信sdk
 export default {
   name: "signin",
   data() {
@@ -291,7 +289,6 @@ export default {
       });
     },
     runRemind: function() {
-      console.log("runremind");
       let that = this;
       let remindList = [
         {
