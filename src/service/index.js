@@ -73,6 +73,9 @@ axios.interceptors.response.use(
                     Toast({
                         message: res.data.message
                     });
+                    router.push({
+                        path: '/login',
+                    })
                     throw res.data;
             }
         }

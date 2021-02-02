@@ -18,10 +18,18 @@
         :key="i"
         @click="linkTo(item)"
       >
+        <div class="headImg_panel">
+          <img
+            class="headImg_logo"
+            :src="
+              item.logo ? item.logo : require('@/assets/images/default.png')
+            "
+          />
+        </div>
         <div class="label_panel">
-          <div class="label_title">
+          <!-- <div class="label_title">
             {{ userData.isTeacher ? "学生" + (i + 1) : item.username }}
-          </div>
+          </div> -->
           <div class="label_signin">
             <span>评价总分：{{ item.totalNum ? item.totalNum : "" }}分</span
             ><span>评价时间：{{ item.year + "-" + item.month }}</span>
@@ -185,7 +193,7 @@ export default {
   justify-content: space-between;
   width: 16.875rem;
   box-sizing: border-box;
-  padding: 0px 0px 0.3125rem 0px;
+  /* padding: 0px 0px 0.3125rem 0px; */
   font-size: 0.75rem;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
