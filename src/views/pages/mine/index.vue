@@ -219,7 +219,6 @@ export default {
 }
 .info_panel {
   width: 100%;
-  height: 120px;
   background-color: #ffffff;
   margin-bottom: 10px;
 }
@@ -230,7 +229,7 @@ export default {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 30px 1rem;
+  padding: 5px 1rem;
 }
 .info_panelContainer::after {
   content: "";
@@ -246,8 +245,8 @@ export default {
 .info_head {
   vertical-align: middle;
   display: inline-block;
-  width: 3.75rem;
-  height: 3.75rem;
+  width: 2.8125rem;
+  height: 2.8125rem;
   border-radius: 50%;
   background-color: #f6f6f6;
   overflow: hidden;
