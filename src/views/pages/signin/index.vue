@@ -691,7 +691,7 @@ export default {
   padding: 140px 1rem 16px 1rem;
 }
 .signin_calendarContainer {
-  overflow: hidden;
+  overflow-x: hidden;
 }
 .signin_titlePanel {
   display: flex;
