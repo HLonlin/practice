@@ -144,7 +144,7 @@ export default {
           that.monthlyList = [];
           for (let i = 0, imax = monthlyList.length; i < imax; i++) {
             monthlyList[i].date = that.$tool.getFullDate(
-              monthlyList[i].wf_Created
+              monthlyList[i].wf_Created.replace(/-/g, "/")
             );
             that.monthlyList.push(monthlyList[i]);
           }

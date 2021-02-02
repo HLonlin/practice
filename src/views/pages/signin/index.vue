@@ -426,7 +426,8 @@ export default {
             });
           }
           for (let i = 0, imax = data.length; i < imax; i++) {
-            let todayDate = new Date(data[i].wf_Created).getDate() - 1;
+            let todayDate =
+              new Date(data[i].wf_Created.replace(/-/g, "/")).getDate() - 1;
             that.$set(that.signinList, todayDate, data[i]);
             that.$set(that.signinList[todayDate], "isSignin", true);
           }

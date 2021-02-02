@@ -238,7 +238,9 @@ export default {
           that.msgDetailList = [];
           for (let i = 0, imax = res.data.length; i < imax; i++) {
             that.$set(that.msgDetailList, i, res.data[i]);
-            let dateObj = that.$tool.getDateObj(res.data[i].wf_Created);
+            let dateObj = that.$tool.getDateObj(
+              res.data[i].wf_Created.replace(/-/g, "/")
+            );
             let time =
               (dateObj.month < 10 ? "0" + dateObj.month : dateObj.month) +
               "月" +

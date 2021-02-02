@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" user-scalable=no>
     <title>实习小匠</title>
 </head>
 
@@ -14,3 +14,19 @@
 </body>
 
 </html>
+<script>
+    var docEl = document.documentElement,
+        isIOS = navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+        dpr = isIOS ? Math.min(window.devicePixelRatio, 3) : 1,
+        dpr = window.top === window.self ? dpr : 1, //被iframe引用时，禁止缩放
+        dpr = 1,
+        scale = 1 / dpr;
+    var metaEl = document.createElement("meta");
+    metaEl.name = "viewport";
+    metaEl.content = "initial-scale=" + scale + ",maximum-scale=" + scale + ", minimum-scale=" + scale + ",user-scalable=no";
+    docEl.firstElementChild.appendChild(metaEl);
+</script>
+<!-- <script src="//cdn.jsdelivr.net/eruda/1.2.2/eruda.min.js"></script>
+<script>
+    eruda.init();
+</script> -->

@@ -110,7 +110,7 @@ export default {
           toast.clear();
           that.isLoadeOver = true;
           that.detail = res.data;
-          let date = new Date(res.data.wf_Created);
+          let date = new Date(res.data.wf_Created.replace(/-/g, "/"));
           let month =
             date.getMonth() + 1 > 10
               ? date.getMonth() + 1
@@ -127,7 +127,9 @@ export default {
             date.getSeconds() > 10
               ? date.getSeconds()
               : "0" + date.getSeconds();
-          that.detail.date = that.$tool.getFullDate(res.data.wf_Created);
+          that.detail.date = that.$tool.getFullDate(
+            res.data.wf_Created.replace(/-/g, "/")
+          );
           that.detail.readTime = that.$tool.getFullDate(res.data.readTime);
           that.detail.filename = that.detail.filename.split(",");
           that.detail.fileurl = that.detail.fileurl.split(",");

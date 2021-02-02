@@ -124,12 +124,12 @@ export default {
         position: "abolute",
         ready: function(date) {
           that.monthly.year = date.year;
-          that.monthly.zhou = date.month;
+          that.monthly.zhou = date.month < 10 ? "0" + date.month : date.month;
         },
-        change: function(value, date, endDate) {
+        done: function(value, date, endDate) {
           that.date = value;
           that.monthly.year = date.year;
-          that.monthly.zhou = date.month;
+          that.monthly.zhou = date.month < 10 ? "0" + date.month : date.month;
         }
       });
     },

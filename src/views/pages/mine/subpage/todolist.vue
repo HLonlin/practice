@@ -184,14 +184,12 @@ export default {
           });
           break;
         case "noContact":
-          let chatWith = {
-            username: item.username,
-            logo: item.logo,
-            userid: item.cardid
+          let query = {
+            chatWith: JSON.stringify(item.cardid ? item.cardid : item.userid)
           };
           this.$router.push({
             path: "/chatroom",
-            query: { chatWith: JSON.stringify(chatWith) }
+            query: query
           });
           break;
         case "audit":

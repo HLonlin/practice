@@ -143,7 +143,7 @@ export default {
           let historyDetailList = res.data.historyDetailList;
           for (let i = 0, imax = historyDetailList.length; i < imax; i++) {
             let dateObj = that.$tool.getDateObj(
-              historyDetailList[i].wf_Created
+              historyDetailList[i].wf_Created.replace(/-/g, "/")
             );
             let time =
               (dateObj.month < 10 ? "0" + dateObj.month : dateObj.month) +

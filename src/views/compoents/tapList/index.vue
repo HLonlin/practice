@@ -103,13 +103,25 @@ export default {
               that.tabbar.list[1].badge = badge;
             }
             let month =
-              (new Date(res.data[i].wf_Created).getMonth() + 1 < 10
-                ? "0" + (new Date(res.data[i].wf_Created).getMonth() + 1)
-                : new Date(res.data[i].wf_Created).getMonth() + 1) + "月";
+              (new Date(res.data[i].wf_Created.replace(/-/g, "/")).getMonth() +
+                1 <
+              10
+                ? "0" +
+                  (new Date(
+                    res.data[i].wf_Created.replace(/-/g, "/")
+                  ).getMonth() +
+                    1)
+                : new Date(
+                    res.data[i].wf_Created.replace(/-/g, "/")
+                  ).getMonth() + 1) + "月";
             let dates =
-              (new Date(res.data[i].wf_Created).getDate() < 10
-                ? "0" + new Date(res.data[i].wf_Created).getDate()
-                : new Date(res.data[i].wf_Created).getDate()) + "日 ";
+              (new Date(res.data[i].wf_Created.replace(/-/g, "/")).getDate() <
+              10
+                ? "0" +
+                  new Date(res.data[i].wf_Created.replace(/-/g, "/")).getDate()
+                : new Date(
+                    res.data[i].wf_Created.replace(/-/g, "/")
+                  ).getDate()) + "日 ";
             let time = month + dates;
             data[i]["time"] = time;
           }

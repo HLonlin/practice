@@ -30,21 +30,11 @@ Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
-        el: '#app',
-        store,
-        router,
-        components: {
-            App
-        },
-        template: '<App/>'
-    })
-    // var docEl = document.documentElement,
-    //     isIOS = navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
-    //     dpr = isIOS ? Math.min(window.devicePixelRatio, 3) : 1,
-    //     dpr = window.top === window.self ? dpr : 1, //被iframe引用时，禁止缩放
-    //     dpr = 1,
-    //     scale = 1 / dpr;
-    // var metaEl = document.createElement("meta");
-    // metaEl.name = "viewport";
-    // metaEl.content = "initial-scale=" + scale + ",maximum-scale=" + scale + ", minimum-scale=" + scale;
-    // docEl.firstElementChild.appendChild(metaEl);
+    el: '#app',
+    store,
+    router,
+    components: {
+        App
+    },
+    template: '<App/>'
+})

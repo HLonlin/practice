@@ -159,7 +159,8 @@ export default {
             });
           }
           for (let i = 0, imax = data.length; i < imax; i++) {
-            let todayDate = new Date(data[i].wf_Created).getDate() - 1;
+            let todayDate =
+              new Date(data[i].wf_Created.replace(/-/g, "/")).getDate() - 1;
             that.$set(that.signinList, todayDate, data[i]);
             that.$set(that.signinList[todayDate], "isSignin", true);
           }
@@ -187,7 +188,9 @@ export default {
       let that = this;
       that.$set(that.signinDetail, "isSignin", item.isSignin);
       if (item.isSignin) {
-        let dateStr = that.$tool.getYearMonthDate(item.wf_Created);
+        let dateStr = that.$tool.getYearMonthDate(
+          item.wf_Created.replace(/-/g, "/")
+        );
         that.$set(that.signinDetail, "dateStr", dateStr);
         that.$set(that.signinDetail, "company", item.shixidanwei);
         that.$set(that.signinDetail, "time", item.wf_Created);
@@ -195,7 +198,9 @@ export default {
       } else {
         let dateStr =
           that.currentYearMonth +
-          (item.wf_Created < 10 ? "0" + item.wf_Created : item.wf_Created) +
+          (item.wf_Created.replace(/-/g, "/") < 10
+            ? "0" + item.wf_Created.replace(/-/g, "/")
+            : item.wf_Created.replace(/-/g, "/")) +
           "日";
         that.$set(that.signinDetail, "dateStr", dateStr);
       }
