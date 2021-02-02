@@ -195,7 +195,9 @@ export default {
             ? that.$api.findBanZhuRenPingJiaById_teacher
             : that.$api.findBanZhuRenPingJiaById_student,
           {
-            id: that.$route.query.id
+            id: that.userData.isTeacher
+              ? that.$route.query.id
+              : that.$route.query.id
           }
         )
         .then(res => {

@@ -194,7 +194,7 @@ export default {
     routerTo: function() {
       let that = this;
       that.$axios.post(that.$api.getBanZhuRenPingJiaMsg).then(res => {
-        if (res.data) {
+        if (res.data.temp) {
           this.$router.push({
             path: "/evaluateList"
           });

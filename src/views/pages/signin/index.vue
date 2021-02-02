@@ -294,44 +294,50 @@ export default {
         {
           name: "updateRemind",
           fn: function() {
-            if (that.$tool.getLocal("updateRemind")) {
-              that.getBanZhuRenPingJiaMsg();
-            } else {
-              that.$axios
-                .post(that.$api.getUpdateUserInfoMsg, {
-                  cardid: that.userData.cardid
-                })
-                .then(res => {
-                  that.remindText = res.data;
-                  if (!res.data) {
-                    return;
-                  } else {
-                    that.popups.updateRemind = true;
-                    that.$tool.setLocal("updateRemind", true);
-                  }
-                });
-            }
+            console.log("updateRemind");
+            that.$axios
+              .post(that.$api.getUpdateUserInfoMsg, {
+                cardid: that.userData.cardid
+              })
+              .then(res => {
+                that.remindText = res.data;
+                if (!res.data) {
+                  run();
+                } else {
+                  that.popups.updateRemind = true;
+                }
+              });
+            that.$tool.setLocal("updateRemind", true);
           }
         },
         {
           name: "evaluateRemind",
           fn: function() {
-            if (that.$tool.getLocal("evaluateRemind")) return;
+            console.log("evaluateRemind");
             that.$axios.post(that.$api.getBanZhuRenPingJiaMsg).then(res => {
-              if (!res.data) {
-                that.popups.evaluateRemind = true;
-                that.$tool.setLocal("evaluateRemind", true);
+              if (!res.data.temp) {
+                let currentMonth = new Date().getMonth() + 1;
+                for (let j = 0, jmax = res.data.month.length; j < jmax; j++) {
+                  if (currentMonth == res.data.month[j].value) {
+                    that.popups.evaluateRemind = true;
+                    return;
+                  }
+                }
               }
             });
+            that.$tool.setLocal("evaluateRemind", true);
           }
         }
       ];
-      for (let i = 0, imax = remindList.length; i < imax; i++) {
-        if (!that.$tool.getLocal(remindList[i].name)) {
-          remindList[i].fn();
-          return;
+      function run() {
+        for (let i = 0, imax = remindList.length; i < imax; i++) {
+          if (!that.$tool.getLocal(remindList[i].name)) {
+            remindList[i].fn();
+            break;
+          }
         }
       }
+      run();
     },
     // 今日是否签到
     isSigninTotal: function() {

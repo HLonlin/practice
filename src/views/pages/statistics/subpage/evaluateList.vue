@@ -18,7 +18,7 @@
         :key="i"
         @click="linkTo(item)"
       >
-        <div class="headImg_panel">
+        <div class="headImg_panel" v-show="userData.isTeacher">
           <img
             class="headImg_logo"
             :src="
@@ -27,9 +27,9 @@
           />
         </div>
         <div class="label_panel">
-          <!-- <div class="label_title">
-            {{ userData.isTeacher ? "学生" + (i + 1) : item.username }}
-          </div> -->
+          <div class="label_title" v-show="!userData.isTeacher">
+            {{ item.username }}
+          </div>
           <div class="label_signin">
             <span>评价总分：{{ item.totalNum ? item.totalNum : "" }}分</span
             ><span>评价时间：{{ item.year + "-" + item.month }}</span>
@@ -37,6 +37,7 @@
         </div>
       </div>
     </div>
+
     <div class="noMore_panel">
       没有更多了
     </div>
@@ -168,7 +169,7 @@ export default {
 .label_panel {
   position: relative;
   box-sizing: border-box;
-  padding: 0px 0px 0px 0.625rem;
+  padding: 0px 0.625rem;
 }
 .evaluateStatus {
   position: absolute;
@@ -193,7 +194,7 @@ export default {
   justify-content: space-between;
   width: 16.875rem;
   box-sizing: border-box;
-  /* padding: 0px 0px 0.3125rem 0px; */
+  padding: 0px 1rem 0px 0px;
   font-size: 0.75rem;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
