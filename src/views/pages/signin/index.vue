@@ -294,7 +294,6 @@ export default {
         {
           name: "updateRemind",
           fn: function() {
-            console.log("updateRemind");
             that.$axios
               .post(that.$api.getUpdateUserInfoMsg, {
                 cardid: that.userData.cardid
@@ -313,7 +312,6 @@ export default {
         {
           name: "evaluateRemind",
           fn: function() {
-            console.log("evaluateRemind");
             that.$axios.post(that.$api.getBanZhuRenPingJiaMsg).then(res => {
               if (!res.data.temp) {
                 let currentMonth = new Date().getMonth() + 1;

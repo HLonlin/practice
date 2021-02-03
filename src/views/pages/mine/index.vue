@@ -195,16 +195,32 @@ export default {
       let that = this;
       that.$axios.post(that.$api.getBanZhuRenPingJiaMsg).then(res => {
         if (res.data.temp) {
+          // 当月已经评论
           this.$router.push({
             path: "/evaluateList"
           });
         } else {
-          this.$router.push({
-            path: "/evaluateTeacher",
-            query: {
-              username: that.userData.banzhuren
+          let currentMonth = new Date().getMonth() + 1;
+          console.log(currentMonth);
+          for (let j = 0, jmax = res.data.month.length; j < jmax; j++) {
+            if (currentMonth == res.data.month[j].value) {
+              console.log(0);
+              // 当月未评论且当月需评论
+              this.$router.push({
+                path: "/evaluateTeacher",
+                query: {
+                  username: that.userData.banzhuren
+                }
+              });
+              return;
+            } else {
+              console.log(1);
+              // 当月未评论但当月无需评论
+              this.$router.push({
+                path: "/evaluateList"
+              });
             }
-          });
+          }
         }
       });
     }
