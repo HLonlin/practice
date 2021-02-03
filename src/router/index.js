@@ -6,8 +6,11 @@ const originalPush = vueRouter.prototype.push
 vueRouter.prototype.push = function push(location) {
     return originalPush.call(this, location).catch(err => err)
 }
-
-// 静态路由
+const originalReplace = vueRouter.prototype.replace
+vueRouter.prototype.replace = function replace(location) {
+        return originalReplace.call(this, location).catch(err => err)
+    }
+    // 静态路由
 export const constantRouter = [{
         path: '',
         // 通过es提案的import()实现懒加载，指定相同webpackChunkName的组件会被打包到同一js文件中

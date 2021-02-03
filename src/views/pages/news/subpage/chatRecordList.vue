@@ -98,7 +98,7 @@ export default {
     // 搜索聊天记录
     onSearch: function(val) {
       this.searchkeywords = this.$tool.trim(val);
-      if (!this.searchkeywords) return;
+      // if (!this.searchkeywords) return;
       this.$router.replace({
         path: "/chatrecordlist",
         query: { searchkeywords: JSON.stringify(val) }

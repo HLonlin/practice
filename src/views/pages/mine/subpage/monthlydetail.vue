@@ -205,8 +205,8 @@ export default {
   font-weight: 400;
   color: #555555;
   line-height: 26px;
-  text-align: justify;
-  letter-spacing: 0.4px;
+  /* text-align: justify;
+  letter-spacing: 0.4px; */
   box-sizing: border-box;
   padding: 10px 0px 0px 0px;
   word-wrap: break-word;

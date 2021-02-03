@@ -20,44 +20,46 @@
       @load="getRecord"
       :offset="0"
     >
-      <div
-        v-for="(item, i) in recordList"
-        :key="i"
-        class="msgItem_panel"
-        :class="[
-          item.comefromName == chatWith.username
-            ? 'msgItem_left'
-            : 'msgItem_right'
-        ]"
-      >
-        <div class="msgItem_time">{{ item.time }}</div>
-        <div class="msgItem_box">
-          <div
-            class="msgItem_header"
-            v-if="item.comefromName == chatWith.username"
-          >
-            <img
-              class="msgItem_logo"
-              :src="
-                chatWith.logo
-                  ? chatWith.logo
-                  : require('@/assets/images/default.png')
-              "
-            />
-          </div>
-          <div class="msgItem_content" v-html="item.info"></div>
-          <div
-            class="msgItem_header"
-            v-if="item.comefromName != chatWith.username"
-          >
-            <img
-              class="msgItem_logo"
-              :src="
-                userData.logo
-                  ? userData.logo
-                  : require('@/assets/images/default.png')
-              "
-            />
+      <div v-show="finished">
+        <div
+          v-for="(item, i) in recordList"
+          :key="i"
+          class="msgItem_panel"
+          :class="[
+            item.comefromName == chatWith.username
+              ? 'msgItem_left'
+              : 'msgItem_right'
+          ]"
+        >
+          <div class="msgItem_time">{{ item.time }}</div>
+          <div class="msgItem_box">
+            <div
+              class="msgItem_header"
+              v-if="item.comefromName == chatWith.username"
+            >
+              <img
+                class="msgItem_logo"
+                :src="
+                  chatWith.logo
+                    ? chatWith.logo
+                    : require('@/assets/images/default.png')
+                "
+              />
+            </div>
+            <div class="msgItem_content" v-html="item.info"></div>
+            <div
+              class="msgItem_header"
+              v-if="item.comefromName != chatWith.username"
+            >
+              <img
+                class="msgItem_logo"
+                :src="
+                  userData.logo
+                    ? userData.logo
+                    : require('@/assets/images/default.png')
+                "
+              />
+            </div>
           </div>
         </div>
       </div>

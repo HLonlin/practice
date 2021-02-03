@@ -295,7 +295,7 @@ export default {
           return;
         }
       }
-      if (!/^1[3|4|5|7|8]\d{9}$/.test(that.studentInfo.phone)) {
+      if (!/^1[3|4|5|7|8|9]\d{9}$/.test(that.studentInfo.phone)) {
         this.$toast({
           message: "联系电话格式错误，请重新输入"
         });
@@ -338,7 +338,6 @@ export default {
             that.$set(that.studentInfo, keys, data[keys]);
           }
           this.headImg[0].url = this.studentInfo.logo;
-          console.log(this.studentInfo);
         });
     },
     linkTo: function(path) {

@@ -98,12 +98,18 @@ export default {
     },
     initYearMonth: function() {
       let that = this;
-      let currentYearMonth = arguments[0] ? new Date(arguments[0]) : new Date();
-      let month =
-        currentYearMonth.getMonth() + 1 < 10
-          ? "0" + (currentYearMonth.getMonth() + 1) + "月"
-          : currentYearMonth.getMonth() + 1 + "月";
-      that.currentYearMonth = currentYearMonth.getFullYear() + "年" + month;
+      if (that.$route.query.currentYearMonth) {
+        that.currentYearMonth = JSON.parse(that.$route.query.currentYearMonth);
+      } else {
+        let currentYearMonth = arguments[0]
+          ? new Date(arguments[0])
+          : new Date();
+        let month =
+          currentYearMonth.getMonth() + 1 < 10
+            ? "0" + (currentYearMonth.getMonth() + 1) + "月"
+            : currentYearMonth.getMonth() + 1 + "月";
+        that.currentYearMonth = currentYearMonth.getFullYear() + "年" + month;
+      }
     },
     pageTurn: function(add) {
       let that = this,
@@ -125,6 +131,10 @@ export default {
         dateArr[1] = "0" + dateArr[1];
       }
       that.currentYearMonth = dateArr[0] + "年" + dateArr[1] + "月";
+      this.$router.replace({
+        path: "/classmonthly",
+        query: { currentYearMonth: JSON.stringify(that.currentYearMonth) }
+      });
       that.onLoad();
     },
     // 加载班级月记列表
