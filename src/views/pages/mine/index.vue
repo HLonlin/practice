@@ -158,6 +158,8 @@ export default {
         if (action === "confirm") {
           done();
           that.$axios.post(that.$api.logout).then(res => {
+            that.$tool.removeLocal("userData");
+            that.$tool.removeLocal("token");
             that.$router.push({ path: "/login" });
           });
         } else {

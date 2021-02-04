@@ -1,5 +1,8 @@
 <template>
-  <div class="login_container">
+  <div
+    class="login_container"
+    v-show="userData.banzurenPermission && userData.xibuPermission"
+  >
     <van-nav-bar
       title="登录"
       :fixed="true"
@@ -58,6 +61,15 @@ export default {
     if (userData) {
       this.userData = userData;
     }
+    if (!this.userData.xibuPermission || !this.userData.banzurenPermission) {
+      this.$tool.setLocal(
+        "identity",
+        this.userData.xibuPermission ? "sdept" : "headmaster"
+      );
+      this.$router.replace({
+        path: this.userData.xibuPermission ? "sdept" : "statistics"
+      });
+    }
   },
   beforeMount() {},
   mounted() {},
@@ -67,12 +79,14 @@ export default {
   destroyed() {},
   methods: {
     routerTo: function(path) {
+      let that = this;
       if (path == "sdept") {
-        this.$tool.setLocal("identity", "sdept");
+        that.$tool.setLocal("identity", "sdept");
       } else {
-        this.$tool.setLocal("identity", "headmaster");
+        that.$tool.setLocal("identity", "headmaster");
+        that.$tool.setLocal("evaluateRemind_teacher", false);
       }
-      this.$router.replace({ path: path });
+      that.$router.replace({ path: path });
     }
   }
 };
