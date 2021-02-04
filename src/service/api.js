@@ -7,8 +7,14 @@ const HOSTURL = process.env.NODE_ENV === 'development' ? 'https://openapi.gzslit
 const API = {
     host: HOSTURL,
     // --------------------------登录--------------------------
-    login: '/api/practice/login', // 用户登录 POST
-    logout: '/api/practice/logout', // 用户退出 GET
+    getWechatAuthURI: '/api/practice/workwechat/getWechatAuthURI', // 获取企业微信授权的URL地址
+    redirect: '/api/practice/workwechat/redirect', // 企业微信重定向
+    loginByOpenToken: '/api/practice/workwechat/loginByOpenToken', // 通过企业微信opentoken登录
+    getWechatAuthURI_wechat: '/api/practice/wechat/getWechatAuthURI', // 获取微信公众号授权的URL地址
+    redirect_wechat: '/api/practice/wechat/redirect', // 微信公众号重定向
+    loginByOpenToken_wechat: '/api/practice/wechat/loginByOpenToken', // 根据opentoken微信登录
+    login: '/api/practice/login', // 用户登录
+    logout: '/api/practice/logout', // 用户退出
     // --------------------------------------------------------------- 学生端 ---------------------------------------------------------------
     // --------------------------签到--------------------------
     signin: '/api/practice/student/qiandao/signIn', // 学员签到
@@ -109,7 +115,6 @@ const API = {
 
     // --------------------------------------------------------------- 微信端 ---------------------------------------------------------------
     getWechatInvokeSign: '/api/practice/wechat/getWechatInvokeSign', // 获取微信调用配置
-    getWechatAuthURI: '/api/practice/wechat/getWechatAuthURI', // 获取微信公众号授权的URL地址 getWechatAuthURI
     getAddress: '/api/practice/wechat/getLocationInfo', // 逆地址解析（坐标位置描述)
     getLocation: '/api/practice/wechat/getLocationCoordinate', // 地址解析（地址转坐标）
 
