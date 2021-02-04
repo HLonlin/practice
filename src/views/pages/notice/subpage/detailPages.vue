@@ -281,11 +281,15 @@ export default {
   color: #ffffff;
 }
 
-section {
+.detailPage_container section {
   box-sizing: border-box;
 }
 
-section img {
+/* section img {
+  width: 100%;
+} */
+
+.detailPage_container img {
   width: 100%;
 }
 </style>

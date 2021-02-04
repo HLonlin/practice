@@ -232,7 +232,7 @@ export default {
               break;
             case "info":
               that.$toast({
-                message: "信息发布不能为空"
+                message: "信息发布评分不能为空"
               });
               break;
           }
