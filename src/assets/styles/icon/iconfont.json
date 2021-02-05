@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "19816558",
+      "name": "手机号图标",
+      "font_class": "shoujihaotubiao",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "19816453",
+      "name": "验证码图标",
+      "font_class": "yanzhengmatubiao",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
       "icon_id": "19534693",
       "name": "学生评价",
       "font_class": "xueshengpingjia",

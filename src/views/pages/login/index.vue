@@ -6,6 +6,8 @@
       :placeholder="true"
       :safe-area-inset-top="true"
       :border="false"
+      :left-arrow="usertype == '3'"
+      @click-left="onClickLeft"
     />
     <div v-if="!islogin">
       <div class="logo_panel">
@@ -13,7 +15,7 @@
       </div>
       <div class="login_panel">
         <div class="login_bgPanel"></div>
-        <div class="login_itemBox">
+        <div class="login_itemBox" v-show="usertype != '3'">
           <div class="login_tabbar">
             <div
               class="login_tabbarItem"
@@ -50,6 +52,56 @@
             />
           </div>
           <div class="login_button" @click="login">登录</div>
+          <div class="login_bind" v-show="false" @click="usertype = '3'">
+            <!-- <div
+            class="login_bind"
+            v-show="usertype == '2'"
+            @click="usertype = '3'"
+          > -->
+            绑定公众号
+          </div>
+        </div>
+        <div class="login_itemBox" v-show="usertype == '3'">
+          <div class="login_account">
+            <i class="iconItem icon_denglu-zhanghaotubiao loginIcon"></i>
+            <van-field
+              v-model="bindid"
+              :placeholder="'请输入身份证号码'"
+              class="login_input"
+              :formatter="bindidFormatter"
+              format-trigger="onBlur"
+            />
+          </div>
+          <div class="login_password">
+            <i class="iconItem icon_shoujihaotubiao loginIcon"></i>
+            <van-field
+              v-model="bindphone"
+              :placeholder="'请输入手机号码'"
+              class="login_input"
+              :formatter="bindphoneFormatter"
+              format-trigger="onBlur"
+            />
+          </div>
+          <div class="login_password">
+            <i class="iconItem icon_yanzhengmatubiao loginIcon"></i>
+            <van-field
+              v-model="bindcode"
+              :placeholder="'请输入验证码'"
+              class="login_input"
+            >
+              <template #button>
+                <div class="send_code" @click="sendvcode">发送验证码</div>
+              </template>
+            </van-field>
+          </div>
+          <div class="login_button" @click="bindUser">确认</div>
+          <div
+            class="login_bind"
+            v-show="usertype == '2'"
+            @click="usertype = '3'"
+          >
+            绑定公众号
+          </div>
         </div>
       </div>
     </div>
@@ -97,7 +149,11 @@ export default {
       islogin: false,
       usertype: "1", // 账号类型，必填 1=教师，2=学生
       userid: "",
-      passwd: ""
+      passwd: "",
+      bindid: "", // 绑定身份证
+      bindphone: "", // 绑定手机号
+      bindcode: "", // 验证码
+      rcode: "" // 安全识别注册码
       // userid: "lyy",
       // passwd: "0513LyyL"
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：身份证号
@@ -115,7 +171,96 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    onClickLeft: function() {},
+    onClickLeft: function() {
+      this.usertype = "2";
+    },
+    sendvcode: function() {
+      let that = this;
+      if (!that.bindphone) {
+        that.$toast({
+          message: "请输入手机号"
+        });
+        return;
+      } else if (!/^1[3|4|5|7|8|9]\d{9}$/.test(that.bindphone)) {
+        that.$toast({
+          message: "手机号码格式错误，请重新输入"
+        });
+      } else {
+        that.$axios
+          .post(that.$api.sendvcode, { phonenum: that.bindphone })
+          .then(res => {
+            console.log("成功发送验证码", res);
+            if (res.data.rcode) {
+              that.rcode = res.data.rcode;
+            }
+          });
+      }
+    },
+    bindphoneFormatter: function(value) {
+      if (!value) {
+        return value;
+      }
+      if (!/^1[3|4|5|7|8|9]\d{9}$/.test(value)) {
+        this.$toast({
+          message: "手机号码格式错误，请重新输入"
+        });
+      }
+      return value;
+    },
+    bindidFormatter: function(value) {
+      let id = /^[1-9][0-9]{5}(19|20)[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}([0-9]|x|X)$/;
+      if (!value) {
+        return value;
+      }
+      if (!id.test(value)) {
+        this.$toast({
+          message: "身份证号码格式错误，请重新输入"
+        });
+      }
+      return value;
+    },
+    getopenid: function() {},
+    bindUser: function() {
+      let that = this;
+      let id = /^[1-9][0-9]{5}(19|20)[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}([0-9]|x|X)$/;
+      if (!that.bindid) {
+        that.$toast({
+          message: "请输入身份证号"
+        });
+        return;
+      } else if (!id.test(that.bindid)) {
+        that.$toast({
+          message: "身份证号码格式错误，请重新输入"
+        });
+        return;
+      }
+      if (!that.bindphone) {
+        that.$toast({
+          message: "请输入手机号"
+        });
+        return;
+      } else if (!/^1[3|4|5|7|8|9]\d{9}$/.test(that.bindphone)) {
+        that.$toast({
+          message: "手机号码格式错误，请重新输入"
+        });
+        return;
+      }
+      if (!that.bindcode) {
+        that.$toast({
+          message: "请输入验证码"
+        });
+        return;
+      }
+      that.$axios
+        .post(that.$api.bindCardid, {
+          openid: "",
+          cardid: that.bindid,
+          phonenum: that.bindphone,
+          rcode: that.rcode,
+          vcode: that.bindcode
+        })
+        .then(res => {});
+    },
     login: function() {
       let that = this;
       this.$toast.loading({
@@ -260,7 +405,7 @@ export default {
   display: flex;
   width: 100%;
   box-sizing: border-box;
-  padding: 32px 0px 10px 0px;
+  padding: 30px 0px 10px 0px;
   border-bottom: 1px solid #eeeeee;
 }
 .loginIcon {
@@ -281,6 +426,29 @@ export default {
   color: #ffffff;
   background-color: #0090d8;
   line-height: 47px;
+}
+.login_bind {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #0090d8;
+}
+.send_code {
+  width: 5rem;
+  height: 24px;
+  background-color: #0090d8;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .login_headImgPanel {
   box-sizing: border-box;

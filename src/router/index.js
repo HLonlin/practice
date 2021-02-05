@@ -82,6 +82,44 @@ Router.beforeEach((to, from, next) => {
             })
         } else {
             // 微信公众号、学生端
+            axios.post(api.loginByOpenToken_wechat, { opentoken: to.query.opentoken }).then(res => {
+                    if (res) {
+                        let userData = res.data;
+                        Storage.setLocal('token', res.data.tokenid);
+                        // 授权登录成功后获取教师补充信息
+                        axios.post(api.getUserInfo).then(res => {
+                            userData["isTeacher"] = false;
+                            for (let key in res.data) {
+                                userData[key] = res.data[key];
+                            }
+                            userData.tokenid = Storage.getLocal('token');
+                            Storage.setLocal('userData', userData);
+                            next({
+                                path: to.path,
+                                replace: true
+                            })
+                        });
+                    } else {
+                        Toast({
+                            message: '获取用户信息失败',
+                        })
+                        next({
+                            path: '/login',
+                            replace: true
+                        })
+                    }
+                })
+                .catch(res => {
+                    // 学生未绑定公众号
+                    let mes = '微信授权失败，请登录！';
+                    Toast({
+                        message: mes,
+                    })
+                    next({
+                        path: '/login',
+                        replace: true
+                    })
+                })
         }
     } else if (to.matched.some(r => r.meta.requireAuth)) {
         // 需要授权的路由、检查是否已有登录token
@@ -104,7 +142,7 @@ Router.beforeEach((to, from, next) => {
                         }
                     })
                     .catch(res => {
-                        let mes = res.message ? res.message : '微信授权失败，请登录！';
+                        let mes = '微信授权失败，请登录！';
                         Toast({
                             message: mes,
                         })
@@ -116,6 +154,27 @@ Router.beforeEach((to, from, next) => {
             } else if (u.match(/micromessenger/i) == 'micromessenger') {
                 // 微信公众号、学生端
                 console.log('微信公众号、学生端');
+                axios.post(api.getWechatAuthURI_wechat, {
+                        url: window.location.origin + '/mop/#/signin',
+                        // appcode: 'practice'
+                    })
+                    .then(res => {
+                        if (res.status === 200) {
+                            location.replace(res.data.uri)
+                        } else {
+                            throw res;
+                        }
+                    })
+                    .catch(res => {
+                        let mes = '微信授权失败，请登录！';
+                        Toast({
+                            message: mes,
+                        })
+                        next({
+                            path: '/login',
+                            replace: true
+                        })
+                    })
                 next({
                     path: '/login',
                     replace: true
@@ -147,7 +206,6 @@ Router.beforeEach((to, from, next) => {
                 next();
             }
         }
-
     } else {
         next();
     }

@@ -28,6 +28,7 @@ const API = {
     getDailyStudyByDate: '/api/practice/student/meizhouyixue/dateYixue', // 根据日期获取每日一学内容
     getUserByCardId: '/api/practice/student/getUserByCardId', // 根据身份证查找学生信息
     getUpdateUserInfoMsg: '/api/practice/student/getUpdateUserInfoMsg', // 获取学员修改个人信息提示语
+    getUserInfo: '/api/practice/student/getUserInfo', // 获取学生基本信息
     // --------------------------消息--------------------------
     msgList: '/api/practice/student/xiaoxi/xiaoxiList', // 消息列表
     msgDetail: '/api/practice/student/xiaoxi/xiaoxiDetail', // 消息详情
@@ -114,11 +115,13 @@ const API = {
     getCountNum: '/api/practice/teacher/getCountNum', // 获取我的统计数
 
     // --------------------------------------------------------------- 微信端 ---------------------------------------------------------------
+    bindCardid: '/api/practice/wechat/bindCardid', // 学生微信公众号绑定身份证
     getWechatInvokeSign: '/api/practice/wechat/getWechatInvokeSign', // 获取微信调用配置
     getWorkWechatInvokeSign: '/api/practice/workwechat/getWorkWechatInvokeSign', // 获取企业微信jsapi签名配置信息
     getWorkWechatGlobalSign: '/api/practice/workwechat/getWorkWechatGlobalSign', // 获取企业微信全局jsapi签名配置信息
     getAddress: '/api/practice/wechat/getLocationInfo', // 逆地址解析（坐标位置描述)
     getLocation: '/api/practice/wechat/getLocationCoordinate', // 地址解析（地址转坐标）
+    sendvcode: '/api/security/sendvcode', // 发送验证码
 
 }
 export default API
