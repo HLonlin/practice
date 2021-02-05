@@ -64,13 +64,22 @@
             {{ signinDetail.time }}
           </div>
         </div>
-        <div class="signinDetail_address signinDetail_container">
+        <div
+          class="signinDetail_address signinDetail_container"
+          v-show="signinDetail.address"
+        >
           <div class="signinDetail_label ">签到地点</div>
           <div class="signinDetail_content">
             {{ signinDetail.address }}
           </div>
         </div>
-        <div class="signinDetail_map" @click="openMap">查看坐标地图</div>
+        <div
+          class="signinDetail_map"
+          @click="openMap"
+          v-show="signinDetail.address"
+        >
+          查看坐标地图
+        </div>
       </div>
       <div class="signinDetail_noSignin" v-else>
         未签到
@@ -187,6 +196,7 @@ export default {
       }
       let that = this;
       that.$set(that.signinDetail, "isSignin", item.isSignin);
+      console.log(item);
       if (item.isSignin) {
         let dateStr = that.$tool.getYearMonthDate(
           item.wf_Created.replace(/-/g, "/")
@@ -198,9 +208,7 @@ export default {
       } else {
         let dateStr =
           that.currentYearMonth +
-          (item.wf_Created.replace(/-/g, "/") < 10
-            ? "0" + item.wf_Created.replace(/-/g, "/")
-            : item.wf_Created.replace(/-/g, "/")) +
+          (item.wf_Created < 10 ? "0" + item.wf_Created : item.wf_Created) +
           "日";
         that.$set(that.signinDetail, "dateStr", dateStr);
       }

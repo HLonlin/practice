@@ -1,9 +1,22 @@
+let path = '';
+let u = window.navigator.userAgent.toLowerCase();
+if ((u.match(/micromessenger/i) == 'micromessenger') && (u.match(/wxwork/i) == 'wxwork')) {
+    // 教师端首页为统计列表
+    path = '/statistics';
+} else if (u.match(/micromessenger/i) == 'micromessenger') {
+    // 学生端首页为签到页
+    path = '/signin'
+} else {
+    // h5需先登录
+    path = '/login'
+}
+
 const routes = [{
         path: '',
         // 通过es提案的import()实现懒加载，指定相同webpackChunkName的组件会被打包到同一js文件中
         component: () =>
             import ( /*webpackChunkName: '包名',*/ '@/views/home'),
-        redirect: '/signin',
+        redirect: path,
         meta: { requireAuth: true },
         children: [{
                 path: 'statistics',

@@ -41,7 +41,7 @@
           :key="i"
         >
           <div v-if="detail.filename[i] != ''">
-            <p>附件：{{ detail.filename.length }}</p>
+            <p>附件：</p>
             <p class="detail_enclosureName">
               <a class="detail_enclosureName" :href="detail.fileurl[i]">{{
                 item
@@ -231,15 +231,10 @@ export default {
   box-sizing: border-box;
   padding-bottom: 10px;
   letter-spacing: -0.3px;
-  text-align: justify;
+  /* text-align: justify; */
   overflow-x: hidden;
   word-wrap: break-word;
 }
-/* .detail_content p {
-  text-indent: 2em;
-  box-sizing: border-box;
-  padding-bottom: 10px;
-} */
 .detail_enclosure {
   font-size: 0.9375rem;
   font-family: PingFangSC-Regular, PingFang SC;

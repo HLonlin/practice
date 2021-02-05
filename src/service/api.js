@@ -115,6 +115,8 @@ const API = {
 
     // --------------------------------------------------------------- 微信端 ---------------------------------------------------------------
     getWechatInvokeSign: '/api/practice/wechat/getWechatInvokeSign', // 获取微信调用配置
+    getWorkWechatInvokeSign: '/api/practice/workwechat/getWorkWechatInvokeSign', // 获取企业微信jsapi签名配置信息
+    getWorkWechatGlobalSign: '/api/practice/workwechat/getWorkWechatGlobalSign', // 获取企业微信全局jsapi签名配置信息
     getAddress: '/api/practice/wechat/getLocationInfo', // 逆地址解析（坐标位置描述)
     getLocation: '/api/practice/wechat/getLocationCoordinate', // 地址解析（地址转坐标）
 
