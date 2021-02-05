@@ -213,7 +213,7 @@ export default {
     addEvaluate: function() {
       let that = this;
       for (let key in that.score) {
-        if (!this.score[key].score) {
+        if (this.score[key].score + "" == "") {
           switch (key) {
             case "vocation":
               that.$toast({
