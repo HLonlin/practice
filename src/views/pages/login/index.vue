@@ -163,7 +163,11 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    if (this.$route.query.openid) {
+      this.usertype = 3;
+    }
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -253,13 +257,17 @@ export default {
       }
       that.$axios
         .post(that.$api.bindCardid, {
-          openid: "",
+          openid: that.$route.query.openid,
           cardid: that.bindid,
           phonenum: that.bindphone,
           rcode: that.rcode,
           vcode: that.bindcode
         })
-        .then(res => {});
+        .then(res => {
+          Toast({
+            message: "成功绑定公众号"
+          });
+        });
     },
     login: function() {
       let that = this;

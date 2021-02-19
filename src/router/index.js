@@ -31,6 +31,7 @@ const u = window.navigator.userAgent.toLowerCase();
 Router.beforeEach((to, from, next) => {
     if (to.query.opentoken) {
         if ((u.match(/micromessenger/i) == 'micromessenger') && (u.match(/wxwork/i) == 'wxwork')) {
+            alert('opentoken');
             // 企业微信、教师端
             axios.post(api.loginByOpenToken, { opentoken: to.query.opentoken }).then(res => {
                 if (res) {
@@ -84,21 +85,33 @@ Router.beforeEach((to, from, next) => {
             // 微信公众号、学生端
             axios.post(api.loginByOpenToken_wechat, { opentoken: to.query.opentoken }).then(res => {
                     if (res) {
-                        let userData = res.data;
-                        Storage.setLocal('token', res.data.tokenid);
-                        // 授权登录成功后获取教师补充信息
-                        axios.post(api.getUserInfo).then(res => {
-                            userData["isTeacher"] = false;
-                            for (let key in res.data) {
-                                userData[key] = res.data[key];
-                            }
-                            userData.tokenid = Storage.getLocal('token');
-                            Storage.setLocal('userData', userData);
-                            next({
-                                path: to.path,
-                                replace: true
+                        if (res.data.openid) {
+                            // 未绑定公众号
+                            Toast({
+                                message: '请先绑定公众号',
                             })
-                        });
+                            next({
+                                path: '/login',
+                                replace: true,
+                                query: { openid: res.data.openid }
+                            });
+                        } else {
+                            let userData = res.data;
+                            Storage.setLocal('token', res.data.tokenid);
+                            // 授权登录成功后获取教师补充信息
+                            axios.post(api.getUserInfo).then(res => {
+                                userData["isTeacher"] = false;
+                                for (let key in res.data) {
+                                    userData[key] = res.data[key];
+                                }
+                                userData.tokenid = Storage.getLocal('token');
+                                Storage.setLocal('userData', userData);
+                                next({
+                                    path: to.path,
+                                    replace: true
+                                })
+                            });
+                        }
                     } else {
                         Toast({
                             message: '获取用户信息失败',
@@ -155,8 +168,7 @@ Router.beforeEach((to, from, next) => {
                 // 微信公众号、学生端
                 console.log('微信公众号、学生端');
                 axios.post(api.getWechatAuthURI_wechat, {
-                        url: window.location.origin + '/mop/#/signin',
-                        // appcode: 'practice'
+                        url: window.location.origin + '/mop/#' + to.fullPath,
                     })
                     .then(res => {
                         if (res.status === 200) {
