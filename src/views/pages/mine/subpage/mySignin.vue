@@ -196,7 +196,6 @@ export default {
       }
       let that = this;
       that.$set(that.signinDetail, "isSignin", item.isSignin);
-      console.log(item);
       if (item.isSignin) {
         let dateStr = that.$tool.getYearMonthDate(
           item.wf_Created.replace(/-/g, "/")

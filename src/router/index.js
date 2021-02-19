@@ -98,7 +98,7 @@ Router.beforeEach((to, from, next) => {
                         } else {
                             let userData = res.data;
                             Storage.setLocal('token', res.data.tokenid);
-                            // 授权登录成功后获取教师补充信息
+                            // 授权登录成功后获取学生信息
                             axios.post(api.getUserInfo).then(res => {
                                 userData["isTeacher"] = false;
                                 for (let key in res.data) {

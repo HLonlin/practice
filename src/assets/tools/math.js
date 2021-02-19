@@ -51,7 +51,6 @@ const math = {
 
         unit = unit.substr(unit.length - n.length); // 截取需要使用的unit单位
         for (var i = 0; i < n.length; i++) {
-            console.log(i)
             str += "零壹贰叁肆伍陆柒捌玖".charAt(n.charAt(i)) + unit.charAt(i); //遍历转化为大写的数字
         }
 

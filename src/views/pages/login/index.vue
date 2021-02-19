@@ -52,10 +52,10 @@
             />
           </div>
           <div class="login_button" @click="login">登录</div>
-          <div class="login_bind" v-show="false" @click="usertype = '3'">
+          <div class="login_bind" v-if="false" @click="usertype = '3'">
             <!-- <div
             class="login_bind"
-            v-show="usertype == '2'"
+            v-if="usertype == '2'"
             @click="usertype = '3'"
           > -->
             绑定公众号
@@ -90,7 +90,17 @@
               class="login_input"
             >
               <template #button>
-                <div class="send_code" @click="sendvcode">发送验证码</div>
+                <van-button
+                  color="#0090d8"
+                  class="send_code"
+                  :disabled="loading"
+                  :loading="loading"
+                  round
+                  @click="sendvcode"
+                  :loading-text="loadingText"
+                  >发送验证码</van-button
+                >
+                <!-- <div class="send_code" @click="sendvcode">发送验证码</div> -->
               </template>
             </van-field>
           </div>
@@ -153,7 +163,10 @@ export default {
       bindid: "", // 绑定身份证
       bindphone: "", // 绑定手机号
       bindcode: "", // 验证码
-      rcode: "" // 安全识别注册码
+      rcode: "", // 安全识别注册码
+      loading: false,
+      loadingText: "60",
+      vcodeTimer: ""
       // userid: "lyy",
       // passwd: "0513LyyL"
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：身份证号
@@ -172,7 +185,9 @@ export default {
   mounted() {},
   beforeUpdate() {},
   updated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    clearInterval(this.vcodeTimer);
+  },
   destroyed() {},
   methods: {
     onClickLeft: function() {
@@ -193,7 +208,15 @@ export default {
         that.$axios
           .post(that.$api.sendvcode, { phonenum: that.bindphone })
           .then(res => {
-            console.log("成功发送验证码", res);
+            that.loading = true;
+            that.vcodeTimer = setInterval(function() {
+              that.loadingText = that.loadingText - 1 + "";
+              if (that.loadingText == 0) {
+                that.loading = false;
+                that.loadingText = "60";
+                clearInterval(that.vcodeTimer);
+              }
+            }, 1000);
             if (res.data.rcode) {
               that.rcode = res.data.rcode;
             }
@@ -446,7 +469,6 @@ export default {
   color: #0090d8;
 }
 .send_code {
-  width: 5rem;
   height: 24px;
   background-color: #0090d8;
   border-radius: 12px;

@@ -203,10 +203,8 @@ export default {
           });
         } else {
           let currentMonth = new Date().getMonth() + 1;
-          console.log(currentMonth);
           for (let j = 0, jmax = res.data.month.length; j < jmax; j++) {
             if (currentMonth == res.data.month[j].value) {
-              console.log(0);
               // 当月未评论且当月需评论
               this.$router.push({
                 path: "/evaluateTeacher",
@@ -216,7 +214,6 @@ export default {
               });
               return;
             } else {
-              console.log(1);
               // 当月未评论但当月无需评论
               this.$router.push({
                 path: "/evaluateList"
