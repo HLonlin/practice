@@ -213,8 +213,29 @@ Router.beforeEach((to, from, next) => {
                 });
             } else if (u.match(/micromessenger/i) == 'micromessenger') {
                 // 微信公众号、学生端
-                next();
+                if (to.path == '/signin') {
+                    let userData = Storage.getLocal('userData');
+                    if (userData.isTeacher) {
+                        let path = '';
+                        // 根据教师权限跳转路由
+                        if (userData.xibuPermission && userData.banzurenPermission) {
+                            path = "/login_choose";
+                        } else if (userData.xibuPermission) {
+                            path = '/sdept';
+                        } else {
+                            path = '/statistics';
+                        }
+                        next({
+                            path: path,
+                        })
+                    } else {
+                        next();
+                    }
+                } else {
+                    next();
+                }
             } else {
+                alert(3)
                 next();
             }
         }
