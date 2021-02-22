@@ -235,7 +235,6 @@ Router.beforeEach((to, from, next) => {
                     next();
                 }
             } else {
-                alert(3)
                 next();
             }
         }
