@@ -339,4 +339,7 @@ export default {
   font-size: 1.125rem;
   color: #ffffff;
 }
+.monthlydetail_container img {
+  display: block;
+}
 </style>
