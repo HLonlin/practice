@@ -167,12 +167,8 @@ export default {
       loading: false,
       loadingText: "60",
       vcodeTimer: ""
-      // userid: "lyy",
-      // passwd: "0513LyyL"
       // userid: "admin", // 登录号，必填，教师：oa账号，学生：身份证号
       // passwd: "gz020slitsXX" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
-      // userid: "440181200004075715", // 登录号，必填，教师：oa账号，学生：身份证号
-      // passwd: "075715" // 登录密码，必填，教师：oa密码，学生：身份证号后6位
     };
   },
   beforeCreate() {},
