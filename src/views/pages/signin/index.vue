@@ -357,6 +357,10 @@ export default {
       // 获取每日一学内容
       function getLearnContent() {
         that.$axios.post(that.$api.getDailyStudy).then(res => {
+          if (JSON.stringify(res.data) == "{}") {
+            that.runRemind();
+            return;
+          }
           for (let keys in res.data) {
             that.$set(that.learnContent, keys, res.data[keys]);
           }
