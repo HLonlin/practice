@@ -60,7 +60,10 @@
           </div>
           <div class="label_phone">
             电话:
-            <span style="color:#0090d8;">{{ item.phone }}</span>
+            <span style="color:#0090d8;" @click.stop="call(i)">
+              {{ item.phone }}
+              <a href="" v-show="false" ref="tels"></a>
+            </span>
           </div>
         </div>
       </div>
@@ -135,6 +138,10 @@ export default {
           isFrom: JSON.stringify("studentList")
         }
       });
+    },
+    call: function(index) {
+      this.$refs.tels[index].href = "tel://" + this.list[index].phone;
+      this.$refs.tels[index].click();
     }
   }
 };
