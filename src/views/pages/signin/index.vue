@@ -1,4 +1,5 @@
 <template>
+  <!-- <div class="container" :style="{ backgroundImage: 'url(' + bgImage + ')' }"> -->
   <div class="container">
     <div class="signin_topPanel">
       <div
@@ -246,7 +247,8 @@ export default {
       otherHealthStatus: "", // 其他症状输入框文本
       // 健康上报选项
       healthRadio: [],
-      remindText: ""
+      remindText: "",
+      bgImage: ""
     };
   },
   beforeCreate() {},
@@ -255,6 +257,7 @@ export default {
     if (userData) {
       this.userData = userData;
     }
+    // this.getBgImage();
     this.getSigninDetailsList();
     this.isLearnToday();
     this.isSigninTotal();
@@ -272,6 +275,14 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getBgImage: function() {
+      let that = this;
+      that.$axios.post(that.$api.mobileImage).then(res => {
+        if (res.data.fileurl) {
+          that.bgImage = res.data.fileurl;
+        }
+      });
+    },
     getCurrentAddress: function() {
       if (!this.$tool.isWechat()) {
         this.$toast({
@@ -619,6 +630,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+/* .container {
+  background-color: #0090d8;
+  background-size: cover;
+} */
 .signin_topPanel {
   position: relative;
   width: 100%;

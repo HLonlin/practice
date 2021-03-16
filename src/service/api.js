@@ -29,6 +29,7 @@ const API = {
     getUserByCardId: '/api/practice/student/getUserByCardId', // 根据身份证查找学生信息
     getUpdateUserInfoMsg: '/api/practice/student/getUpdateUserInfoMsg', // 获取学员修改个人信息提示语
     getUserInfo: '/api/practice/student/getUserInfo', // 获取学生基本信息
+    mobileImage: '/api/practice/mobileimage', // 移动端背景图
     // --------------------------消息--------------------------
     msgList: '/api/practice/student/xiaoxi/xiaoxiList', // 消息列表
     msgDetail: '/api/practice/student/xiaoxi/xiaoxiDetail', // 消息详情
