@@ -142,7 +142,7 @@
               <div class="popup_itemTitle">每日健康上报</div>
               <div class="popup_itemText">{{ healthStatus }}</div>
             </div>
-            <div class="popup_ContentItem">
+            <!-- <div class="popup_ContentItem">
               <div class="popup_itemTitle">
                 签到地址
                 <div class="popup_itemLabel" @click="getCurrentAddress">
@@ -150,7 +150,7 @@
                 </div>
               </div>
               <div class="popup_itemText">{{ currentAddress }}</div>
-            </div>
+            </div> -->
           </div>
           <div class="signin_popupBottomBtn" @click="signinTotal">确定</div>
         </div>
