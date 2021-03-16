@@ -52,12 +52,12 @@
             />
           </div>
           <div class="login_button" @click="login">登录</div>
-          <div class="login_bind" v-if="false" @click="usertype = '3'">
-            <!-- <div
+          <!-- <div class="login_bind" v-if="false" @click="usertype = '3'"> -->
+          <div
             class="login_bind"
             v-if="usertype == '2'"
             @click="usertype = '3'"
-          > -->
+          >
             绑定公众号
           </div>
         </div>
