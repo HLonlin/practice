@@ -122,7 +122,7 @@ const API = {
     getWorkWechatGlobalSign: '/api/practice/workwechat/getWorkWechatGlobalSign', // 获取企业微信全局jsapi签名配置信息
     getAddress: '/api/practice/wechat/getLocationInfo', // 逆地址解析（坐标位置描述)
     getLocation: '/api/practice/wechat/getLocationCoordinate', // 地址解析（地址转坐标）
-    sendvcode: '/api/security/sendvcode', // 发送验证码
+    sendvcode: '/api/practice/sendvcode', // 发送验证码
 
 }
 export default API
