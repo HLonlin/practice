@@ -36,7 +36,7 @@
             <i class="iconItem icon_denglu-zhanghaotubiao loginIcon"></i>
             <van-field
               v-model="userid"
-              :placeholder="usertype == '1' ? '请输入账号' : '请输入身份证号码'"
+              :placeholder="usertype == '1' ? '请输入账号' : '请输入手机号码'"
               class="login_input"
             />
           </div>
@@ -58,7 +58,7 @@
             v-if="usertype == '2'"
             @click="usertype = '3'"
           >
-            绑定公众号
+            <i class="iconItem icon_bangdingshoujihaotubiao"></i> 绑定手机号
           </div>
         </div>
         <div class="login_itemBox" v-show="usertype == '3'">
@@ -110,7 +110,7 @@
             v-show="usertype == '2'"
             @click="usertype = '3'"
           >
-            绑定公众号
+            <i class="iconItem icon_bangdingshoujihaotubiao"></i> 绑定手机号
           </div>
         </div>
       </div>
@@ -442,8 +442,8 @@ export default {
   font-size: 19px;
 }
 .login_button {
-  margin-top: 50px;
-  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 40px;
   width: 100%;
   height: 47px;
   border-radius: 1.5rem;

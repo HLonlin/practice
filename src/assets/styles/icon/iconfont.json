@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "20412695",
+      "name": "绑定手机号图标",
+      "font_class": "bangdingshoujihaotubiao",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
       "icon_id": "19816558",
       "name": "手机号图标",
       "font_class": "shoujihaotubiao",
