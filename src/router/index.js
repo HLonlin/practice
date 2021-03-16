@@ -88,7 +88,7 @@ Router.beforeEach((to, from, next) => {
                         if (res.data.openid) {
                             // 未绑定公众号
                             Toast({
-                                message: '请先绑定公众号',
+                                message: '请先绑定手机号码',
                             })
                             next({
                                 path: '/login',
