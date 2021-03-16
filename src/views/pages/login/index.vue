@@ -283,6 +283,7 @@ export default {
           vcode: that.bindcode
         })
         .then(res => {
+          that.usertype = "2";
           Toast({
             message: "成功绑定公众号"
           });
