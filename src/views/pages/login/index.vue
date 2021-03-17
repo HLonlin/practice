@@ -1,7 +1,7 @@
 <template>
   <div class="login_container">
     <van-nav-bar
-      title="登录"
+      :title="usertype == '3' ? '绑定手机号' : '登录'"
       :fixed="true"
       :placeholder="true"
       :safe-area-inset-top="true"
@@ -283,10 +283,10 @@ export default {
           vcode: that.bindcode
         })
         .then(res => {
-          that.usertype = "2";
-          Toast({
-            message: "成功绑定公众号"
+          that.$toast({
+            message: "绑定成功，请重新登录!"
           });
+          that.usertype = "2";
         });
     },
     login: function() {
