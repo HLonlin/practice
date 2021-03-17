@@ -62,7 +62,7 @@
           <div class="popup_content">
             {{ learnContent.context }}
           </div>
-          <div class="popup_author">——{{ learnContent.wf_Creator }}</div>
+          <!-- <div class="popup_author">——{{ learnContent.wf_Creator }}</div> -->
           <div
             class="popup_bottomBtn"
             :class="{ popup_bottomBtnAble: countDown == 0 }"
@@ -814,7 +814,7 @@ export default {
   font-weight: 400;
   color: #666666;
   text-align: justify;
-  padding: 0px 1.25rem;
+  padding: 0px 1.25rem 20px 1.25rem;
   box-sizing: border-box;
 }
 .signin_popupContent {
