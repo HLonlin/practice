@@ -1,15 +1,30 @@
 <template>
   <div class="todolist_container">
     <div class="topbar_panel">
-      <van-nav-bar
-        :title="title[type]"
-        :fixed="true"
-        :placeholder="true"
-        :safe-area-inset-top="true"
-        :border="false"
-        left-arrow
-        @click-left="onClickLeft"
-      />
+      <div v-if="type == 'evaluate' ? true : false">
+        <van-nav-bar
+          :title="title[type]"
+          :fixed="true"
+          :placeholder="true"
+          :safe-area-inset-top="true"
+          :border="false"
+          left-arrow
+          @click-left="onClickLeft"
+          @click-right="onClickRight"
+          :right-text="multiState ? '取消' : '批量管理'"
+        />
+      </div>
+      <div v-else>
+        <van-nav-bar
+          :title="title[type]"
+          :fixed="true"
+          :placeholder="true"
+          :safe-area-inset-top="true"
+          :border="false"
+          left-arrow
+          @click-left="onClickLeft"
+        />
+      </div>
     </div>
     <div
       class="list_panel topList_panel"
@@ -20,7 +35,7 @@
         class="listItem_panel"
         v-for="(item, i) in topList"
         :key="i"
-        @click="linkTo(item)"
+        @click="linkTo(item, i)"
         :class="{ isToday: item.isToday }"
       >
         <div class="headImg_panel">
@@ -44,13 +59,13 @@
         </div>
       </div>
     </div>
-    <div class="list_panel" v-if="!noMore">
+    <div class="list_panel" v-if="!noMore" :class="{ onMulti: multiState }">
       <div
         class="listItem_panel"
         v-for="(item, i) in list"
         :key="i"
-        @click="linkTo(item)"
-        :class="{ isToday: item.isToday }"
+        @click="linkTo(item, i)"
+        :class="{ isToday: item.isToday, isChecked: item.checked }"
       >
         <div class="evaluateStatus" v-show="type == 'evaluate'">
           {{ item.status }}
@@ -89,6 +104,11 @@
     <div class="noMore_panel" v-else>
       没有更多了
     </div>
+    <div class="floatBar" v-if="multiState">
+      <div class="btn_allChecked" @click="onAllChecked">全选</div>
+      <div class="btn_allChecked" @click="offAllChecked">取消全选</div>
+      <div class="btn_evaluate" @click="batchEvaluate">评定</div>
+    </div>
   </div>
 </template>
 
@@ -106,7 +126,8 @@ export default {
       },
       list: [],
       topList: [],
-      noMore: false
+      noMore: false,
+      multiState: false
     };
   },
   beforeCreate() {},
@@ -123,6 +144,13 @@ export default {
   methods: {
     onClickLeft: function() {
       this.$router.go(-1);
+    },
+    onClickRight: function() {
+      let that = this;
+      this.multiState = !this.multiState;
+      for (let i = 0, imax = that.list.length; i < imax; i++) {
+        that.$set(that.list[i], "checked", false);
+      }
     },
     // 加载缺勤名单
     getList: function() {
@@ -172,49 +200,89 @@ export default {
           break;
       }
     },
-    linkTo: function(item) {
-      switch (this.type) {
-        case "absenteeism":
-          this.$router.push({
-            path: "/studentInfo",
-            query: {
-              cardid: JSON.stringify(item.cardid),
-              isFrom: JSON.stringify("todolist")
+    linkTo: function(item, i) {
+      if (this.multiState) {
+        if (item.status == "已评定") {
+          this.$toast({
+            message: "该学生已评定，无需再操作"
+          });
+          return;
+        }
+        item.checked = !item.checked;
+      } else {
+        switch (this.type) {
+          case "absenteeism":
+            this.$router.push({
+              path: "/studentInfo",
+              query: {
+                cardid: JSON.stringify(item.cardid),
+                isFrom: JSON.stringify("todolist")
+              }
+            });
+            break;
+          case "noContact":
+            let query = {
+              chatWith: JSON.stringify(item.cardid ? item.cardid : item.userid)
+            };
+            this.$router.push({
+              path: "/chatroom",
+              query: query
+            });
+            break;
+          case "audit":
+            this.$router.push({
+              path: "/auditstudent",
+              query: { wf_docunid: JSON.stringify(item.wf_docunid) }
+            });
+            break;
+          case "evaluate":
+            let data = {
+              cardid: item.cardid,
+              logo: item.logo,
+              name: item.username
+            };
+            if (item.status == "已评定") {
+              data.finish = true;
+            } else {
+              data.finish = false;
             }
-          });
-          break;
-        case "noContact":
-          let query = {
-            chatWith: JSON.stringify(item.cardid ? item.cardid : item.userid)
-          };
-          this.$router.push({
-            path: "/chatroom",
-            query: query
-          });
-          break;
-        case "audit":
-          this.$router.push({
-            path: "/auditstudent",
-            query: { wf_docunid: JSON.stringify(item.wf_docunid) }
-          });
-          break;
-        case "evaluate":
-          let data = {
-            cardid: item.cardid,
-            logo: item.logo,
-            name: item.username
-          };
-          if (item.status == "已评定") {
-            data.finish = true;
-          } else {
-            data.finish = false;
-          }
-          this.$router.push({
-            path: "/evaluateStudent",
-            query: { data: JSON.stringify(data) }
-          });
-          break;
+            this.$router.push({
+              path: "/evaluateStudent",
+              query: { data: JSON.stringify(data) }
+            });
+            break;
+        }
       }
+    },
+    onAllChecked: function() {
+      let that = this;
+      for (let i = 0, imax = that.list.length; i < imax; i++) {
+        if (that.list[i].status != "已评定") {
+          that.$set(that.list[i], "checked", true);
+        }
+      }
+    },
+    offAllChecked: function() {
+      let that = this;
+      for (let i = 0, imax = that.list.length; i < imax; i++) {
+        that.$set(that.list[i], "checked", false);
+      }
+    },
+    batchEvaluate: function() {
+      let that = this;
+      let cardids = [];
+      for (let i = 0, imax = that.list.length; i < imax; i++) {
+        if (that.list[i].checked) {
+          cardids.push(that.list[i].cardid);
+        }
+      }
+      let data = {
+        cardid: cardids
+      };
+      that.$router.push({
+        path: "/evaluateStudent",
+        query: { data: JSON.stringify(data) }
+      });
     }
   }
 };
@@ -246,6 +314,32 @@ export default {
   padding: 12px 0px;
   border-bottom: 1px solid #eeeeee;
 }
+.isChecked::before {
+  content: "";
+  height: 1rem;
+  width: 1rem;
+  background-image: linear-gradient(
+    to bottom right,
+    #07c160 50%,
+    transparent 50%
+  );
+
+  position: absolute;
+  top: 0px;
+  left: -1rem;
+}
+
+/* .isChecked::before {
+  content: "";
+  height: 100%;
+  width: 1rem;
+  background-color: rgb(7 193 96 / 50%);
+
+  position: absolute;
+  top: 0px;
+  left: -1rem;
+} */
+
 .evaluateStatus {
   position: absolute;
   top: 50%;
@@ -325,6 +419,38 @@ export default {
   font-weight: 400;
   color: #666666;
 }
+.onMulti {
+  padding-bottom: 50px;
+}
+.floatBar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  height: 50px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  padding: 10px 1rem;
+  box-shadow: 0px -1px 5px #adadad;
+}
+.btn_allChecked {
+  background-color: #ffffff;
+  border-radius: 3px;
+  border: 1px solid #a7a7a7;
+  box-sizing: border-box;
+  padding: 4px 0.625rem;
+  margin: 0px 0.625rem 0px 0px;
+}
+.btn_evaluate {
+  margin-left: auto;
+  background-color: #0090d8;
+  border-radius: 3px;
+  color: #ffffff;
+  box-sizing: border-box;
+  padding: 4px 0.625rem;
+}
 </style>
 <style>
 .todolist_container .van-nav-bar {
@@ -339,6 +465,9 @@ export default {
 }
 .todolist_container .van-nav-bar__title {
   font-size: 1.125rem;
+  color: #ffffff;
+}
+.todolist_container .van-nav-bar__right .van-nav-bar__text {
   color: #ffffff;
 }
 </style>

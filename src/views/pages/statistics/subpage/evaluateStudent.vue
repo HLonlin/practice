@@ -11,88 +11,164 @@
         @click-left="onClickLeft"
       />
     </div>
-    <div class="topBar_panel">
-      <div class="headImg_panel">
-        <img
-          class="headImg_logo"
-          :src="logo ? logo : require('@/assets/images/default.png')"
-        />
+    <div v-if="typeof cardid == 'object'">
+      <div class="evaluateScore_panel">
+        <div class="scoreTitle_panel">实习表现（70分）</div>
+        <div class="scoreLabel_panel">班主任评价（30分）</div>
+        <div class="scoreLabel_panel">
+          实习纪律(配合现场巡查、按时提交资料、实习小匠等)（40分）
+        </div>
+        <div class="scoreNum_panel">
+          评分：
+          <van-field
+            class="score_num"
+            type="digit"
+            input-align="center"
+            v-model="score.internship.score"
+            @input="inputHandler(score.internship.score, 'internship')"
+            :readonly="finish"
+          />
+          分
+        </div>
       </div>
-      <div class="topLabel_panel">
-        <div class="topName_panel">{{ name }}</div>
-        <div class="topTime_panel">{{ year }}年{{ month }}月</div>
+      <div class="evaluateScore_panel">
+        <div class="scoreTitle_panel">职业素养（20分）</div>
+        <div class="scoreLabel_panel">
+          是否遵守招聘纪律、出勤情况(旷工、早退)、不按规章制度办理离职手续、无故不参加顶岗实习、实习时间（是否频繁更换企业）（10分）
+        </div>
+        <div class="scoreLabel_panel">企业认可或有表彰、报道等（10分）</div>
+        <div class="scoreNum_panel">
+          评分：<van-field
+            class="score_num"
+            type="digit"
+            input-align="center"
+            v-model="score.vocation.score"
+            @input="inputHandler(score.vocation.score, 'vocation')"
+            :readonly="finish"
+          />
+          分
+        </div>
+      </div>
+      <div class="evaluateScore_panel">
+        <div class="scoreTitle_panel">遵纪守法(10分)</div>
+        <div class="scoreLabel_panel">
+          是否遵守社会公德、注重个人形象、是否涉及违法行为
+        </div>
+        <div class="scoreNum_panel">
+          评分：<van-field
+            class="score_num"
+            type="digit"
+            input-align="center"
+            v-model="score.observe.score"
+            @input="inputHandler(score.observe.score, 'observe')"
+            :readonly="finish"
+          />
+          分
+        </div>
+      </div>
+      <div class="evaluateScore_panel">
+        <div class="scoreNum_panel">
+          总评：<van-field
+            class="score_num"
+            type="digit"
+            input-align="center"
+            v-model="score.total.score"
+            :readonly="true"
+          />
+          分
+        </div>
+        <div class="score_remark">(操行分不能低于90分，满分100分)</div>
+      </div>
+      <div class="evaluateBottom_panel" v-if="!finish">
+        <div class="evaluateBottom_btn" @click="addEvaluate">
+          提交
+        </div>
       </div>
     </div>
-    <div class="evaluateScore_panel">
-      <div class="scoreTitle_panel">实习表现（70分）</div>
-      <div class="scoreLabel_panel">班主任评价（30分）</div>
-      <div class="scoreLabel_panel">
-        实习纪律(配合现场巡查、按时提交资料、实习小匠等)（40分）
+    <div v-else>
+      <div class="topBar_panel">
+        <div class="headImg_panel">
+          <img
+            class="headImg_logo"
+            :src="logo ? logo : require('@/assets/images/default.png')"
+          />
+        </div>
+        <div class="topLabel_panel">
+          <div class="topName_panel">{{ name }}</div>
+          <div class="topTime_panel">{{ year }}年{{ month }}月</div>
+        </div>
       </div>
-      <div class="scoreNum_panel">
-        评分：
-        <van-field
-          class="score_num"
-          type="digit"
-          input-align="center"
-          v-model="score.internship.score"
-          @input="inputHandler(score.internship.score, 'internship')"
-          :readonly="finish"
-        />
-        分
+      <div class="evaluateScore_panel">
+        <div class="scoreTitle_panel">实习表现（70分）</div>
+        <div class="scoreLabel_panel">班主任评价（30分）</div>
+        <div class="scoreLabel_panel">
+          实习纪律(配合现场巡查、按时提交资料、实习小匠等)（40分）
+        </div>
+        <div class="scoreNum_panel">
+          评分：
+          <van-field
+            class="score_num"
+            type="digit"
+            input-align="center"
+            v-model="score.internship.score"
+            @input="inputHandler(score.internship.score, 'internship')"
+            :readonly="finish"
+          />
+          分
+        </div>
       </div>
-    </div>
-    <div class="evaluateScore_panel">
-      <div class="scoreTitle_panel">职业素养（20分）</div>
-      <div class="scoreLabel_panel">
-        是否遵守招聘纪律、出勤情况(旷工、早退)、不按规章制度办理离职手续、无故不参加顶岗实习、实习时间（是否频繁更换企业）（10分）
+      <div class="evaluateScore_panel">
+        <div class="scoreTitle_panel">职业素养（20分）</div>
+        <div class="scoreLabel_panel">
+          是否遵守招聘纪律、出勤情况(旷工、早退)、不按规章制度办理离职手续、无故不参加顶岗实习、实习时间（是否频繁更换企业）（10分）
+        </div>
+        <div class="scoreLabel_panel">企业认可或有表彰、报道等（10分）</div>
+        <div class="scoreNum_panel">
+          评分：<van-field
+            class="score_num"
+            type="digit"
+            input-align="center"
+            v-model="score.vocation.score"
+            @input="inputHandler(score.vocation.score, 'vocation')"
+            :readonly="finish"
+          />
+          分
+        </div>
       </div>
-      <div class="scoreLabel_panel">企业认可或有表彰、报道等（10分）</div>
-      <div class="scoreNum_panel">
-        评分：<van-field
-          class="score_num"
-          type="digit"
-          input-align="center"
-          v-model="score.vocation.score"
-          @input="inputHandler(score.vocation.score, 'vocation')"
-          :readonly="finish"
-        />
-        分
+      <div class="evaluateScore_panel">
+        <div class="scoreTitle_panel">遵纪守法(10分)</div>
+        <div class="scoreLabel_panel">
+          是否遵守社会公德、注重个人形象、是否涉及违法行为
+        </div>
+        <div class="scoreNum_panel">
+          评分：<van-field
+            class="score_num"
+            type="digit"
+            input-align="center"
+            v-model="score.observe.score"
+            @input="inputHandler(score.observe.score, 'observe')"
+            :readonly="finish"
+          />
+          分
+        </div>
       </div>
-    </div>
-    <div class="evaluateScore_panel">
-      <div class="scoreTitle_panel">遵纪守法(10分)</div>
-      <div class="scoreLabel_panel">
-        是否遵守社会公德、注重个人形象、是否涉及违法行为
+      <div class="evaluateScore_panel">
+        <div class="scoreNum_panel">
+          总评：<van-field
+            class="score_num"
+            type="digit"
+            input-align="center"
+            v-model="score.total.score"
+            :readonly="true"
+          />
+          分
+        </div>
+        <div class="score_remark">(操行分不能低于90分，满分100分)</div>
       </div>
-      <div class="scoreNum_panel">
-        评分：<van-field
-          class="score_num"
-          type="digit"
-          input-align="center"
-          v-model="score.observe.score"
-          @input="inputHandler(score.observe.score, 'observe')"
-          :readonly="finish"
-        />
-        分
-      </div>
-    </div>
-    <div class="evaluateScore_panel">
-      <div class="scoreNum_panel">
-        总评：<van-field
-          class="score_num"
-          type="digit"
-          input-align="center"
-          v-model="score.total.score"
-          :readonly="true"
-        />
-        分
-      </div>
-      <div class="score_remark">(操行分不能低于90分，满分100分)</div>
-    </div>
-    <div class="evaluateBottom_panel" v-if="!finish">
-      <div class="evaluateBottom_btn" @click="addEvaluate">
-        提交
+      <div class="evaluateBottom_panel" v-if="!finish">
+        <div class="evaluateBottom_btn" @click="addEvaluate">
+          提交
+        </div>
       </div>
     </div>
   </div>
@@ -118,6 +194,7 @@ export default {
   },
   beforeCreate() {},
   created() {
+    this.cardid = JSON.parse(this.$route.query.data).cardid;
     this.logo = JSON.parse(this.$route.query.data).logo;
     this.name = JSON.parse(this.$route.query.data).name;
     this.finish = JSON.parse(this.$route.query.data).finish;
@@ -146,23 +223,28 @@ export default {
         Number(that.score.observe.score);
     },
     getEvaluate: function() {
-      if (!this.finish) return;
       let that = this;
       let today = that.$tool.getDateObj();
-      that.$axios
-        .post(that.$api.getEvaluate, {
-          cardid: JSON.parse(this.$route.query.data).cardid,
-          year: today.year,
-          month: today.month < 10 ? "0" + today.month : today.month
-        })
-        .then(res => {
-          that.score.internship.score = res.data.internshipNum;
-          that.score.vocation.score = res.data.professionalNum;
-          that.score.observe.score = res.data.abidingNum;
-          that.score.total.score = res.data.totalNum;
-          that.year = res.data.year;
-          that.month = res.data.month;
-        });
+      if (!this.finish) {
+        that.year = today.year;
+        that.month = today.month < 10 ? "0" + today.month : today.month;
+        return;
+      } else {
+        that.$axios
+          .post(that.$api.getEvaluate, {
+            cardid: JSON.parse(this.$route.query.data).cardid,
+            year: today.year,
+            month: today.month < 10 ? "0" + today.month : today.month
+          })
+          .then(res => {
+            that.score.internship.score = res.data.internshipNum;
+            that.score.vocation.score = res.data.professionalNum;
+            that.score.observe.score = res.data.abidingNum;
+            that.score.total.score = res.data.totalNum;
+            that.year = res.data.year;
+            that.month = res.data.month;
+          });
+      }
     },
     addEvaluate: function() {
       let that = this;
@@ -191,7 +273,10 @@ export default {
       let today = that.$tool.getDateObj();
       that.$axios
         .post(that.$api.addConductEvaluation, {
-          cardid: JSON.parse(this.$route.query.data).cardid,
+          cardids:
+            typeof that.cardid == "string"
+              ? that.cardid
+              : that.cardid.join(","),
           year: today.year,
           month: today.month < 10 ? "0" + today.month : today.month,
           internshipNum: that.score.internship.score,
