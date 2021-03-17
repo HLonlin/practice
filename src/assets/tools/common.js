@@ -36,5 +36,17 @@ const common = {
             }, delay);
         };
     },
+    getGPS_status: function() {
+        let that = this;
+        navigator.geolocation.getCurrentPosition(function(position) {
+            return true;
+        }, function(err) {
+            return false;
+        }, {
+            enableHighAcuracy: false, //位置是否精确获取
+            timeout: 5000, //获取位置允许的最长时间
+            maximumAge: 1000 //多久更新获取一次位置
+        });
+    }
 };
 export default common;
