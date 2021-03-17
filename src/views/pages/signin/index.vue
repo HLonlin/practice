@@ -10,10 +10,10 @@
           {{ is_SigninTotal ? "已签到" : "签到" }}
         </div>
       </div>
-      <div class="signin_position" v-show="currentAddress">
+      <!-- <div class="signin_position" v-show="currentAddress">
         <i class="iconItem icon_dizhitubiao signin_icon"></i>
         {{ currentAddress }}
-      </div>
+      </div> -->
     </div>
     <div class="signin_calendarContainer">
       <div class="signin_titlePanel">
@@ -86,10 +86,10 @@
               <div class="popup_itemTitle">每日健康上报</div>
               <div class="popup_itemText">{{ signinItem.healthStatus }}</div>
             </div>
-            <div class="popup_ContentItem" v-if="signinItem.is_signin">
+            <!-- <div class="popup_ContentItem" v-if="signinItem.is_signin">
               <div class="popup_itemTitle">签到地址</div>
               <div class="popup_itemText">{{ signinItem.signinAddress }}</div>
-            </div>
+            </div> -->
           </div>
           <div
             class="signin_popupBottomBtn"
@@ -99,7 +99,11 @@
           </div>
         </div>
       </van-popup>
-      <van-popup v-model="popups.healthStatus" :get-container="getContainer">
+      <van-popup
+        v-model="popups.healthStatus"
+        :get-container="getContainer"
+        :close-on-click-overlay="false"
+      >
         <div class="signin_popup">
           <div class="signin_popupTitle">每日健康上报</div>
           <div class="signin_popupContent">
@@ -362,14 +366,22 @@ export default {
         if (!res.data.hasMeizhouyixue) {
           getLearnContent();
         } else {
-          that.runRemind();
+          if (that.is_SigninTotal) {
+            that.runRemind();
+          } else {
+            that.openPopup("healthStatus", true);
+          }
         }
       });
       // 获取每日一学内容
       function getLearnContent() {
         that.$axios.post(that.$api.getDailyStudy).then(res => {
           if (JSON.stringify(res.data) == "{}") {
-            that.runRemind();
+            if (that.is_SigninTotal) {
+              that.runRemind();
+            } else {
+              that.openPopup("healthStatus", true);
+            }
             return;
           }
           for (let keys in res.data) {
@@ -409,7 +421,11 @@ export default {
               confirmButtonColor: "#0090d8"
             })
             .then(() => {
-              that.runRemind();
+              if (that.is_SigninTotal) {
+                that.runRemind();
+              } else {
+                that.openPopup("healthStatus", true);
+              }
             });
         });
     },
@@ -526,7 +542,6 @@ export default {
         that.healthStatus = data[0].text;
         for (let i = 0, imax = data.length; i < imax; i++) {
           that.healthRadio[i] = data[i].text;
-          // that.$set(that.healthRadio, i, data[i].text);
         }
       });
     },
@@ -598,9 +613,10 @@ export default {
           remark: that.otherHealthStatus // 其他说明
         })
         .then(res => {
-          that.openPopup("confirmSignin", false);
+          that.runRemind();
           that.isSigninTotal();
           that.getSigninDetailsList();
+          that.openPopup("confirmSignin", false);
         });
     },
     linkTo: function(path, query) {
