@@ -8,7 +8,9 @@
         :safe-area-inset-top="true"
         :border="false"
         left-arrow
+        right-text="选择学届"
         @click-left="onClickLeft"
+        @click-right="onClickRight"
       />
     </div>
     <div class="search_panel">
@@ -41,6 +43,20 @@
     <div class="noMore_panel" v-if="list.length == 0">
       没有更多了
     </div>
+    <van-popup
+      v-model="selecterShow"
+      position="bottom"
+      :style="{ height: '50%' }"
+    >
+      <van-picker
+        title="选择学届"
+        show-toolbar
+        :columns="columns"
+        @confirm="onConfirm"
+        @cancel="onCancel"
+        :default-index="defaultIndex"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -55,11 +71,15 @@ export default {
     return {
       year: new Date().getFullYear(),
       totalNum: "100",
-      list: []
+      list: [],
+      selecterShow: false,
+      columns: [],
+      defaultIndex: 0
     };
   },
   beforeCreate() {},
   created() {
+    this.initColumns();
     this.getAllCountXibu();
   },
   beforeMount() {},
@@ -69,17 +89,40 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    initColumns: function() {
+      let theFirstOne = new Date(this.year - 5 + "").getFullYear();
+      for (let i = 0, imax = 10; i <= imax; i++) {
+        if (this.year == i + theFirstOne) {
+          this.defaultIndex = i;
+        }
+        this.columns.push(i + theFirstOne);
+      }
+    },
+    onConfirm: function(value, index) {
+      this.year = value;
+      this.getAllCountXibu();
+      this.defaultIndex = index;
+      this.selecterShow = false;
+    },
+    onCancel: function() {
+      this.selecterShow = false;
+    },
     onClickLeft: function() {
       this.$router.push({
         path: "/login"
       });
     },
+    onClickRight: function() {
+      this.selecterShow = !this.selecterShow;
+    },
     getAllCountXibu: function() {
       let that = this;
-      that.$axios.post(that.$api.allCountXibu, {}).then(res => {
-        that.list = res.data.data;
-        that.totalNum = res.data.totalNum;
-      });
+      that.$axios
+        .post(that.$api.allCountXibu, { year: that.year })
+        .then(res => {
+          that.list = res.data.data;
+          that.totalNum = res.data.totalNum;
+        });
     },
     onSearch: function(searchkeywords) {
       let that = this;
@@ -185,6 +228,9 @@ export default {
 }
 .sdept_container .van-nav-bar__title {
   font-size: 1.125rem;
+  color: #ffffff;
+}
+.sdept_container .van-nav-bar__right .van-nav-bar__text {
   color: #ffffff;
 }
 </style>
