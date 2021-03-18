@@ -41,9 +41,15 @@
           />
         </div>
       </div>
-      <div class="attachFile_panel" v-show="false">
+      <div class="attachFile_panel">
         <div class="notice_title">附件</div>
-        <van-uploader v-model="annexList" class="notice_upload">
+        <van-uploader
+          v-model="annexList"
+          class="notice_upload"
+          accept="file"
+          :before-read="beforeRead"
+          :after-read="afterRead"
+        >
           <div class="attachFile_btnPanel">
             <div class="attachFile_btn">
               <i class="iconItem icon_tianjiatubiao"></i>
@@ -51,7 +57,9 @@
             </div>
           </div>
           <template #preview-cover="{ file }">
-            <div class="preview-cover van-ellipsis">{{ file.name }}</div>
+            <div class="preview-cover van-ellipsis" :title="file.name">
+              {{ file.name }}
+            </div>
           </template>
         </van-uploader>
       </div>
@@ -109,6 +117,37 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    beforeRead(file) {
+      // if (file.type !== "image/jpeg") {
+      //   this.$toast("请上传 jpg 格式图片");
+      //   return false;
+      // }
+      return true;
+    },
+    afterRead: function(file) {
+      let files = file.file;
+      let that = this;
+      let host = "https://practice.dev.qooroo.cn:8443/practice"; // 测试
+      // let host='https://practice.gzslits.com.cn/practice'; // 生产
+      let uploadUrl = host + "/api/toolkit/upload/file";
+      let formdata = new FormData();
+      formdata.append(files.name, files, files.name);
+      //设置请求头
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      };
+      const axiosAjax = that.$axios.create({
+        timeout: 1000 * 60 //时间
+      });
+      axiosAjax
+        .post(uploadUrl, formdata, config)
+        .then(res => {
+          that.$toast(res.data.message);
+        })
+        .catch(() => {});
+    },
     initLayDate: function() {
       let that = this;
       let today = that.$tool.getDateObj(new Date());
@@ -236,6 +275,7 @@ export default {
 }
 .noticeDate_panel,
 .attachFile_panel {
+  width: 100%;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -243,7 +283,7 @@ export default {
   padding: 0px 0px 20px 0px;
 }
 .notice_upload {
-  max-width: 50%;
+  width: 80%;
 }
 .attachFile_btn {
   display: flex;
@@ -252,7 +292,7 @@ export default {
   position: relative;
   box-sizing: border-box;
   padding: 5px 0.625rem;
-  margin-left: 0.9375rem;
+  margin-left: 1rem;
   border: 1px solid #dddddd;
   font-size: 0.875rem;
   font-family: PingFangSC-Regular, PingFang SC;
@@ -268,13 +308,13 @@ export default {
   color: #fff;
   font-size: 12px;
   text-align: center;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 144, 216, 0.7);
 }
 .noticeIstop_panel {
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  padding: 1rem 0px;
+  padding: 0px 0px 1rem 0px;
 }
 .bottomBtn_panel {
   width: 100%;
@@ -323,5 +363,22 @@ export default {
 .addnotice_container .van-picker {
   z-index: 0;
   width: 190px;
+}
+.addnotice_container .van-uploader__preview {
+  width: 100%;
+  margin-left: 1rem;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.addnotice_container .van-uploader__file {
+  width: 100%;
+  height: 24px;
+  background-color: rgba(0, 0, 0, 0);
+}
+.addnotice_container .van-uploader__file-icon {
+  display: none;
+}
+.addnotice_container .van-uploader__file-name {
+  display: none;
 }
 </style>
