@@ -132,22 +132,19 @@
               placeholder="请简要描述症状情况"
             />
           </div>
-          <div
-            class="signin_popupBottomBtn"
-            @click="is_SigninTotal ? '' : openPopup('confirmSignin', true)"
-          >
+          <div class="signin_popupBottomBtn" @click="signinTotal">
             签到
           </div>
         </div>
       </van-popup>
-      <van-popup v-model="popups.confirmSignin" :get-container="getContainer">
+      <!-- <van-popup v-model="popups.confirmSignin" :get-container="getContainer">
         <div class="signin_popup">
           <div class="signin_popupContent">
             <div class="popup_ContentItem popup_paddinTop">
               <div class="popup_itemTitle">每日健康上报</div>
               <div class="popup_itemText">{{ healthStatus }}</div>
             </div>
-            <!-- <div class="popup_ContentItem">
+            <div class="popup_ContentItem">
               <div class="popup_itemTitle">
                 签到地址
                 <div class="popup_itemLabel" @click="getCurrentAddress">
@@ -155,11 +152,11 @@
                 </div>
               </div>
               <div class="popup_itemText">{{ currentAddress }}</div>
-            </div> -->
+            </div>
           </div>
           <div class="signin_popupBottomBtn" @click="signinTotal">确定</div>
         </div>
-      </van-popup>
+      </van-popup> -->
       <van-popup
         v-model="popups.updateRemind"
         :get-container="getContainer"
@@ -266,9 +263,6 @@ export default {
     this.isLearnToday();
     this.isSigninTotal();
     this.getHealthStatus();
-    if (this.$tool.isWechat()) {
-      this.getCurrentAddress();
-    }
   },
   beforeMount() {},
   mounted() {
@@ -285,22 +279,6 @@ export default {
         if (res.data.fileurl) {
           that.bgImage = res.data.fileurl;
         }
-      });
-    },
-    getCurrentAddress: function() {
-      if (!this.$tool.isWechat()) {
-        this.$toast({
-          message: "请在微信端进行此操作"
-        });
-        return;
-      }
-      let that = this;
-      that.$tool.getCurrentAddress(function(data) {
-        that.$tool.locationToAddress(data.latitude, data.longitude, function(
-          res
-        ) {
-          that.currentAddress = res.data.result.address;
-        });
       });
     },
     runRemind: function() {
@@ -593,31 +571,71 @@ export default {
     // 今日份签到
     signinTotal: function() {
       let that = this;
-      //采用prototype原型实现方式，查找元素在数组中的索引值
-      Array.prototype.getArrayIndex = function(obj) {
-        for (var i = 0; i < this.length; i++) {
-          if (this[i] === obj) {
-            return i;
+      if (that.$tool.isWechat()) {
+        navigator.geolocation.getCurrentPosition(
+          function(data) {
+            that.$tool.locationToAddress(
+              data.coords.latitude,
+              data.coords.longitude,
+              function(res) {
+                that.currentAddress = res.data.result.address;
+                sign_in();
+              }
+            );
+          },
+          function(err) {
+            console.log(err);
+            console.log(err.code);
+            console.log(err.message);
+            switch (err.code) {
+              case 2:
+                that.$toast("请打开设备的GPS定位功能");
+                break;
+              case 3:
+                that.$toast("网络不佳，请稍后重试");
+                break;
+              default:
+                that.$toast("请打开设备的GPS定位功能");
+                break;
+            }
+            return;
+          },
+          {
+            enableHighAcuracy: false, //位置是否精确获取
+            timeout: 5000, //获取位置允许的最长时间
+            maximumAge: 1000 //多久更新获取一次位置
           }
-        }
-        return -1;
-      };
-      let jiankangStatus =
-        that.healthRadio.getArrayIndex(that.healthStatus) + 1;
-      that.$axios
-        .post(that.$api.signin, {
-          latitude: that.latitude, // 纬度
-          longitude: that.longitude, // 经度
-          address: that.currentAddress, // 打卡地点
-          jiankangStatus: jiankangStatus, // 健康状态
-          remark: that.otherHealthStatus // 其他说明
-        })
-        .then(res => {
-          that.runRemind();
-          that.isSigninTotal();
-          that.getSigninDetailsList();
-          that.openPopup("confirmSignin", false);
-        });
+        );
+      } else {
+        sign_in();
+      }
+      function sign_in() {
+        //采用prototype原型实现方式，查找元素在数组中的索引值
+        Array.prototype.getArrayIndex = function(obj) {
+          for (var i = 0; i < this.length; i++) {
+            if (this[i] === obj) {
+              return i;
+            }
+          }
+          return -1;
+        };
+        let jiankangStatus =
+          that.healthRadio.getArrayIndex(that.healthStatus) + 1;
+        that.$axios
+          .post(that.$api.signin, {
+            latitude: that.latitude, // 纬度
+            longitude: that.longitude, // 经度
+            address: that.currentAddress, // 打卡地点
+            jiankangStatus: jiankangStatus, // 健康状态
+            remark: that.otherHealthStatus // 其他说明
+          })
+          .then(res => {
+            that.runRemind();
+            that.isSigninTotal();
+            that.getSigninDetailsList();
+            that.openPopup("healthStatus", false);
+          });
+      }
     },
     linkTo: function(path, query) {
       this.$router.push({
