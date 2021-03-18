@@ -285,6 +285,15 @@ const routes = [{
         hidden: true
     },
     {
+        title: '修改记录',
+        name: 'updaterecord',
+        path: '/updaterecord',
+        meta: { requireAuth: true },
+        component: () =>
+            import ('@/views/pages/mine/subpage/updaterecord'),
+        hidden: true
+    },
+    {
         title: '每日一学',
         name: 'dailystudy',
         path: '/dailystudy',

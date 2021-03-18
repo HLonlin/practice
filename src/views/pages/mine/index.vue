@@ -66,6 +66,10 @@
         <i class="iconItem icon_yuejitubiao icon_left"></i>
         <div class="middle_title">月记</div>
       </router-link>
+      <router-link :to="{ path: 'updaterecord' }" class="cell_panel">
+        <i class="iconItem icon_meiriyixuetubiao icon_left"></i>
+        <div class="middle_title">个人信息修改记录</div>
+      </router-link>
       <!-- <router-link :to="{ path: 'dailystudy' }" class="cell_panel">
         <i class="iconItem icon_meiriyixuetubiao icon_left"></i>
         <div class="middle_title">每日一学</div>
