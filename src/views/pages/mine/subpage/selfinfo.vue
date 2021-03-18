@@ -143,6 +143,8 @@
             label="实习单位"
             type="textarea"
             placeholder="请输入实习单位"
+            :formatter="formatter_symbol"
+            format-trigger="onBlur"
             :readonly="!editing"
           />
         </div>
@@ -157,6 +159,8 @@
             label="单位地址"
             type="textarea"
             placeholder="请输入单位地址"
+            :formatter="formatter_symbol"
+            format-trigger="onBlur"
             :readonly="!editing"
           />
         </div>
@@ -167,7 +171,7 @@
             v-model="userData.phone"
             label="联系电话"
             placeholder="请输入联系电话"
-            :formatter="formatter"
+            :formatter="formatter_phone"
             format-trigger="onBlur"
             :readonly="!editing"
           />
@@ -185,6 +189,8 @@
             v-model="userData.jzdh"
             label="单位电话"
             placeholder="请输入单位电话"
+            :formatter="formatter_phone"
+            format-trigger="onBlur"
             :readonly="!editing"
           />
         </div>
@@ -193,6 +199,8 @@
             v-model="userData.qylxr"
             label="企业联系人"
             placeholder="请输入企业联系人"
+            :formatter="formatter_symbol"
+            format-trigger="onBlur"
             :readonly="!editing"
           />
         </div>
@@ -201,6 +209,8 @@
             v-model="userData.job"
             label="岗位"
             placeholder="请输入岗位"
+            :formatter="formatter_symbol"
+            format-trigger="onBlur"
             :readonly="!editing"
           />
         </div>
@@ -271,7 +281,45 @@ export default {
         }
       });
     },
-    formatter: function(value) {
+    formatter: function(formatterList) {
+      if (!value && !this.editing) {
+        return;
+      }
+      if (formatterList.indexof("symbol") != -1) {
+        if (
+          /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、]/.test(
+            value
+          )
+        ) {
+          this.$toast({
+            message: "请输入数字、汉字、英文字母或者下划线"
+          });
+        }
+      }
+
+      return value;
+    },
+    formatter_symbol: function(value) {
+      if (!value && !this.editing) {
+        return;
+      }
+      if (!value) {
+        this.$toast({
+          message: "内容不可为空"
+        });
+      }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          value
+        )
+      ) {
+        this.$toast({
+          message: "请输入数字、汉字、英文字母或者下划线"
+        });
+      }
+      return value;
+    },
+    formatter_phone: function(value) {
       if (!value && !this.editing) {
         return;
       }
