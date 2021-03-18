@@ -50,7 +50,13 @@
           <div class="label_title">{{ item.username }}</div>
           <div class="label_signin">
             <span>最近签到：{{ item.lastTime }}</span>
-            <span>缺勤次数：{{ item.noSignNum }}</span>
+            <span
+              :class="{
+                font_red: item.noSignNum > 3,
+                font_yellow: item.noSignNum >= 2
+              }"
+              >缺勤次数：{{ item.noSignNum }}</span
+            >
           </div>
           <div class="label_phone">
             电话:
@@ -413,6 +419,13 @@ export default {
 .label_signin span:last-child {
   padding: 0px;
 }
+.font_yellow {
+  color: #ffff00;
+}
+.font_red {
+  color: #ff0000;
+}
+
 .label_phone {
   font-size: 0.75rem;
   font-family: PingFangSC-Regular, PingFang SC;
