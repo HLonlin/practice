@@ -117,10 +117,33 @@
       </div>
       <div class="selfinfo_bottomBtnBox">
         <div class="selfinfo_submitBtn" @click="submitComment('是')">同意</div>
-        <div class="selfinfo_cancelBtn" @click="submitComment('否')">
+        <div class="selfinfo_cancelBtn" @click="disagree_Container = true">
           不同意
         </div>
       </div>
+      <van-popup
+        v-model="disagree_Container"
+        :get-container="getContainer"
+        :close-on-click-overlay="false"
+      >
+        <div class="disagree_Container">
+          <div class="disagree_title">不同意原因</div>
+          <div class="disagree_area">
+            <van-field
+              v-model="remark"
+              :autosize="{ maxHeight: 150, minHeight: 150 }"
+              type="textarea"
+              placeholder="请输入不同意原因"
+            />
+          </div>
+          <div class="disagree_btnBox">
+            <div class="disagree_btn" @click="submitComment('否')">确定</div>
+            <div class="cancel_btn" @click="disagree_Container = false">
+              取消
+            </div>
+          </div>
+        </div>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -130,7 +153,9 @@ export default {
   name: "auditstudent",
   data() {
     return {
-      studentInfo: {}
+      disagree_Container: false,
+      studentInfo: {},
+      remark: ""
     };
   },
   beforeCreate() {},
@@ -166,12 +191,17 @@ export default {
       that.$axios
         .post(that.$api.submitAudit, {
           wf_docUnid: JSON.parse(that.$route.query.wf_docunid),
-          status: type
+          status: type,
+          remark: type == "否" ? that.remark : ""
         })
         .then(res => {
           that.$toast.success("审核已完成");
           that.$router.go(-1);
         });
+    },
+    // 返回一个特定的 DOM 节点，作为每日一学弹窗挂载的父节点
+    getContainer() {
+      return document.querySelector(".auditstudent_container");
     }
   }
 };
@@ -262,6 +292,63 @@ export default {
   text-align: center;
   border: 1px solid #bbbbbb;
 }
+.disagree_Container {
+  width: 17.5rem;
+  border: 4px;
+}
+.disagree_title {
+  width: 100%;
+  height: 40px;
+  background-color: #0090d8;
+  color: #ffffff;
+  text-align: center;
+  line-height: 40px;
+  font-size: 1.125rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.disagree_area {
+  background-color: #ffffff;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.disagree_btnBox {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  padding: 10px 0px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.disagree_btn {
+  display: inline-block;
+  border-radius: 4px;
+  width: 6.75rem;
+  height: 30px;
+  background-color: #0090d8;
+  color: #ffffff;
+  text-align: center;
+  line-height: 30px;
+  margin: 0px auto;
+  font-size: 0.875rem;
+}
+.cancel_btn {
+  display: inline-block;
+  border-radius: 4px;
+  width: 6.75rem;
+  height: 28px;
+  background-color: #ffffff;
+  color: #666666;
+  text-align: center;
+  line-height: 30px;
+  margin: 0px auto;
+  font-size: 0.875rem;
+  border: 1px solid #bbbbbb;
+}
 </style>
 <style>
 .auditstudent_container .van-nav-bar {
@@ -284,6 +371,10 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+.disagree_area .van-field {
+  padding: 0px 10px;
+  border: 1px solid #eeeeee;
+}
 .auditstudent_container .van-field__label,
 .auditstudent_container .van-field__control {
   font-size: 0.875rem;
@@ -294,15 +385,26 @@ export default {
 .auditstudent_container .van-field__value {
   max-width: 14rem;
 }
+.disagree_area .van-field__value {
+  max-width: 100%;
+}
 .auditstudent_container .van-field__control {
   text-align: right;
   color: #666666;
   letter-spacing: -0.1px;
 }
+.disagree_area .van-field__control {
+  text-align: left;
+}
+
 .selfinfo_color .van-field__control {
   color: #0090d8;
 }
 .selfinfo_area .van-field__control {
   text-align: left;
+}
+
+.auditstudent_container .van-popup {
+  background-color: transparent;
 }
 </style>

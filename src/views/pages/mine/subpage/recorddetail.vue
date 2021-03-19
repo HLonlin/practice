@@ -17,7 +17,7 @@
             {{
               detail.isty == "是"
                 ? "已通过"
-                : item.isty == "否"
+                : detail.isty == "否"
                 ? "未通过"
                 : "待审核"
             }}
