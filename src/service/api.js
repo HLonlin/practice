@@ -55,6 +55,7 @@ const API = {
     addBanZhuRenPingJia: '/api/practice/student/banzhuren/addBanZhuRenPingJia', // 新增班主任评价
     banZhuRenPingJiaList_student: '/api/practice/student/banZhuRenPingJiaList', // 班主任评价列表
     findBanZhuRenPingJiaById_student: '/api/practice/student/findBanZhuRenPingJiaById', // 查询班主任评价详情
+    recordList: '/api/practice/student/recordList', // 学生修改信息历史记录列表
     // --------------------------月记--------------------------
     monthlyList: '/api/practice/student/zhoubao/zhoubaoList', // 月记列表
     monthlyDetail: '/api/practice/student/zhoubao/zhoubaoDetail', // 月记详情

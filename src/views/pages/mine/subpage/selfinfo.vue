@@ -283,7 +283,7 @@ export default {
     },
     formatter: function(formatterList) {
       if (!value && !this.editing) {
-        return;
+        return value;
       }
       if (formatterList.indexof("symbol") != -1) {
         if (
@@ -301,7 +301,7 @@ export default {
     },
     formatter_symbol: function(value) {
       if (!value && !this.editing) {
-        return;
+        return value;
       }
       if (!value) {
         this.$toast({
@@ -320,12 +320,15 @@ export default {
       return value;
     },
     formatter_phone: function(value) {
+      if (!this.editing) {
+        return value;
+      }
       if (!value && !this.editing) {
-        return;
+        return value;
       }
       if (!/^1[3|4|5|7|8|9]\d{9}$/.test(value)) {
         this.$toast({
-          message: "联系电话格式错误，请重新输入"
+          message: "电话格式错误，请重新输入"
         });
       }
       return value;
