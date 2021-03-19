@@ -294,6 +294,15 @@ const routes = [{
         hidden: true
     },
     {
+        title: '记录详情',
+        name: 'recorddetail',
+        path: '/recorddetail',
+        meta: { requireAuth: true },
+        component: () =>
+            import ('@/views/pages/mine/subpage/recorddetail'),
+        hidden: true
+    },
+    {
         title: '每日一学',
         name: 'dailystudy',
         path: '/dailystudy',

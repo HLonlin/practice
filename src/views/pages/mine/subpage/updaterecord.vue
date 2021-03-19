@@ -19,12 +19,21 @@
           finished-text="没有更多了"
           @load="onLoad"
         >
+          <!-- <router-link
+            v-for="(item, i) in recordList"
+            :key="i"
+            :to="{
+              path: 'recorddetail',
+              query: { wf_docUnid: JSON.stringify(item.WF_DocUnid) }
+            }"
+            class="recordList_listItem"
+          > -->
           <router-link
             v-for="(item, i) in recordList"
             :key="i"
             :to="{
-              path: 'listdetail',
-              query: { listdetail: JSON.stringify(item) }
+              path: 'recorddetail',
+              query: { detail: JSON.stringify(item) }
             }"
             class="recordList_listItem"
           >
