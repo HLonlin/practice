@@ -115,6 +115,10 @@ const API = {
     submitAudit: '/api/practice/teacher/submitAudit', // 审核学生信息
     getUserByCardId_teacher: '/api/practice/teacher/getUserByCardId', // 根据身份证查找学生信息
     getCountNum: '/api/practice/teacher/getCountNum', // 获取我的统计数
+    zhoubaoRemarkList: '/api/practice/teacher/zhoubao/remarkList', // 教师月记点评常用语列表
+    zhoubaoRemarkAdd: '/api/practice/teacher/zhoubao/remarkAdd', // 教师添加月记点评常用语
+    zhoubaoRemarkEdit: '/api/practice/teacher/zhoubao/remarkEdit', // 教师修改月记点评常用语
+    zhoubaoRemarkDelete: '/api/practice/teacher/zhoubao/remarkDelete', // 教师删除月记点评常用语
 
     // --------------------------------------------------------------- 微信端 ---------------------------------------------------------------
     bindCardid: '/api/practice/wechat/bindCardid', // 学生微信公众号绑定身份证

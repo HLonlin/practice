@@ -84,7 +84,8 @@ export default {
       editText: "",
       list: [],
       from: "",
-      userData: Object
+      userData: Object,
+      comeFrom: ""
     };
   },
   beforeCreate() {},
@@ -94,6 +95,7 @@ export default {
       this.userData = userData;
     }
     this.type = Number(this.$route.query.type);
+    this.comeFrom = this.$route.query.comeFrom;
     if (this.type == 0) {
       this.from = "add";
     }
@@ -129,18 +131,19 @@ export default {
             break;
           // 编辑面板完成操作
           case 1:
+            let editApi = that.userData.isTeacher
+              ? that.$api.remarkEdit_teacher
+              : that.$api.remarkEdit;
+            if (that.comeFrom === "monthlydetail") {
+              editApi = that.$api.zhoubaoRemarkEdit;
+            }
             that.editItem.text = that.editItem.text.trim();
             if (that.editItem.text) {
               that.$axios
-                .post(
-                  that.userData.isTeacher
-                    ? that.$api.remarkEdit_teacher
-                    : that.$api.remarkEdit,
-                  {
-                    wf_docUnid: that.editItem.id,
-                    content: that.editItem.text
-                  }
-                )
+                .post(editApi, {
+                  wf_docUnid: that.editItem.id,
+                  content: that.editItem.text
+                })
                 .then(res => {
                   back();
                 });
@@ -202,21 +205,20 @@ export default {
       that.editText = that.editText.trim();
       switch (type) {
         case "add":
+          let addApi = that.userData.isTeacher
+            ? that.$api.remarkAdd_teacher
+            : that.$api.remarkAdd;
+          if (that.comeFrom === "monthlydetail") {
+            addApi = that.$api.zhoubaoRemarkAdd;
+          }
           if (that.addText) {
-            that.$axios
-              .post(
-                that.userData.isTeacher
-                  ? that.$api.remarkAdd_teacher
-                  : that.$api.remarkAdd,
-                { content: that.addText }
-              )
-              .then(res => {
-                if (that.from) {
-                  that.backToManage("end");
-                } else {
-                  that.$router.go(-1);
-                }
-              });
+            that.$axios.post(addApi, { content: that.addText }).then(res => {
+              if (that.from) {
+                that.backToManage("end");
+              } else {
+                that.$router.go(-1);
+              }
+            });
           } else {
             that.$toast({
               message: "常用语不能为空"
@@ -231,17 +233,18 @@ export default {
             title: "温馨提示",
             message: "您确定要删除此常用语吗？",
             beforeClose: (action, done) => {
+              let delApi = that.userData.isTeacher
+                ? that.$api.remarkDelete_teacher
+                : that.$api.remarkDelete;
+              if (that.comeFrom === "monthlydetail") {
+                delApi = that.$api.zhoubaoRemarkDelete;
+              }
               if (action === "confirm") {
                 done();
                 that.$axios
-                  .post(
-                    that.userData.isTeacher
-                      ? that.$api.remarkDelete_teacher
-                      : that.$api.remarkDelete,
-                    {
-                      wf_docUnid: that.editItem.id
-                    }
-                  )
+                  .post(delApi, {
+                    wf_docUnid: that.editItem.id
+                  })
                   .then(res => {
                     that.getList();
                   });
@@ -257,18 +260,17 @@ export default {
       let that = this;
       that.list = [];
       if (that.type != 2) return;
-      that.$axios
-        .post(
-          that.userData.isTeacher
-            ? that.$api.remarkList_teacher
-            : that.$api.remarkList,
-          {}
-        )
-        .then(res => {
-          for (let i = 0, imax = res.data.length; i < imax; i++) {
-            that.$set(that.list, i, res.data[i]);
-          }
-        });
+      let listApi = that.userData.isTeacher
+        ? that.$api.remarkList_teacher
+        : that.$api.remarkList;
+      if (that.comeFrom === "monthlydetail") {
+        listApi = that.$api.zhoubaoRemarkList;
+      }
+      that.$axios.post(listApi, {}).then(res => {
+        for (let i = 0, imax = res.data.length; i < imax; i++) {
+          that.$set(that.list, i, res.data[i]);
+        }
+      });
     }
   },
   computed: {

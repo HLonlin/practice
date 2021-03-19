@@ -60,6 +60,37 @@
     </div>
     <div class="monthlydetail_commentPanel" v-if="identity == 'headmaster'">
       <div class="monthlydetail_commentTitle">月记点评</div>
+      <div class="dropDownList_box">
+        <div class="dropDownList_container" @click.stop="dropDown = !dropDown">
+          <div
+            class="dropDownList_title"
+            :style="{ color: onSelect === '' ? '#BBBBBB' : '#555555' }"
+          >
+            {{ onSelect === "" ? "请选择常用评语" : onSelect }}
+          </div>
+          <div class="dropDownList_triangle"></div>
+          <div class="dropDownList_itemBox" v-show="dropDown">
+            <div class="dropDownList_itemContainer">
+              <div
+                class="dropDownList_item"
+                v-for="(item, i) in commonOption"
+                :key="i"
+                v-html="item.content"
+                @click.stop="selectItem(item.content)"
+                :style="{ color: onSelect === item.content ? '#0090d8' : '' }"
+              ></div>
+            </div>
+            <div class="dropDownList_btnBox">
+              <div class="dropDownList_addBtn" @click="turnCommonWord(0)">
+                <i class="iconItem icon_tianjiatubiao icon_bottomIcon"></i>添加
+              </div>
+              <div class="dropDownList_ediBtn" @click="turnCommonWord(2)">
+                <i class="iconItem icon_guanlitubiao icon_bottomIcon"></i>管理
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="monthlyComment_panel">
         <van-field
           class="monthlyComment_item"
@@ -87,6 +118,9 @@ export default {
   name: "monthlydetail",
   data() {
     return {
+      onSelect: "",
+      dropDown: false,
+      commonOption: [],
       userData: Object,
       show: false,
       index: 0,
@@ -108,6 +142,7 @@ export default {
   created() {
     this.getUserData();
     this.getDEtail();
+    this.getRemarkList();
   },
   beforeMount() {},
   mounted() {},
@@ -116,6 +151,23 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    turnCommonWord: function(type) {
+      this.$router.push({
+        path: "/commonwords",
+        query: { type: type, comeFrom: "monthlydetail" }
+      });
+    },
+    getRemarkList: function() {
+      let that = this;
+      that.$axios.post(that.$api.zhoubaoRemarkList).then(res => {
+        that.commonOption = res.data;
+      });
+    },
+    selectItem: function(item) {
+      this.onSelect = item;
+      this.dropDown = false;
+      this.message = item;
+    },
     getUserData: function() {
       let userData = this.$tool.getLocal("userData");
       let identity = this.$tool.getLocal("identity");
@@ -322,6 +374,90 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #ffffff;
+}
+.dropDownList_box {
+  box-sizing: border-box;
+  padding: 15px 0px 0px 0px;
+}
+.dropDownList_container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 36px;
+  border: 1px solid #eeeeee;
+  box-sizing: border-box;
+  padding: 0px 10px;
+}
+.dropDownList_title {
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dropDownList_triangle {
+  position: relative;
+  transform: translateY(3px);
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #dddddd transparent transparent transparent;
+}
+.dropDownList_itemBox {
+  position: absolute;
+  left: -1px;
+  top: 36px;
+  width: 100%;
+  height: 185px;
+  border: 1px solid #eeeeee;
+  border-top-width: 0px;
+  background-color: #ffffff;
+  z-index: 1;
+}
+.dropDownList_itemContainer {
+  width: 100%;
+  height: 155px;
+  border-bottom: 1px solid #eeeeee;
+  box-sizing: border-box;
+  padding: 10px;
+  overflow: scroll;
+}
+.dropDownList_item {
+  box-sizing: border-box;
+  padding: 10px 0px;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #555555;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.dropDownList_btnBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+}
+.dropDownList_addBtn,
+.dropDownList_ediBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #0090d8;
+}
+.dropDownList_addBtn {
+  border-right: 1px solid #eeeeee;
+}
+.icon_bottomIcon {
+  font-size: 0.625rem;
+  margin-right: 5px;
 }
 </style>
 <style>
