@@ -55,6 +55,7 @@
         @confirm="onConfirm"
         @cancel="onCancel"
         :default-index="defaultIndex"
+        :visible-item-count="5"
       />
     </van-popup>
   </div>
@@ -125,10 +126,13 @@ export default {
         });
     },
     onSearch: function(searchkeywords) {
+      if (!searchkeywords) return;
       let that = this;
       this.$router.push({
         path: "/studentList",
-        query: { searchkeywords: JSON.stringify(searchkeywords) }
+        query: {
+          searchkeywords: JSON.stringify(searchkeywords)
+        }
       });
     },
     linkTo: function(item) {
