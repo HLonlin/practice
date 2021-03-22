@@ -49,6 +49,7 @@
           accept="file"
           :before-read="beforeRead"
           :after-read="afterRead"
+          @delete="onDeleteFile"
         >
           <div class="attachFile_btnPanel">
             <div class="attachFile_btn">
@@ -101,7 +102,9 @@ export default {
         month: "",
         dates: ""
       },
-      currentDate: new Date()
+      currentDate: new Date(),
+      filenames: [],
+      fileurls: []
     };
   },
   beforeCreate() {},
@@ -117,6 +120,11 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    onDeleteFile: function(file) {
+      let index = this.filenames.indexOf(file.file.name);
+      this.filenames.splice(index, 1);
+      this.fileurls.splice(index, 1);
+    },
     beforeRead(file) {
       // if (file.type !== "image/jpeg") {
       //   this.$toast("请上传 jpg 格式图片");
@@ -145,6 +153,10 @@ export default {
         .post(uploadUrl, formdata, config)
         .then(res => {
           that.$toast(res.data.message);
+          let file = res.data.data;
+          console.log(file);
+          that.filenames.push(file[0].field_name);
+          that.fileurls.push(file[0].server_path);
         })
         .catch(() => {});
     },
@@ -237,8 +249,8 @@ export default {
       let data = {
         subject: that.noticeTitle,
         info: that.noticeInfo,
-        filename: "",
-        fileurl: "",
+        filename: that.filenames.join(","),
+        fileurl: that.fileurls.join(","),
         zhiding: that.istop ? 1 : 0,
         expiredTime:
           that.expiryTime.year +

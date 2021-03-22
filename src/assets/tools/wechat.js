@@ -92,7 +92,7 @@ const wechat = {
             })
         }
     },
-    getCurrentAddress: function(callback) {
+    getCurrentAddress: function(callback, failBack) {
         this.initJssdk(function() {
             wx.getLocation({
                 type: "gcj02", //                       默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -111,6 +111,11 @@ const wechat = {
                     // verticalAccuracy	                number	    垂直精度，单位 m（Android 无法获取，返回 0）
                     // horizontalAccuracy	            number	    水平精度，单位 m
                 },
+                fail: function(err) {
+                    if (failBack) {
+                        failBack(err)
+                    }
+                }
             })
         })
     },

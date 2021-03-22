@@ -1,6 +1,6 @@
 <template>
-  <!-- <div class="container" :style="{ backgroundImage: 'url(' + bgImage + ')' }"> -->
-  <div class="container">
+  <div class="container" :style="{ backgroundImage: 'url(' + bgImage + ')' }">
+    <!-- <div class="container"> -->
     <div class="signin_topPanel">
       <div
         class="signin_roundWhite"
@@ -258,7 +258,7 @@ export default {
     if (userData) {
       this.userData = userData;
     }
-    // this.getBgImage();
+    this.getBgImage();
     this.getSigninDetailsList();
     this.isLearnToday();
     this.isSigninTotal();
@@ -572,11 +572,12 @@ export default {
     signinTotal: function() {
       let that = this;
       if (that.$tool.isWechat()) {
-        navigator.geolocation.getCurrentPosition(
+        console.log("signinTotal");
+        that.$tool.getCurrentAddress(
           function(data) {
             that.$tool.locationToAddress(
-              data.coords.latitude,
-              data.coords.longitude,
+              data.latitude,
+              data.longitude,
               function(res) {
                 that.currentAddress = res.data.result.address;
                 sign_in();
@@ -584,41 +585,52 @@ export default {
             );
           },
           function(err) {
-            console.log(err);
-            console.log(err.code);
-            console.log(err.message);
-            switch (err.code) {
-              case 2:
-                that.$toast("请打开设备的GPS定位功能");
-                break;
-              case 3:
-                that.$toast("网络不佳，请稍后重试");
-                break;
-              default:
-                that.$toast("请打开设备的GPS定位功能");
-                break;
-            }
+            that.$toast("请打开设备的GPS定位功能");
             return;
-          },
-          {
-            enableHighAcuracy: false, //位置是否精确获取
-            timeout: 5000, //获取位置允许的最长时间
-            maximumAge: 1000 //多久更新获取一次位置
           }
         );
       } else {
         sign_in();
       }
+      // if (that.$tool.isWechat()) {
+      //   navigator.geolocation.getCurrentPosition(
+      //     function(data) {
+      //       that.$tool.locationToAddress(
+      //         data.coords.latitude,
+      //         data.coords.longitude,
+      //         function(res) {
+      //           that.currentAddress = res.data.result.address;
+      //           sign_in();
+      //         }
+      //       );
+      //     },
+      //     function(err) {
+      //       console.log(err);
+      //       console.log(err.code);
+      //       console.log(err.message);
+      //       switch (err.code) {
+      //         case 2:
+      //           that.$toast("请打开设备的GPS定位功能");
+      //           break;
+      //         case 3:
+      //           that.$toast("网络不佳，请稍后重试");
+      //           break;
+      //         default:
+      //           that.$toast("请打开设备的GPS定位功能");
+      //           break;
+      //       }
+      //       return;
+      //     },
+      //     {
+      //       enableHighAcuracy: false, //位置是否精确获取
+      //       timeout: 5000, //获取位置允许的最长时间
+      //       maximumAge: 1000 //多久更新获取一次位置
+      //     }
+      //   );
+      // } else {
+      //   sign_in();
+      // }
       function sign_in() {
-        //采用prototype原型实现方式，查找元素在数组中的索引值
-        Array.prototype.getArrayIndex = function(obj) {
-          for (var i = 0; i < this.length; i++) {
-            if (this[i] === obj) {
-              return i;
-            }
-          }
-          return -1;
-        };
         let jiankangStatus =
           that.healthRadio.getArrayIndex(that.healthStatus) + 1;
         that.$axios
@@ -664,15 +676,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-/* .container {
+.container {
   background-color: #0090d8;
   background-size: cover;
-} */
+}
 .signin_topPanel {
   position: relative;
   width: 100%;
   height: 200px;
-  background-color: #0090d8;
+  /* background-color: #0090d8; */
 }
 .signin_roundWhite {
   position: absolute;

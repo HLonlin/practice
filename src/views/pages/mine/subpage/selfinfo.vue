@@ -189,7 +189,7 @@
             v-model="userData.jzdh"
             label="单位电话"
             placeholder="请输入单位电话"
-            :formatter="formatter_phone"
+            :formatter="formatter_symbol"
             format-trigger="onBlur"
             :readonly="!editing"
           />
@@ -397,6 +397,16 @@ export default {
       }
       if (
         /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          that.userData.shixidanwei
+        )
+      ) {
+        that.$toast({
+          message: "实习单位不可填写特殊符号"
+        });
+        return;
+      }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
           that.userData.danweidizhi
         )
       ) {
@@ -411,9 +421,13 @@ export default {
         });
         return;
       }
-      if (!/^1[3|4|5|7|8|9]\d{9}$/.test(that.userData.jzdh)) {
-        this.$toast({
-          message: "单位电话格式错误，请重新输入"
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          that.userData.qylxr
+        )
+      ) {
+        that.$toast({
+          message: "单位电话不可填写特殊符号"
         });
         return;
       }

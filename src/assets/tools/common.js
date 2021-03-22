@@ -50,3 +50,24 @@ const common = {
     }
 };
 export default common;
+//采用prototype原型实现方式，查找元素在数组中的索引值
+Array.prototype.getArrayIndex = function(obj) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] === obj) {
+            return i;
+        }
+    }
+    return -1;
+};
+Array.prototype.indexOf = function(val) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] == val) return i;
+    }
+    return -1;
+};
+Array.prototype.remove = function(val) {
+    var index = this.indexOf(val);
+    if (index > -1) {
+        this.splice(index, 1);
+    }
+};
