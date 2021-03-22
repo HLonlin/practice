@@ -395,9 +395,45 @@ export default {
           return;
         }
       }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          that.userData.danweidizhi
+        )
+      ) {
+        that.$toast({
+          message: "单位地址不可填写特殊符号"
+        });
+        return;
+      }
       if (!/^1[3|4|5|7|8|9]\d{9}$/.test(that.userData.phone)) {
         this.$toast({
           message: "联系电话格式错误，请重新输入"
+        });
+        return;
+      }
+      if (!/^1[3|4|5|7|8|9]\d{9}$/.test(that.userData.jzdh)) {
+        this.$toast({
+          message: "单位电话格式错误，请重新输入"
+        });
+        return;
+      }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          that.userData.qylxr
+        )
+      ) {
+        that.$toast({
+          message: "企业联系人不可填写特殊符号"
+        });
+        return;
+      }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          that.userData.job
+        )
+      ) {
+        that.$toast({
+          message: "岗位不可填写特殊符号"
         });
         return;
       }
