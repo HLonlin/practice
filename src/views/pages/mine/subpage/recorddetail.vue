@@ -109,6 +109,14 @@
             :readonly="true"
           />
         </div>
+        <div class="recorddetail_panel" v-show="detail.isty == '否'">
+          <van-field
+            v-model="detail.remark"
+            label="审核意见"
+            placeholder="暂无"
+            :readonly="true"
+          />
+        </div>
       </div>
     </div>
   </div>
