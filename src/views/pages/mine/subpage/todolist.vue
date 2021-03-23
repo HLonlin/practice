@@ -420,7 +420,7 @@ export default {
   padding: 0px;
 }
 .font_yellow {
-  color: #ffff00;
+  color: #ffaa00;
 }
 .font_red {
   color: #ff0000;
