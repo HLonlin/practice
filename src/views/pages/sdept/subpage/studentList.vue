@@ -208,10 +208,14 @@ export default {
   border-radius: 50%;
 }
 .label_panel {
+  width: 100%;
   box-sizing: border-box;
   padding: 0px 0px 0px 0.625rem;
 }
 .label_title {
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
   box-sizing: border-box;
   padding: 0px 0px 0.5rem 0px;
   font-size: 0.875rem;

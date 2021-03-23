@@ -223,9 +223,10 @@ export default {
   padding: 0px 1.5rem 0px 0.625rem;
 }
 .label_title {
-  width: 100%;
+  width: 90%;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  flex-wrap: wrap;
   box-sizing: border-box;
   padding: 0px 0px 0.5rem 0px;
   font-size: 0.875rem;
