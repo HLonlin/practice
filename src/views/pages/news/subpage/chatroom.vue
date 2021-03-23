@@ -55,7 +55,11 @@
               "
             />
           </div>
-          <div class="msgItem_content" v-html="item.info"></div>
+          <div
+            class="msgItem_content"
+            v-html="item.info"
+            @click="showPreview($event)"
+          ></div>
           <div
             class="msgItem_header"
             v-if="
@@ -148,6 +152,11 @@
         </div>
       </van-popup>
     </div>
+    <van-image-preview
+      v-model="imagePreview"
+      :images="images"
+      :startPosition="startPosition"
+    ></van-image-preview>
   </div>
 </template>
 
@@ -165,7 +174,10 @@ export default {
       chatWith: {}, // 聊天对象
       commonList: [], // 常用列表
       msgDetailList: [], //消息内容列表
-      timer: ""
+      timer: "",
+      startPosition: 0,
+      imagePreview: false,
+      images: []
     };
   },
   beforeCreate() {},
@@ -183,6 +195,10 @@ export default {
   },
   destroyed() {},
   methods: {
+    showPreview: function(event) {
+      this.startPosition = this.images.indexOf(event.target.src);
+      this.imagePreview = true;
+    },
     beforeRead(file) {
       if (file.type.indexOf("image") != 0) {
         this.$toast("请选择图片发送");
@@ -277,11 +293,20 @@ export default {
         )
         .then(res => {
           that.msgDetailList = [];
+          that.images = [];
           for (let i = 0, imax = res.data.length; i < imax; i++) {
             that.$set(that.msgDetailList, i, res.data[i]);
             let dateObj = that.$tool.getDateObj(
               res.data[i].wf_Created.replace(/-/g, "/")
             );
+            let imgBox = document.createElement("div");
+            imgBox.innerHTML = res.data[i].info;
+            if (
+              imgBox.children.length > 0 &&
+              imgBox.children[0].tagName === "IMG"
+            ) {
+              that.images.push(imgBox.children[0].src);
+            }
             let time =
               (dateObj.month < 10 ? "0" + dateObj.month : dateObj.month) +
               "月" +

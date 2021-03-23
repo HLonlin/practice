@@ -71,7 +71,8 @@ export default {
       let that = this;
       that.$axios
         .post(that.$api.countXibu, {
-          xibu: that.xibu
+          xibu: that.xibu,
+          year: JSON.parse(that.$route.query.year)
         })
         .then(res => {
           that.totalNum = res.data.totalNum;
@@ -81,7 +82,10 @@ export default {
     linkTo: function(item) {
       this.$router.push({
         path: "/classList",
-        query: { zhuanye: JSON.stringify(item.zhuanye) }
+        query: {
+          zhuanye: JSON.stringify(item.zhuanye),
+          year: this.$route.query.year
+        }
       });
     }
   }

@@ -121,7 +121,8 @@ export default {
       let that = this;
       that.$axios
         .post(that.$api.getUserListByBanji, {
-          banji: banji
+          banji: banji,
+          year: JSON.parse(that.$route.query.year)
         })
         .then(res => {
           that.phone = res.data.phone;

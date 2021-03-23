@@ -70,7 +70,9 @@ export default {
   },
   data() {
     return {
-      year: new Date().getFullYear(),
+      year: this.$route.query.year
+        ? JSON.parse(this.$route.query.year)
+        : new Date().getFullYear(),
       totalNum: "100",
       list: [],
       selecterShow: false,
@@ -91,7 +93,9 @@ export default {
   destroyed() {},
   methods: {
     initColumns: function() {
-      let theFirstOne = new Date(this.year - 5 + "").getFullYear();
+      let theFirstOne = new Date(
+        new Date().getFullYear() - 5 + ""
+      ).getFullYear();
       for (let i = 0, imax = 10; i <= imax; i++) {
         if (this.year == i + theFirstOne) {
           this.defaultIndex = i;
@@ -104,6 +108,12 @@ export default {
       this.getAllCountXibu();
       this.defaultIndex = index;
       this.selecterShow = false;
+      this.$router.replace({
+        path: "/sdept",
+        query: {
+          year: JSON.stringify(this.year)
+        }
+      });
     },
     onCancel: function() {
       this.selecterShow = false;
@@ -138,7 +148,10 @@ export default {
     linkTo: function(item) {
       this.$router.push({
         path: "/majorList",
-        query: { xibu: JSON.stringify(item.xibu) }
+        query: {
+          xibu: JSON.stringify(item.xibu),
+          year: JSON.stringify(this.year)
+        }
       });
     }
   }

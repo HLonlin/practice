@@ -31,7 +31,6 @@ const u = window.navigator.userAgent.toLowerCase();
 Router.beforeEach((to, from, next) => {
     if (to.query.opentoken) {
         if ((u.match(/micromessenger/i) == 'micromessenger') && (u.match(/wxwork/i) == 'wxwork')) {
-            alert('opentoken');
             // 企业微信、教师端
             axios.post(api.loginByOpenToken, { opentoken: to.query.opentoken }).then(res => {
                 if (res) {
