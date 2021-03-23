@@ -28,9 +28,9 @@
                   color:
                     item.jiankangstatus == '健康'
                       ? '#00C110'
-                      : item.jiankangstatus == '异常'
-                      ? '#FF2A2A'
-                      : '#666666'
+                      : item.jiankangstatus == '未上报'
+                      ? '#666666'
+                      : '#FF2A2A'
                 }"
               >
                 <span>
