@@ -92,7 +92,14 @@
         />
       </div>
       <div class="sendMsgBtnBox">
-        <!-- <i class="iconItem icon_biaoqingtubiao icon_smile"></i> -->
+        <van-uploader
+          accept="image/*"
+          :before-read="beforeRead"
+          :after-read="afterRead"
+        >
+          <i class="iconItem icon_shangchuanfujiantubiao icon_smile"></i>
+        </van-uploader>
+        <!-- <i class="iconItem icon_shangchuanfujiantubiao icon_smile"></i> -->
         <div class="sendMsgBtn" @click="sendMsg">发送</div>
       </div>
     </div>
@@ -176,6 +183,40 @@ export default {
   },
   destroyed() {},
   methods: {
+    beforeRead(file) {
+      if (file.type.indexOf("image") != 0) {
+        this.$toast("请选择图片发送");
+        return false;
+      }
+      return true;
+    },
+    afterRead: function(file) {
+      let files = file.file;
+      let that = this;
+      let host = "https://practice.dev.qooroo.cn:8443/practice"; // 测试
+      // let host='https://practice.gzslits.com.cn/practice'; // 生产
+      let uploadUrl = host + "/api/toolkit/upload/image";
+      let formdata = new FormData();
+      formdata.append(files.name, files, files.name);
+      //设置请求头
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      };
+      const axiosAjax = that.$axios.create({
+        timeout: 1000 * 60 //时间
+      });
+      axiosAjax
+        .post(uploadUrl, formdata, config)
+        .then(res => {
+          that.$toast(res.data.message);
+          let file = res.data.data;
+          that.sendImg(file[0].src);
+          console.log(file);
+        })
+        .catch(() => {});
+    },
     onClickLeft: function() {
       this.$router.go(-1);
     },
@@ -285,6 +326,23 @@ export default {
           {
             sendto: that.userData.chatWith,
             info: that.msg
+          }
+        )
+        .then(res => {
+          that.msg = "";
+          that.getMsgDetail(true);
+        });
+    },
+    sendImg: function(url) {
+      let that = this;
+      that.$axios
+        .post(
+          that.userData.isTeacher
+            ? that.$api.sendMsg_teacher
+            : that.$api.sendMsg_student,
+          {
+            sendto: that.userData.chatWith,
+            info: "<img url='" + url + "' />"
           }
         )
         .then(res => {
@@ -409,7 +467,8 @@ export default {
 .msgItem_header {
   align-self: start;
   width: 1.875rem;
-  height: 1.875rem;
+  height: auto;
+  min-width: 1.875rem;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -584,5 +643,8 @@ export default {
 }
 .bottom_bar .van-field__control {
   line-height: 30px;
+}
+.msgItem_content img {
+  max-width: 100%;
 }
 </style>
