@@ -196,6 +196,7 @@ export default {
   destroyed() {},
   methods: {
     showPreview: function(event) {
+      if (event.target.tagName != "IMG") return;
       this.startPosition = this.images.indexOf(event.target.src);
       this.imagePreview = true;
     },

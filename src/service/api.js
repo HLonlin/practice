@@ -44,6 +44,7 @@ const API = {
     findUserByUserId: '/api/practice/student/findUserByUserId', // 查询老师信息
     // --------------------------公告--------------------------
     noticeList: '/api/practice/student/notice/noticeList', // 公告列表
+    adList: '/api/practice/student/notice/noticeList', // 公告列表
     noticeDetail: '/api/practice/student/notice/noticeDetail', // 公告详情
     readNotice: '/api/practice/student/notice/readNotice', // 阅读公告（设置为已读）
     // --------------------------我的--------------------------
@@ -98,6 +99,7 @@ const API = {
     remarkDelete_teacher: '/api/practice/teacher/xiaoxi/remarkDelete', // 删除教师常用语
     // --------------------------公告--------------------------
     noticeList_teacher: '/api/practice/teacher/notice/noticelist', //公告列表
+    adList_teacher: '/api/practice/teacher/notice/noticelist', //招聘公告
     noticeDetail_teacher: '/api/practice/teacher/notice/noticeDetail', // 公告详情
     readNotice_teacher: '/api/practice/teacher/notice/readNotice', // 阅读公告（设置为已读）
     addNotice: '/api/practice/teacher/notice/addNotice', // 新增公告

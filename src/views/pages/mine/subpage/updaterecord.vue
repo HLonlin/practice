@@ -16,13 +16,13 @@
         <div class="recordList_listPanel">
           <van-pull-refresh
             v-model="itemObj.refreshing"
-            @refresh="dropDownRefresh(j)"
+            @refresh="dropDownRefresh"
           >
             <van-list
               v-model="itemObj.loading"
               :finished="itemObj.finished"
               finished-text="没有更多了"
-              @load="onLoad(j)"
+              @load="onLoad"
             >
               <router-link
                 v-for="(item, i) in itemObj.recordList"
@@ -101,12 +101,6 @@ export default {
           recordList: []
         }
       ],
-      recordList: [],
-      loading: false, // 加载状态
-      finished: false, // 是否已加载全部
-      refreshing: false,
-      pageIndex: 1,
-      pageSize: 10,
       active: 0
     };
   },
@@ -121,37 +115,42 @@ export default {
       }
     },
     // 加载记录列表
-    onLoad(index) {
+    onLoad() {
       let that = this;
       that.$axios
-        .post(that.$api.recordList, index == 0 ? {} : { status: index })
+        .post(
+          that.$api.recordList,
+          that.active == 0 ? {} : { status: that.active }
+        )
         .then(res => {
-          that.tabList[index].loading = false;
-          that.tabList[index].pageIndex = that.tabList[index].pageIndex + 1;
+          that.tabList[that.active].loading = false;
+          that.tabList[that.active].pageIndex =
+            that.tabList[that.active].pageIndex + 1;
           let recordList = res.data;
           for (let i = 0, imax = recordList.length; i < imax; i++) {
             recordList[i].date = that.$tool.getFullDate(
               recordList[i].WF_Created.replace(/-/g, "/")
             );
-            that.tabList[index].recordList.push(recordList[i]);
+            that.tabList[that.active].recordList.push(recordList[i]);
           }
-          that.tabList[index].finished = true;
+          that.tabList[that.active].finished = true;
         });
     },
     // 下拉刷新
-    dropDownRefresh(index) {
-      if (this.tabList[index].refreshing) {
+    dropDownRefresh() {
+      let that = this;
+      if (that.tabList[that.active].refreshing) {
         // 清空列表数据
-        this.tabList[index].recordList = [];
+        that.tabList[that.active].recordList = [];
         // 重置页码
-        this.tabList[index].pageIndex = 1;
-        this.tabList[index].refreshing = false;
-        this.tabList[index].finished = false;
+        that.tabList[that.active].pageIndex = 1;
+        that.tabList[that.active].refreshing = false;
+        that.tabList[that.active].finished = false;
         // 将 loading 设置为 true，表示处于加载状态
-        this.tabList[index].loading = true;
+        that.tabList[that.active].loading = true;
       }
       // 重新加载数据
-      this.onLoad(index);
+      that.onLoad();
     }
   },
   watch: {},

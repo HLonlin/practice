@@ -1,63 +1,70 @@
 <template>
   <div class="container">
-    <div class="search_panel">
-      <search sourceOf="notice" v-on:searchNotice="onSearch"></search>
-    </div>
-    <div class="noticeList_panel">
-      <van-pull-refresh v-model="refreshing" @refresh="dropDownRefresh">
-        <div
-          class="notice_Item"
-          v-for="(item, i) in topList"
-          :key="i"
-          :title="item.subject"
-          @click="notice_Details(item.wf_docUnid)"
-        >
-          <div
-            class="notice_title"
-            :class="{
-              notice_titleTop: item.zhiding
-            }"
-          >
-            <i
-              class="iconItem icon_zhidingtubiao icon_intop"
-              v-if="item.zhiding"
-            ></i>
-            {{ item.subject }}
-          </div>
-          <div class="notice_label">发起人：{{ item.wf_Creator }}</div>
-          <div class="notice_date">{{ item.wf_Created }}</div>
+    <van-tabs v-model="active" color="#0090d8" :sticky="true" offset-top="44px">
+      <van-tab v-for="(itemObj, i) in tabList" :key="i" :title="itemObj.title">
+        <div class="search_panel">
+          <search sourceOf="notice" v-on:searchNotice="onSearch"></search>
         </div>
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <div
-            class="notice_Item"
-            v-for="(item, i) in noticeList"
-            :key="i"
-            :title="item.subject"
-            @click="notice_Details(item.wf_docUnid)"
+        <div class="noticeList_panel">
+          <van-pull-refresh
+            v-model="itemObj.refreshing"
+            @refresh="dropDownRefresh"
           >
             <div
-              class="notice_title"
-              :class="{
-                notice_titleTop: item.zhiding
-              }"
+              class="notice_Item"
+              v-for="(item, i) in itemObj.topList"
+              :key="i"
+              :title="item.subject"
+              @click="notice_Details(item.wf_docUnid)"
             >
-              <i
-                class="iconItem icon_zhidingtubiao icon_intop"
-                v-if="item.intop"
-              ></i>
-              {{ item.subject }}
+              <div
+                class="notice_title"
+                :class="{
+                  notice_titleTop: item.zhiding
+                }"
+              >
+                <i
+                  class="iconItem icon_zhidingtubiao icon_intop"
+                  v-if="item.zhiding"
+                ></i>
+                {{ item.subject }}
+              </div>
+              <div class="notice_label">发起人：{{ item.wf_Creator }}</div>
+              <div class="notice_date">{{ item.wf_Created }}</div>
             </div>
-            <div class="notice_label">发起人：{{ item.wf_Creator }}</div>
-            <div class="notice_date">{{ item.wf_Created }}</div>
-          </div>
-        </van-list>
-      </van-pull-refresh>
-    </div>
+            <van-list
+              v-model="itemObj.loading"
+              :finished="itemObj.finished"
+              finished-text="没有更多了"
+              @load="onLoad"
+            >
+              <div
+                class="notice_Item"
+                v-for="(item, i) in itemObj.noticeList"
+                :key="i"
+                :title="item.subject"
+                @click="notice_Details(item.wf_docUnid)"
+              >
+                <div
+                  class="notice_title"
+                  :class="{
+                    notice_titleTop: item.zhiding
+                  }"
+                >
+                  <i
+                    class="iconItem icon_zhidingtubiao icon_intop"
+                    v-if="item.intop"
+                  ></i>
+                  {{ item.subject }}
+                </div>
+                <div class="notice_label">发起人：{{ item.wf_Creator }}</div>
+                <div class="notice_date">{{ item.wf_Created }}</div>
+              </div>
+            </van-list>
+          </van-pull-refresh>
+        </div></van-tab
+      >
+    </van-tabs>
   </div>
 </template>
 
@@ -74,14 +81,29 @@ export default {
   data() {
     return {
       userData: Object,
-      topList: [],
-      noticeList: [],
-      loading: false, // 加载状态
-      finished: false, // 是否已加载全部
-      refreshing: false, //
-      noReadAll: false,
-      pageIndex: 1,
-      pageSize: 10
+      tabList: [
+        {
+          title: "公告列表",
+          topList: [],
+          noticeList: [],
+          loading: false, // 加载状态
+          finished: false, // 是否已加载全部
+          refreshing: false, //
+          pageIndex: 1,
+          pageSize: 10
+        },
+        {
+          title: "招聘公告",
+          topList: [],
+          noticeList: [],
+          loading: false, // 加载状态
+          finished: false, // 是否已加载全部
+          refreshing: false, //
+          pageIndex: 1,
+          pageSize: 10
+        }
+      ],
+      active: 0
     };
   },
   beforeCreate() {},
@@ -99,15 +121,16 @@ export default {
   destroyed() {},
   methods: {
     onSearch: function(searchkeywords) {
+      let that = this;
       // 清空列表数据
-      this.noticeList = [];
-      this.topList = [];
+      that.tabList[that.active].noticeList = [];
+      that.tabList[that.active].topList = [];
       // 重置页码
-      this.pageIndex = 1;
-      this.refreshing = false;
-      this.finished = false;
+      that.tabList[that.active].pageIndex = 1;
+      that.tabList[that.active].refreshing = false;
+      that.tabList[that.active].finished = false;
       // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true;
+      that.tabList[that.active].loading = true;
       this.onLoad(searchkeywords);
     },
     onLoad() {
@@ -117,48 +140,55 @@ export default {
       that.$axios
         .post(
           that.userData.isTeacher
-            ? that.$api.noticeList_teacher
-            : that.$api.noticeList,
+            ? that.active == 0
+              ? that.$api.noticeList_teacher
+              : that.$api.adList_teacher
+            : that.active == 0
+            ? that.$api.noticeList
+            : that.$api.adList,
           {
             searchkeywords: keyword,
-            pageNum: that.pageIndex,
-            pageSize: arguments[0] ? 1000 : that.pageSize
+            pageNum: that.tabList[that.active].pageIndex,
+            pageSize: arguments[0] ? 1000 : that.tabList[that.active].pageSize
           }
         )
         .then(res => {
-          that.loading = false;
-          that.pageIndex = that.pageIndex + 1;
+          that.tabList[that.active].loading = false;
+          that.tabList[that.active].pageIndex =
+            that.tabList[that.active].pageIndex + 1;
           let noticeList = res.data.noticeList;
           for (let i = 0, imax = noticeList.length; i < imax; i++) {
             if (noticeList[i].zhiding == "1") {
-              that.topList.push(noticeList[i]);
+              that.tabList[that.active].topList.push(noticeList[i]);
             } else {
-              that.noticeList.push(noticeList[i]);
+              that.tabList[that.active].noticeList.push(noticeList[i]);
             }
           }
           if (
-            that.noticeList.length + that.topList.length >=
+            that.tabList[that.active].noticeList.length +
+              that.tabList[that.active].topList.length >=
             res.data.totalRecord
           ) {
-            that.finished = true;
+            that.tabList[that.active].finished = true;
           }
         });
     },
     // 下拉刷新
     dropDownRefresh() {
-      if (this.refreshing) {
+      let that = this;
+      if (that.tabList[that.active].refreshing) {
         // 清空列表数据
-        this.noticeList = [];
-        this.topList = [];
+        that.tabList[that.active].noticeList = [];
+        that.tabList[that.active].topList = [];
         // 重置页码
-        this.pageIndex = 1;
-        this.refreshing = false;
-        this.finished = false;
+        that.tabList[that.active].pageIndex = 1;
+        that.tabList[that.active].refreshing = false;
+        that.tabList[that.active].finished = false;
         // 将 loading 设置为 true，表示处于加载状态
-        this.loading = true;
+        that.tabList[that.active].loading = true;
       }
       // 重新加载数据
-      this.onLoad();
+      that.onLoad();
     },
     notice_Details: function(id) {
       this.$router.push({
