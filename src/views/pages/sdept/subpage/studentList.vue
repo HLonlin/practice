@@ -136,6 +136,7 @@ export default {
         path: "/studentInfo",
         query: {
           cardid: JSON.stringify(item.cardid),
+          year: this.$route.query.year,
           isFrom: JSON.stringify("studentList")
         }
       });

@@ -330,7 +330,8 @@ export default {
       let that = this;
       that.$axios
         .post(that.$api.getUserByCardId_teacher, {
-          cardid: JSON.parse(that.$route.query.cardid)
+          cardid: JSON.parse(that.$route.query.cardid),
+          year: that.$route.query.year ? JSON.parse(that.$route.query.year) : ""
         })
         .then(res => {
           let data = res.data;
