@@ -23,6 +23,12 @@
             }}
           </div>
         </div>
+        <div class="recorddetail_panel" v-show="detail.isty == '否'">
+          <div class="recorddetail_label">审核意见</div>
+          <div class="recorddetail_text">
+            {{ detail.remark ? detail.remark : "暂无" }}
+          </div>
+        </div>
         <div class="recorddetail_panel">
           <div class="recorddetail_label">就业方式</div>
           <div class="recorddetail_text">
@@ -106,14 +112,6 @@
             v-model="detail.job"
             label="岗位"
             placeholder="请输入岗位"
-            :readonly="true"
-          />
-        </div>
-        <div class="recorddetail_panel" v-show="detail.isty == '否'">
-          <van-field
-            v-model="detail.remark"
-            label="审核意见"
-            placeholder="暂无"
             :readonly="true"
           />
         </div>
