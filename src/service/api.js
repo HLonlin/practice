@@ -47,6 +47,8 @@ const API = {
     adList: '/api/practice/student/notice/recruitNoticeList', // 公告列表
     noticeDetail: '/api/practice/student/notice/noticeDetail', // 公告详情
     readNotice: '/api/practice/student/notice/readNotice', // 阅读公告（设置为已读）
+    recruitApply: '/api/practice/student/job/recruitApply', // 学生企业报名
+    hasRecruitApply: '/api/practice/student/job/hasRecruitApply', // 是否已报名企业
     // --------------------------我的--------------------------
     updateInfo_student: '/api/practice/student/profile/updateProfile', // 修改学生个人信息
     jiuyefangshi: '/api/practice/dic/jiuyefangshi', //就业方式数据字典
@@ -108,6 +110,7 @@ const API = {
     classMonthList_teacher: '/api/practice/teacher/getYueJiList', // 班级月记列表
     monthList_teacher: '/api/practice/teacher/tongji/zhoubaoList', // 教师端学生月记列表
     monthlyDetail_teacher: '/api/practice/teacher/tongji/zhoubaoDetail', // 教师端学生月记详情
+    recruitApplyList: '/api/practice/teacher/job/recruitApplyList', // 学生企业报名列表
 
     // --------------------------我的--------------------------
     getuserInfo_teacher: '/api/practice/teacher/getUserInfo', // 获取教师个人信息

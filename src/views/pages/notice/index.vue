@@ -15,7 +15,7 @@
               v-for="(item, i) in itemObj.topList"
               :key="i"
               :title="item.subject"
-              @click="notice_Details(item.wf_docUnid)"
+              @click="notice_Details(item.wf_docUnid, item.recruit_Id)"
             >
               <div
                 class="notice_title"
@@ -43,7 +43,7 @@
                 v-for="(item, i) in itemObj.noticeList"
                 :key="i"
                 :title="item.subject"
-                @click="notice_Details(item.wf_docUnid)"
+                @click="notice_Details(item.wf_docUnid, item.recruit_Id)"
               >
                 <div
                   class="notice_title"
@@ -83,7 +83,7 @@ export default {
       userData: Object,
       tabList: [
         {
-          title: "公告列表",
+          title: "校内公告",
           topList: [],
           noticeList: [],
           loading: false, // 加载状态
@@ -190,10 +190,15 @@ export default {
       // 重新加载数据
       that.onLoad();
     },
-    notice_Details: function(id) {
+    notice_Details: function(id, recruit_Id) {
       this.$router.push({
         path: "/detailPage",
-        query: { wf_docUnid: id, cardid: this.userData.cardid }
+        query: {
+          wf_docUnid: id,
+          recruit_Id: recruit_Id,
+          cardid: this.userData.cardid,
+          type: this.active
+        }
       });
     }
   }

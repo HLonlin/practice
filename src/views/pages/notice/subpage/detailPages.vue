@@ -49,6 +49,17 @@
             </p>
           </div>
         </div>
+        <div
+          class="handle_btn"
+          :class="{ handle_btnDisabled: isRecruitApply }"
+          v-if="type == '1' && identity == 'student'"
+          @click="recruitApply"
+        >
+          {{ isRecruitApply ? "已报名" : "立即报名" }}
+        </div>
+        <div class="handle_btn" v-else-if="type == '1'" @click="linkTo">
+          报名情况
+        </div>
       </div>
     </div>
   </div>
@@ -58,24 +69,32 @@
 /**
  * 公告详情页
  */
-import { Toast } from "vant";
 export default {
   name: "detailPage",
   data() {
     return {
+      type: "",
+      identity: "",
       userData: Object,
       isLoadeOver: false,
       detail: Object,
-      showDetail_notify: false
+      showDetail_notify: false,
+      isRecruitApply: false
     };
   },
   beforeCreate() {},
   created() {
+    let identity = this.$tool.getLocal("identity");
+    if (identity) {
+      this.identity = identity;
+    }
     let userData = this.$tool.getLocal("userData");
     if (userData) {
       this.userData = userData;
     }
     this.getNoticeDetail();
+    this.hasRecruitApply();
+    this.type = this.$route.query.type;
   },
   beforeMount() {},
   mounted() {},
@@ -89,9 +108,53 @@ export default {
         path: "/notice"
       });
     },
+    linkTo: function() {
+      this.$router.push({
+        path: "notice"
+      });
+    },
+    // 是否已报名
+    hasRecruitApply: function() {
+      let that = this;
+      if (that.identity == "student") {
+        that.$axios
+          .post(that.$api.hasRecruitApply, {
+            recuritId: that.$route.query.recruit_Id
+          })
+          .then(res => {
+            // that.isRecruitApply = res.data;
+          });
+      }
+    },
+    recruitApply: function() {
+      if (this.isRecruitApply) return;
+      let that = this;
+      that.$dialog
+        .confirm({
+          title: "提示",
+          message: "是否立即报名？",
+          confirmButtonText: "是",
+          confirmButtonColor: "#0090d8",
+          cancelButtonText: "否"
+        })
+        .then(() => {
+          that.$axios
+            .post(that.$api.recruitApply, {
+              recuritId: that.$route.query.recruit_Id
+            })
+            .then(res => {
+              if (res.message == "success") {
+                that.$toast.success("报名成功");
+                that.isRecruitApply = true;
+              } else {
+                that.$toast.fail("报名失败");
+              }
+            });
+        });
+    },
     // 获取公告详情
     getNoticeDetail: function() {
-      let toast = Toast.loading({
+      this.$toast.loading({
         duration: 0,
         message: "加载中...",
         forbidClick: true
@@ -107,7 +170,7 @@ export default {
           }
         )
         .then(res => {
-          toast.clear();
+          this.$toast.clear();
           that.isLoadeOver = true;
           that.detail = res.data;
           let date = new Date(res.data.wf_Created.replace(/-/g, "/"));
@@ -258,6 +321,22 @@ export default {
   line-height: 15px;
   box-sizing: border-box;
   padding-bottom: 10px;
+}
+.handle_btn {
+  width: 100%;
+  height: 36px;
+  background-color: #0090d8;
+  border-radius: 2px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ffffff;
+  text-align: center;
+  line-height: 36px;
+}
+.handle_btnDisabled {
+  background-color: #cfcfcf;
 }
 </style>
 <style>
