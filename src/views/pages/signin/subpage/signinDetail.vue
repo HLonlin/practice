@@ -95,10 +95,15 @@ export default {
         .replace(/月/, "");
       that.firstDay = new Date(YearMonthStr + "-01").getDay();
       that.$axios
-        .post(that.$api.monthQiandaoList_teacher, {
-          cardid: that.$route.query.cardid,
-          month: YearMonthStr
-        })
+        .post(
+          that.$tool.getLocal("identity") == "sdept"
+            ? that.$api.monthQiandaoList_dept
+            : that.$api.monthQiandaoList_teacher,
+          {
+            cardid: that.$route.query.cardid,
+            month: YearMonthStr
+          }
+        )
         .then(res => {
           let data = res.data;
           that.signinList = [];
