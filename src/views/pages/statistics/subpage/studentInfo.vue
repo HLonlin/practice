@@ -95,6 +95,8 @@
           label="实习单位"
           type="textarea"
           placeholder="请输入实习单位"
+          :formatter="formatter_symbol"
+          format-trigger="onBlur"
           :readonly="!editing"
         />
       </div>
@@ -109,6 +111,8 @@
           label="单位地址"
           type="textarea"
           placeholder="请输入单位地址"
+          :formatter="formatter_symbol"
+          format-trigger="onBlur"
           :readonly="!editing"
         />
       </div>
@@ -119,7 +123,7 @@
           v-model="studentInfo.phone"
           label="联系电话"
           placeholder="请输入联系电话"
-          :formatter="formatter"
+          :formatter="formatter_phone"
           format-trigger="onBlur"
           :readonly="!editing"
         />
@@ -137,6 +141,8 @@
           v-model="studentInfo.jzdh"
           label="单位电话"
           placeholder="请输入单位电话"
+          :formatter="formatter_symbol"
+          format-trigger="onBlur"
           :readonly="!editing"
         />
       </div>
@@ -145,6 +151,8 @@
           v-model="studentInfo.qylxr"
           label="企业联系人"
           placeholder="请输入企业联系人"
+          :formatter="formatter_symbol"
+          format-trigger="onBlur"
           :readonly="!editing"
         />
       </div>
@@ -153,6 +161,8 @@
           v-model="studentInfo.job"
           label="岗位"
           placeholder="请输入岗位"
+          :formatter="formatter_symbol"
+          format-trigger="onBlur"
           :readonly="!editing"
         />
       </div>
@@ -245,13 +255,36 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    formatter: function(value) {
+    formatter_symbol: function(value) {
       if (!value && !this.editing) {
-        return;
+        return value;
       }
-      if (!/^1[3|4|5|7|8|9]\d{9}$/.test(value)) {
+      if (!value) {
         this.$toast({
-          message: "联系电话格式错误，请重新输入"
+          message: "内容不可为空"
+        });
+      }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          value
+        )
+      ) {
+        this.$toast({
+          message: "请输入数字、汉字、英文字母或者下划线"
+        });
+      }
+      return value;
+    },
+    formatter_phone: function(value) {
+      if (!this.editing) {
+        return value;
+      }
+      if (!value && !this.editing) {
+        return value;
+      }
+      if (!/^1[3|4|5|6|7|8|9]\d{9}$/.test(value)) {
+        this.$toast({
+          message: "电话格式错误，请重新输入"
         });
       }
       return value;
@@ -295,9 +328,59 @@ export default {
           return;
         }
       }
-      if (!/^1[3|4|5|7|8|9]\d{9}$/.test(that.studentInfo.phone)) {
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          data.shixidanwei
+        )
+      ) {
+        that.$toast({
+          message: "实习单位不可填写特殊符号"
+        });
+        return;
+      }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          data.danweidizhi
+        )
+      ) {
+        that.$toast({
+          message: "单位地址不可填写特殊符号"
+        });
+        return;
+      }
+      if (!/^1[3|4|5|6|7|8|9]\d{9}$/.test(data.phone)) {
         this.$toast({
           message: "联系电话格式错误，请重新输入"
+        });
+        return;
+      }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          data.jzdh
+        )
+      ) {
+        that.$toast({
+          message: "单位电话不可填写特殊符号"
+        });
+        return;
+      }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          data.qylxr
+        )
+      ) {
+        that.$toast({
+          message: "企业联系人不可填写特殊符号"
+        });
+        return;
+      }
+      if (
+        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
+          data.job
+        )
+      ) {
+        that.$toast({
+          message: "岗位不可填写特殊符号"
         });
         return;
       }
@@ -329,10 +412,17 @@ export default {
     getUserByCardId() {
       let that = this;
       that.$axios
-        .post(that.$api.getUserByCardId_teacher, {
-          cardid: JSON.parse(that.$route.query.cardid),
-          year: that.$route.query.year ? JSON.parse(that.$route.query.year) : ""
-        })
+        .post(
+          this.isFrom == "statistics"
+            ? that.$api.getUserByCardId_teacher
+            : that.$api.getUserByCardId_dept,
+          {
+            cardid: JSON.parse(that.$route.query.cardid),
+            year: that.$route.query.year
+              ? JSON.parse(that.$route.query.year)
+              : ""
+          }
+        )
         .then(res => {
           let data = res.data;
           for (let keys in data) {

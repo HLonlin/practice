@@ -75,6 +75,7 @@ const API = {
     yuejiIdeaList: '/api/practice/dept/yuejiIdeaList', // 月记评语列表
     monthQiandaoList: '/api/practice/dept/monthQiandaoList', // 学生每月签到列表
     getUserListByName: '/api/practice/dept/getUserListByName', // 根据学生姓名获取学生列表
+    getUserByCardId_dept: '/api/practice/dept/getUserByCardId', // 根据身份证查找学生信息
     // --------------------------------------------------------------- 教师端 ---------------------------------------------------------------
     // --------------------------统计--------------------------
     tongjiList: '/api/practice/teacher/tongji/tongjiList', // 教师端统计列表

@@ -281,24 +281,6 @@ export default {
         }
       });
     },
-    formatter: function(formatterList) {
-      if (!value && !this.editing) {
-        return value;
-      }
-      if (formatterList.indexof("symbol") != -1) {
-        if (
-          /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、]/.test(
-            value
-          )
-        ) {
-          this.$toast({
-            message: "请输入数字、汉字、英文字母或者下划线"
-          });
-        }
-      }
-
-      return value;
-    },
     formatter_symbol: function(value) {
       if (!value && !this.editing) {
         return value;
@@ -423,7 +405,7 @@ export default {
       }
       if (
         /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
-          that.userData.qylxr
+          that.userData.jzdh
         )
       ) {
         that.$toast({
