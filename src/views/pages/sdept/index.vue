@@ -93,15 +93,24 @@ export default {
   destroyed() {},
   methods: {
     initColumns: function() {
-      let theFirstOne = new Date(
-        new Date().getFullYear() - 5 + ""
-      ).getFullYear();
-      for (let i = 0, imax = 10; i <= imax; i++) {
-        if (this.year == i + theFirstOne) {
-          this.defaultIndex = i;
+      let that = this;
+      that.$axios.post(that.$api.getXuejieList).then(res => {
+        for (let i = 0, imax = res.data.length; i < imax; i++) {
+          if (this.year == res.data[i].value) {
+            this.defaultIndex = i;
+          }
+          this.columns.push(res.data[i].value);
         }
-        this.columns.push(i + theFirstOne);
-      }
+      });
+      // let theFirstOne = new Date(
+      //   new Date().getFullYear() - 5 + ""
+      // ).getFullYear();
+      // for (let i = 0, imax = 10; i <= imax; i++) {
+      //   if (this.year == i + theFirstOne) {
+      //     this.defaultIndex = i;
+      //   }
+      //   this.columns.push(i + theFirstOne);
+      // }
     },
     onConfirm: function(value, index) {
       this.year = value;
