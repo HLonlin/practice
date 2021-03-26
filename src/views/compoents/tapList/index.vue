@@ -65,9 +65,7 @@ export default {
     if (userData) {
       this.userData = userData;
     }
-    if (this.userData.isTeacher) {
-      this.isTeacher();
-    }
+    this.isTeacher();
     this.updateMsgList();
   },
   beforeMount() {},
@@ -139,11 +137,19 @@ export default {
       }, 1000);
     },
     isTeacher: function() {
-      this.tabbar.list[0] = {
-        text: "统计",
-        routerTo: "/statistics",
-        icon: "icon_tongjitubiao"
-      };
+      let that = this;
+      if (that.userData.isTeacher) {
+        that.tabbar.list[0] = {
+          text: "统计",
+          routerTo: "/statistics",
+          icon: "icon_tongjitubiao"
+        };
+      } else {
+        that.$axios.post(that.$api.contactList).then(res => {
+          let chatWith = JSON.stringify(res.data.contactList[0].userid);
+          that.tabbar.list[1].routerTo = "/chatroom?chatWith=" + chatWith;
+        });
+      }
     }
   }
 };

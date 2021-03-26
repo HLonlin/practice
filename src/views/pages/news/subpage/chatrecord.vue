@@ -280,4 +280,7 @@ export default {
   font-size: 1.125rem;
   color: #ffffff;
 }
+.msgItem_content img {
+  max-width: 100%;
+}
 </style>
