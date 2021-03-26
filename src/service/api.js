@@ -17,6 +17,7 @@ const API = {
     logout: '/api/practice/logout', // 用户退出
     // --------------------------------------------------------------- 学生端 ---------------------------------------------------------------
     // --------------------------签到--------------------------
+    getLastQianDaoMonth_student: '/api/practice/student/tongji/getLastQianDaoMonth', // 获取最后一次签到月份
     signin: '/api/practice/student/qiandao/signIn', // 学员签到
     isSignin: '/api/practice/student/qiandao/hasQiandao', // 判断今天是否签到
     signinList: '/api/practice/student/qiandao/monthQiandaoList', // 根据月份获取学员签到列表
@@ -67,6 +68,7 @@ const API = {
     contactDetail: '/api/practice/student/contact/contactDetail', // 通讯录用户详情
     about: '/api/practice/dic/guanyu', // 移动端关于菜单配置
     // --------------------------------------------------------------- 系部端 ---------------------------------------------------------------
+    getLastQianDaoMonth_dept: '/api/practice/dept/tongji/getLastQianDaoMonth', // 获取最后一次签到月份
     allCountXibu: '/api/practice/dept/allCountXibu', // 统计所有系部实习率及签到率
     countXibu: '/api/practice/dept/countXibu', // 根据系部统计实习率及签到率
     countZhuanye: '/api/practice/dept/countZhuanye', // 根据专业统计实习率及签到率
@@ -92,6 +94,7 @@ const API = {
     banZhuRenPingJiaList_teacher: '/api/practice/teacher/banZhuRenPingJiaList', //    班主任评价列表
     findBanZhuRenPingJiaById_teacher: '/api/practice/teacher/findBanZhuRenPingJiaById', // 查询班主任评价详情
     studentEdit: '/api/practice/teacher/tongji/studentEdit', // 教师端编辑学生信息
+    getLastQianDaoMonth_teacher: '/api/practice/teacher/tongji/getLastQianDaoMonth', // 获取最后一次签到月份
     // --------------------------消息--------------------------
     msgList_teacher: '/api/practice/teacher/xiaoxi/xiaoxiList', // 教师消息列表
     sendMsg_teacher: '/api/practice/teacher/xiaoxi/sendXiaoxi', // 教师发送消息

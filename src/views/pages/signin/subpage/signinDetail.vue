@@ -69,7 +69,7 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.getSigninList();
+    this.getLastSignin();
   },
   beforeMount() {},
   mounted() {},
@@ -80,6 +80,19 @@ export default {
   methods: {
     onClickLeft: function() {
       this.$router.go(-1);
+    },
+    getLastSignin: function() {
+      let that = this;
+      that.$axios
+        .post(
+          that.$tool.getLocal("identity") == "sdept"
+            ? that.$api.getLastQianDaoMonth_dept
+            : that.$api.getLastQianDaoMonth_teacher,
+          { cardid: that.$route.query.cardid }
+        )
+        .then(res => {
+          that.getSigninList(res.data);
+        });
     },
     getSigninList: function() {
       let that = this;

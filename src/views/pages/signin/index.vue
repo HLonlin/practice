@@ -259,7 +259,8 @@ export default {
       this.userData = userData;
     }
     this.getBgImage();
-    this.getSigninDetailsList();
+    this.getLastSignin();
+    // this.getSigninDetailsList();
     this.isLearnToday();
     this.isSigninTotal();
     this.getHealthStatus();
@@ -406,6 +407,12 @@ export default {
               }
             });
         });
+    },
+    getLastSignin: function() {
+      let that = this;
+      that.$axios.post(that.$api.getLastQianDaoMonth_student).then(res => {
+        that.getSigninDetailsList(res.data);
+      });
     },
     // 根据月份获取签到列表
     getSigninDetailsList: function() {
