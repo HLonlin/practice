@@ -12,9 +12,10 @@
     </van-nav-bar>
     <div class="monthlylist_topPanel">
       <div class="monthlylist_yearPanel">
-        <div class="monthlylist_lastYear" @click="pageTurn(false)"></div>
+        <datecomponent class="datecomponent" @datebutton="datebutton" />
+        <!-- <div class="monthlylist_lastYear" @click="pageTurn(false)"></div>
         <div class="monthlylist_currentYear">{{ currentYearMonth }}</div>
-        <div class="monthlylist_nextYear" @click="pageTurn(true)"></div>
+        <div class="monthlylist_nextYear" @click="pageTurn(true)"></div> -->
       </div>
     </div>
     <div class="monthlylist_listPanel">
@@ -61,7 +62,11 @@
 /**
  * 月记列表页
  */
+import datecomponent from "../../../compoents/month";
 export default {
+  components: {
+    datecomponent
+  },
   name: "classmonthly",
   data() {
     return {
@@ -72,7 +77,9 @@ export default {
       finished: false, // 是否已加载全部
       refreshing: false,
       pageIndex: 1,
-      pageSize: 10
+      pageSize: 10,
+      year: "",
+      month: ""
     };
   },
   beforeCreate() {},
@@ -87,6 +94,14 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    datebutton(Datenum) {
+      this.currentYearMonth = `${Datenum.year}年${Datenum.month}月`;
+      this.$router.replace({
+        path: "/classmonthly",
+        query: { currentYearMonth: JSON.stringify(this.currentYearMonth) }
+      });
+      this.onLoad();
+    },
     onClickLeft: function() {
       this.$router.go(-1);
     },
@@ -277,6 +292,13 @@ export default {
 }
 .monthlylist_listDate {
   color: #999999;
+}
+.datecomponent {
+  width: 100%;
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  font-size: 1rem;
 }
 </style>
 <style>
