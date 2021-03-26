@@ -49,6 +49,19 @@ axios.interceptors.response.use(
         let status = res.data.status;
         if (status === 200) {
             return Promise.resolve(res.data);
+        } else if (status === 410) {
+            let errorMsg = res.data.message || '请求失败，请检查网络是否畅通';
+            Toast({
+                message: errorMsg
+            });
+            router.replace({
+                path: '/login',
+            })
+        } else if (status === 400) {
+            let errorMsg = res.data.message || '请求失败，请检查网络是否畅通';
+            Toast({
+                message: errorMsg
+            });
         } else {
             let errorMsg = res.data.message || '请求失败，请检查网络是否畅通';
             Toast({
