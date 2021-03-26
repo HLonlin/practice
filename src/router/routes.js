@@ -222,6 +222,15 @@ const routes = [{
         hidden: true
     },
     {
+        title: '报名情况',
+        name: 'applylist',
+        path: '/applylist',
+        meta: { requireAuth: true },
+        component: () =>
+            import ('@/views/pages/notice/subpage/applylist'),
+        hidden: true
+    },
+    {
         title: '审核学生信息',
         name: 'auditstudent',
         path: '/auditstudent',

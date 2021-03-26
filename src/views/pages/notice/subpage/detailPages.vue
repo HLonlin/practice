@@ -110,7 +110,10 @@ export default {
     },
     linkTo: function() {
       this.$router.push({
-        path: "notice"
+        path: "/applylist",
+        query: {
+          recruit_Id: this.$route.query.recruit_Id
+        }
       });
     },
     // 是否已报名
@@ -119,10 +122,10 @@ export default {
       if (that.identity == "student") {
         that.$axios
           .post(that.$api.hasRecruitApply, {
-            recuritId: that.$route.query.recruit_Id
+            recruitId: that.$route.query.recruit_Id
           })
           .then(res => {
-            // that.isRecruitApply = res.data;
+            that.isRecruitApply = res.data;
           });
       }
     },
@@ -140,7 +143,7 @@ export default {
         .then(() => {
           that.$axios
             .post(that.$api.recruitApply, {
-              recuritId: that.$route.query.recruit_Id
+              recruitId: that.$route.query.recruit_Id
             })
             .then(res => {
               if (res.message == "success") {
