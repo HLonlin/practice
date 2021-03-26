@@ -57,7 +57,6 @@ export default {
           recruitId: that.$route.query.recruit_Id
         })
         .then(res => {
-          console.log(res);
           if (res.data) {
             that.list = res.data;
           }
@@ -179,6 +178,15 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #666666;
+}
+.noMore_panel {
+  box-sizing: border-box;
+  padding: 20px 0px;
+  text-align: center;
+  font-size: 0.875rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #bbbbbb;
 }
 </style>
 <!-- You need to override the style of the frame -->
