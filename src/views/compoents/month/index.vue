@@ -105,11 +105,25 @@ export default {
   height: 100%;
 }
 .exterior {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  font-size: 1rem;
+  font-weight: bold;
 }
+/* .exterior::after {
+  position: absolute;
+  content: "";
+  width: 0.625rem;
+  height: 0.625rem;
+  border-left: 2px solid #999;
+  border-bottom: 2px solid #999;
+  transform: rotate(315deg);
+  top: 30%;
+  right: 0px;
+} */
 main > .yesr {
   display: flex;
   justify-content: space-around;
@@ -129,7 +143,7 @@ main > .yesr {
   border-bottom: 2px solid #ffffff;
 }
 .signin_nextMonth {
-  transform: rotate(-135deg);
+  transform: rotate(225deg);
 }
 section {
   width: 100%;

@@ -201,7 +201,6 @@ export default {
   height: 100vh;
   background-color: #f6f6f6;
   box-sizing: border-box;
-  padding: 10px 0px;
 }
 .icon_add {
   font-size: 1rem;
