@@ -13,9 +13,15 @@
     </div>
     <div class="signin_calendarContainer">
       <div class="signin_titlePanel">
-        <div class="signin_lastMonth" @click="pageTurn(false)"></div>
+        <datecomponent
+          class="datecomponent"
+          @datebutton="datebutton"
+          :year="year"
+          :month="month"
+        />
+        <!-- <div class="signin_lastMonth" @click="pageTurn(false)"></div>
         <div class="signin_monthText">{{ currentYearMonth }}</div>
-        <div class="signin_nextMonth" @click="pageTurn(true)"></div>
+        <div class="signin_nextMonth" @click="pageTurn(true)"></div> -->
       </div>
       <div class="signin_calendarListContainer">
         <div class="signin_calendarTitle">
@@ -56,7 +62,11 @@
 </template>
 
 <script>
+import datecomponent from "../../../compoents/month";
 export default {
+  components: {
+    datecomponent
+  },
   name: "signinDetail",
   data() {
     return {
@@ -64,7 +74,9 @@ export default {
       currentYearMonth: "",
       firstDay: "",
       signinList: [], // 签到列表
-      pageIndex: Number
+      pageIndex: Number,
+      year: 1970,
+      month: 1
     };
   },
   beforeCreate() {},
@@ -78,6 +90,9 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    datebutton(Datenum) {
+      this.getSigninList(Datenum.year + "-" + Datenum.month);
+    },
     onClickLeft: function() {
       this.$router.go(-1);
     },
@@ -92,6 +107,10 @@ export default {
         )
         .then(res => {
           that.getSigninList(res.data);
+          if (res.data) {
+            that.year = new Date(res.data).getFullYear();
+            that.month = new Date(res.data).getMonth() + 1;
+          }
         });
     },
     getSigninList: function() {
@@ -200,11 +219,12 @@ export default {
   padding-bottom: 10px;
 }
 .signin_titlePanel {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
-  padding: 15px 5rem;
+  padding: 15px 0rem;
   border-bottom: 1px solid #eeeeee;
   font-size: 1rem;
   font-family: PingFangSC-Medium, PingFang SC;

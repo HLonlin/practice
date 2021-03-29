@@ -1,36 +1,33 @@
 <template>
   <div class="month_wrapper">
-    <div @click="showPopup">{{ yesr }}-{{ actived }}</div>
-    <van-popup
-      v-model="show"
-      position="top"
-      :style="{ height: '50%' }"
-      @click-overlay="close"
-    >
+    <div class="exterior" @click="showPopup">
+      {{ yesr }}-{{ actived >= 10 ? actived : "0" + actived }}
+    </div>
+    <van-popup v-model="show" position="top" @click-overlay="close">
       <main>
         <!-- 选择年 -->
         <div class="yesr">
-          <van-icon name="arrow-left" @click="last" />
-          <span>{{ yesr }}年{{ actived }}月</span>
-          <van-icon name="arrow" @click="next" />
+          <div class="signin_lastMonth" @click="yesr -= 1"></div>
+          <span>
+            {{ yesr }}年{{ actived >= 10 ? actived : "0" + actived }}月
+          </span>
+          <div class="signin_nextMonth" @click="yesr += 1"></div>
         </div>
-
+        <!-- 选择月 -->
         <section>
           <div>
             <span
               v-for="(item, index) in 12"
               :key="index"
-              :class="actived === item ? 'spanBGd' : false"
-              @click="spanmouth(item)"
+              :class="actived === item ? 'isActived' : false"
+              @click="actived = item"
             >
               {{ item }}月
             </span>
           </div>
         </section>
-
-        <footer></footer>
+        <footer><div class="button" @click="button">确定</div></footer>
       </main>
-      <div class="button" @click="button">确定</div>
     </van-popup>
   </div>
 </template>
@@ -38,63 +35,62 @@
 <script>
 export default {
   name: "month",
+  props: {
+    year: Number, // 自定义年
+    month: Number // 自定义月
+  },
   data: function() {
     return {
-      yesr: 1970, //年
-      actived: 1, //月
-      show: false
+      yesr: Number, // 默认年
+      actived: Number, // 默认月
+      show: false, // 弹层显隐状态
+      // 备份年月用于取消选择时还原
+      backups: {
+        year: "",
+        month: ""
+      }
     };
   },
   methods: {
-    //   上一年
-    last() {
-      this.yesr = this.yesr - 1;
-    },
-    // 下一年
-    next() {
-      this.yesr = this.yesr + 1;
-    },
-    //选择月份
-    spanmouth(item) {
-      this.actived = item < 10 ? "0" + item : item;
-      console.log(this.actived);
-    },
-    //弹出层
+    //打开弹出层备份年月
     showPopup() {
       this.show = true;
+      this.backups.year = this.yesr;
+      this.backups.month = this.actived;
     },
-    //关闭弹出层
+    //关闭弹出层还原年月
     close() {
-      //   设置默认年份
-      var date = new Date();
-      this.yesr = date.getFullYear();
-      this.actived =
-        date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1)
-          : date.getMonth() + 1;
+      this.yesr = this.backups.year;
+      this.actived = this.backups.month;
     },
     //确定
     button() {
       this.show = false;
-      var Datenum = { year: this.yesr, month: this.actived };
-
+      var Datenum = {
+        year: this.yesr,
+        month: this.actived >= 10 ? this.actived + "" : "0" + this.actived
+      };
       this.$emit("datebutton", Datenum);
     }
   },
-  watch: {},
+  watch: {
+    year() {
+      this.yesr = this.year ? this.year : date.getFullYear();
+    },
+    month() {
+      this.actived = this.month ? this.month : date.getMonth() + 1;
+    }
+  },
   computed: {},
   beforeCreate() {},
-  created() {},
-  beforeMount() {},
-  mounted() {
-    //   设置默认年份
+  created() {
+    // 设置默认年份
     var date = new Date();
-    this.yesr = date.getFullYear();
-    this.actived =
-      date.getMonth() + 1 < 10
-        ? "0" + (date.getMonth() + 1)
-        : date.getMonth() + 1;
+    this.yesr = this.year ? this.year : date.getFullYear();
+    this.actived = this.month ? this.month : date.getMonth() + 1;
   },
+  beforeMount() {},
+  mounted() {},
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
@@ -104,6 +100,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.month_wrapper {
+  width: 100%;
+  height: 100%;
+}
+.exterior {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 main > .yesr {
   display: flex;
   justify-content: space-around;
@@ -111,12 +117,23 @@ main > .yesr {
   height: 50px;
   width: 100%;
   background: #0090d8;
-  color: #fff;
+  color: #ffffff;
   font-size: 1rem;
+}
+.signin_lastMonth,
+.signin_nextMonth {
+  transform: rotate(45deg);
+  width: 0.625rem;
+  height: 0.625rem;
+  border-left: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+.signin_nextMonth {
+  transform: rotate(-135deg);
 }
 section {
   width: 100%;
-  height: 150px;
+  height: 149px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,26 +149,34 @@ section > div {
   flex-wrap: wrap;
 }
 section > div > span {
-  width: 40px;
+  width: 16.666%;
   height: 40px;
   line-height: 40px;
   text-align: center;
 }
-.spanBGd {
-  background: #0090d8;
-  color: #fff;
-  border-radius: 10px;
+.isActived {
+  background-color: #0090d8;
+  color: #ffffff;
+  border-radius: 4px;
+}
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 20px 0px;
 }
 .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 80%;
   height: 50px;
-  margin: 20px auto;
-  line-height: 50px;
   background: linear-gradient(270deg, #0090d8 0%, #0090d8 100%);
   outline: none;
   border-radius: 2px;
   text-align: center;
-  color: #fff;
+  color: #ffffff;
   font-size: 1rem;
 }
 </style>
