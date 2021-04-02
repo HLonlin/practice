@@ -1,7 +1,18 @@
 <template>
   <div class="container">
-    <van-tabs v-model="active" color="#0090d8" :sticky="true" offset-top="44px">
-      <van-tab v-for="(itemObj, i) in tabList" :key="i" :title="itemObj.title">
+    <van-tabs
+      v-model="active"
+      color="#0090d8"
+      :sticky="true"
+      offset-top="44px"
+      @change="tabChange"
+    >
+      <van-tab
+        v-for="(itemObj, i) in tabList"
+        :key="i"
+        :title="itemObj.title"
+        :name="i"
+      >
         <div class="search_panel">
           <search sourceOf="notice" v-on:searchNotice="onSearch"></search>
         </div>
@@ -62,8 +73,8 @@
               </div>
             </van-list>
           </van-pull-refresh>
-        </div></van-tab
-      >
+        </div>
+      </van-tab>
     </van-tabs>
   </div>
 </template>
@@ -103,7 +114,7 @@ export default {
           pageSize: 10
         }
       ],
-      active: 0
+      active: Number(this.$route.query.active ? this.$route.query.active : 0)
     };
   },
   beforeCreate() {},
@@ -120,6 +131,14 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    tabChange: function() {
+      this.$router.replace({
+        path: "/notice",
+        query: {
+          active: this.active
+        }
+      });
+    },
     onSearch: function(searchkeywords) {
       let that = this;
       // 清空列表数据

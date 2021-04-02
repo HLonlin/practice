@@ -578,8 +578,11 @@ export default {
     // 今日份签到
     signinTotal: function() {
       let that = this;
+      that.$toast.loading({
+        duration: 0,
+        message: "签到中请稍后..."
+      });
       if (that.$tool.isWechat()) {
-        console.log("signinTotal");
         that.$tool.getCurrentAddress(
           function(data) {
             that.$tool.locationToAddress(
@@ -649,6 +652,7 @@ export default {
             remark: that.otherHealthStatus // 其他说明
           })
           .then(res => {
+            that.$toast.clear();
             that.runRemind();
             that.isSigninTotal();
             that.getSigninDetailsList();
@@ -808,10 +812,10 @@ export default {
   justify-content: center;
   align-items: center;
   width: 14.285%;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: bold;
-  color: #666666;
+  color: #323233;
 }
 .signin_calendarListItem {
   display: flex;
@@ -830,8 +834,8 @@ export default {
   border-radius: 50%;
   font-size: 1rem;
   font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #666666;
+  font-weight: bold;
+  color: #323233;
 }
 .today .listItem_text {
   width: 1.5rem;

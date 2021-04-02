@@ -1,17 +1,21 @@
 <template>
   <div class="month_wrapper">
     <div class="exterior" @click="showPopup">
-      {{ yesr }}-{{ actived >= 10 ? actived : "0" + actived }}
+      <div class="signin_last ouside" @click.stop="lastMonth"></div>
+      <div class="signin_title">
+        {{ yesr }}-{{ actived >= 10 ? actived : "0" + actived }}
+      </div>
+      <div class="signin_next ouside" @click.stop="nextMonth"></div>
     </div>
     <van-popup v-model="show" position="top" @click-overlay="close">
       <main>
         <!-- 选择年 -->
         <div class="yesr">
-          <div class="signin_lastMonth" @click="yesr -= 1"></div>
+          <div class="signin_last" @click="yesr -= 1"></div>
           <span>
             {{ yesr }}年{{ actived >= 10 ? actived : "0" + actived }}月
           </span>
-          <div class="signin_nextMonth" @click="yesr += 1"></div>
+          <div class="signin_next" @click="yesr += 1"></div>
         </div>
         <!-- 选择月 -->
         <section>
@@ -62,6 +66,14 @@ export default {
     close() {
       this.yesr = this.backups.year;
       this.actived = this.backups.month;
+    },
+    lastMonth: function() {
+      this.actived = this.actived - 1;
+      this.button();
+    },
+    nextMonth: function() {
+      this.actived = this.actived + 1;
+      this.button();
     },
     //确定
     button() {
@@ -124,6 +136,9 @@ export default {
   top: 30%;
   right: 0px;
 } */
+main {
+  background-color: #ffffff;
+}
 main > .yesr {
   display: flex;
   justify-content: space-around;
@@ -134,16 +149,23 @@ main > .yesr {
   color: #ffffff;
   font-size: 1rem;
 }
-.signin_lastMonth,
-.signin_nextMonth {
+.signin_title {
+  width: 50%;
+  text-align: center;
+}
+.signin_last,
+.signin_next {
   transform: rotate(45deg);
   width: 0.625rem;
   height: 0.625rem;
   border-left: 2px solid #ffffff;
   border-bottom: 2px solid #ffffff;
 }
-.signin_nextMonth {
+.signin_next {
   transform: rotate(225deg);
+}
+.ouside {
+  border-color: #333333;
 }
 section {
   width: 100%;

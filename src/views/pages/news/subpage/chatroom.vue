@@ -224,9 +224,14 @@ export default {
       const axiosAjax = that.$axios.create({
         timeout: 1000 * 60 //时间
       });
+      that.$toast.loading({
+        duration: 0,
+        message: "图片发送中..."
+      });
       axiosAjax
         .post(uploadUrl, formdata, config)
         .then(res => {
+          that.$toast.clear();
           that.$toast(res.data.message);
           let file = res.data.data;
           that.sendImg(file[0].src);

@@ -104,9 +104,10 @@ export default {
   destroyed() {},
   methods: {
     onClickLeft: function() {
-      this.$router.push({
-        path: "/notice"
-      });
+      this.$router.go(-1);
+      // this.$router.push({
+      //   path: "/notice"
+      // });
     },
     linkTo: function() {
       this.$router.push({
