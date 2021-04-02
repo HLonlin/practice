@@ -68,11 +68,21 @@ export default {
       this.actived = this.backups.month;
     },
     lastMonth: function() {
-      this.actived = this.actived - 1;
+      if (this.actived - 1 <= 1) {
+        this.actived = 12;
+        this.yesr = this.yesr - 1 <= 1970 ? 1970 : this.yesr - 1;
+      } else {
+        this.actived = this.actived - 1;
+      }
       this.button();
     },
     nextMonth: function() {
-      this.actived = this.actived + 1;
+      if (this.actived + 1 >= 12) {
+        this.actived = 1;
+        this.yesr = this.yesr + 1;
+      } else {
+        this.actived = this.actived + 1;
+      }
       this.button();
     },
     //确定

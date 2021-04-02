@@ -277,18 +277,25 @@ export default {
     batchEvaluate: function() {
       let that = this;
       let cardids = [];
+      let isChecked = false;
       for (let i = 0, imax = that.list.length; i < imax; i++) {
         if (that.list[i].checked) {
           cardids.push(that.list[i].cardid);
         }
       }
-      let data = {
-        cardid: cardids
-      };
-      that.$router.push({
-        path: "/evaluateStudent",
-        query: { data: JSON.stringify(data) }
-      });
+      if (isChecked) {
+        let data = {
+          cardid: cardids
+        };
+        that.$router.push({
+          path: "/evaluateStudent",
+          query: { data: JSON.stringify(data) }
+        });
+      } else {
+        this.$toast({
+          message: "请选择至少一名学生进行评定"
+        });
+      }
     }
   }
 };

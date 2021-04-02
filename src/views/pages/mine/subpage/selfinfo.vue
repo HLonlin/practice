@@ -291,12 +291,12 @@ export default {
         });
       }
       if (
-        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
-          value
-        )
+        new RegExp(
+          "[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]"
+        ).test(value)
       ) {
         this.$toast({
-          message: "请输入数字、汉字、英文字母或者下划线"
+          message: "请输入数字、汉字或英文字母"
         });
       }
       return value;
@@ -378,9 +378,9 @@ export default {
         }
       }
       if (
-        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
-          that.userData.shixidanwei
-        )
+        new RegExp(
+          "[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]"
+        ).test(that.userData.shixidanwei)
       ) {
         that.$toast({
           message: "实习单位不可填写特殊符号"
@@ -388,9 +388,9 @@ export default {
         return;
       }
       if (
-        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
-          that.userData.danweidizhi
-        )
+        new RegExp(
+          "[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]"
+        ).test(that.userData.danweidizhi)
       ) {
         that.$toast({
           message: "单位地址不可填写特殊符号"
@@ -404,9 +404,9 @@ export default {
         return;
       }
       if (
-        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
-          that.userData.jzdh
-        )
+        new RegExp(
+          "[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]"
+        ).test(that.userData.jzdh)
       ) {
         that.$toast({
           message: "单位电话不可填写特殊符号"
@@ -414,9 +414,9 @@ export default {
         return;
       }
       if (
-        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
-          that.userData.qylxr
-        )
+        new RegExp(
+          "[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]"
+        ).test(that.userData.qylxr)
       ) {
         that.$toast({
           message: "企业联系人不可填写特殊符号"
@@ -424,9 +424,9 @@ export default {
         return;
       }
       if (
-        /[~`!@#$%^&*()+=-{}:;"'<,>.?/|[\]\\·【】；：’”“‘《》，。？、！￥……（）——]/.test(
-          that.userData.job
-        )
+        new RegExp(
+          "[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]"
+        ).test(that.userData.job)
       ) {
         that.$toast({
           message: "岗位不可填写特殊符号"
