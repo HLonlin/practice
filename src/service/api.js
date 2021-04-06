@@ -3,7 +3,7 @@
  * 接口文件
  * @author HLonlin <1021944439@qq.com>
  */
-const HOSTURL = process.env.NODE_ENV === 'development' ? 'https://openapi.gzslits.com.cn/openapi/' : 'https://openapi.gzslits.com.cn/openapi/';
+const HOSTURL = process.env.NODE_ENV === 'development' ? 'https://openapi.dev.qooroo.cn:8443/openapi' : 'https://openapi.gzslits.com.cn/openapi/';
 const API = {
     host: HOSTURL,
     // --------------------------登录--------------------------
