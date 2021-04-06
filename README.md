@@ -52,8 +52,8 @@ npm run dev
 # build for production with minification
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
+# build for testing
+npm run build_test_
 ```
 
 有关工作原理的详细说明，请查看[docs for vue.js](https://cn.vuejs.org/v2/guide/).
