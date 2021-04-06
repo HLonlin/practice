@@ -31,19 +31,19 @@ axios.defaults.baseURL = api.host;
 
 // http request 拦截器
 axios.interceptors.request.use(
-        config => {
-            if (config.method === 'post') {
-                config.data = commonFn.stringify(config.data);
-            }
-            if (Storage.getLocal('token') && !(config.url === api.login)) {
-                config.headers['Access-Token'] = `${Storage.getLocal('token')}`
-            }
-            return config;
-        },
-        err => {
-            return Promise.reject(err);
-        })
-    // http response 拦截器
+    config => {
+        if (config.method === 'post') {
+            config.data = commonFn.stringify(config.data);
+        }
+        if (Storage.getLocal('token') && !(config.url === api.login)) {
+            config.headers['Access-Token'] = `${Storage.getLocal('token')}`
+        }
+        return config;
+    },
+    err => {
+        return Promise.reject(err);
+    });
+// http response 拦截器
 axios.interceptors.response.use(
     res => {
         let status = res.data.status;
@@ -73,6 +73,32 @@ axios.interceptors.response.use(
         }
         return Promise.reject(res.data);
     },
-)
+);
+axios.uploadImg = function(file, callback) {
+    let files = file.file;
+    let that = this;
+    let host = "https://practice.dev.qooroo.cn:8443/practice"; // 测试
+    // let host='https://practice.gzslits.com.cn/practice'; // 生产
+    let uploadUrl = host + "/api/toolkit/upload/file";
+    let formdata = new FormData();
+    formdata.append(files.name, files, files.name);
+    //设置请求头
+    let config = {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    };
+    const axiosAjax = that.create({
+        timeout: 1000 * 60 //时间
+    });
+    axiosAjax
+        .post(uploadUrl, formdata, config)
+        .then(res => {
+            if (callback) {
+                callback();
+            }
+        })
+        .catch(() => {});
+}
 
 export default axios;

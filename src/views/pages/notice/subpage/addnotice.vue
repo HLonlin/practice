@@ -133,32 +133,39 @@ export default {
       return true;
     },
     afterRead: function(file) {
-      let files = file.file;
       let that = this;
-      let host = "https://practice.dev.qooroo.cn:8443/practice"; // 测试
-      // let host='https://practice.gzslits.com.cn/practice'; // 生产
-      let uploadUrl = host + "/api/toolkit/upload/file";
-      let formdata = new FormData();
-      formdata.append(files.name, files, files.name);
-      //设置请求头
-      let config = {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      };
-      const axiosAjax = that.$axios.create({
-        timeout: 1000 * 60 //时间
+      that.$axios.uploadImg(file, function() {
+        that.$toast(res.data.message);
+        let file = res.data.data;
+        that.filenames.push(file[0].field_name);
+        that.fileurls.push(file[0].server_path);
       });
-      axiosAjax
-        .post(uploadUrl, formdata, config)
-        .then(res => {
-          that.$toast(res.data.message);
-          let file = res.data.data;
-          console.log(file);
-          that.filenames.push(file[0].field_name);
-          that.fileurls.push(file[0].server_path);
-        })
-        .catch(() => {});
+      // let files = file.file;
+      // let that = this;
+      // let host = "https://practice.dev.qooroo.cn:8443/practice"; // 测试
+      // // let host='https://practice.gzslits.com.cn/practice'; // 生产
+      // let uploadUrl = host + "/api/toolkit/upload/file";
+      // let formdata = new FormData();
+      // formdata.append(files.name, files, files.name);
+      // //设置请求头
+      // let config = {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data"
+      //   }
+      // };
+      // const axiosAjax = that.$axios.create({
+      //   timeout: 1000 * 60 //时间
+      // });
+      // axiosAjax
+      //   .post(uploadUrl, formdata, config)
+      //   .then(res => {
+      //     that.$toast(res.data.message);
+      //     let file = res.data.data;
+      //     console.log(file);
+      //     that.filenames.push(file[0].field_name);
+      //     that.fileurls.push(file[0].server_path);
+      //   })
+      //   .catch(() => {});
     },
     initLayDate: function() {
       let that = this;

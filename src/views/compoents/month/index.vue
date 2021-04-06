@@ -1,8 +1,8 @@
 <template>
   <div class="month_wrapper">
-    <div class="exterior" @click="showPopup">
+    <div class="exterior">
       <div class="signin_last ouside" @click.stop="lastMonth"></div>
-      <div class="signin_title">
+      <div class="signin_title" @click="showPopup">
         {{ yesr }}-{{ actived >= 10 ? actived : "0" + actived }}
       </div>
       <div class="signin_next ouside" @click.stop="nextMonth"></div>

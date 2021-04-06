@@ -397,7 +397,9 @@ export default {
             .alert({
               message: "每日一学已打卡",
               theme: "round-button",
-              confirmButtonColor: "#0090d8"
+              confirmButtonColor: "#0090d8",
+              className: "everyDayConfirm",
+              width: "250px"
             })
             .then(() => {
               if (that.is_SigninTotal) {
@@ -595,7 +597,8 @@ export default {
             );
           },
           function(err) {
-            that.$toast("请打开设备的GPS定位功能");
+            console.log(err);
+            that.$toast("请打开设备的定位功能");
             return;
           }
         );
@@ -994,5 +997,8 @@ export default {
 <style>
 .signin_calendarContainer .van-popup {
   background-color: transparent;
+}
+.everyDayConfirm .van-dialog--round-button {
+  padding: 8px 70px 16px;
 }
 </style>
