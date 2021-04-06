@@ -280,6 +280,7 @@ export default {
       let isChecked = false;
       for (let i = 0, imax = that.list.length; i < imax; i++) {
         if (that.list[i].checked) {
+          isChecked = true;
           cardids.push(that.list[i].cardid);
         }
       }
