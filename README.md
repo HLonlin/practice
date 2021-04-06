@@ -53,7 +53,7 @@ npm run dev
 npm run build
 
 # build for testing
-npm run build_test_
+npm run build_test
 ```
 
 有关工作原理的详细说明，请查看[docs for vue.js](https://cn.vuejs.org/v2/guide/).
